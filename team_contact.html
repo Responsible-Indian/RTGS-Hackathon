@@ -284,6 +284,114 @@
 
         .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
+        /* Hero Stats Section */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 40px;
+            padding: 30px 40px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(0, 247, 255, 0.05));
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 8px;
+        }
+
+        .team-tagline {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .team-tagline p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .team-tagline strong {
+            color: var(--color-text-primary);
+        }
+
+        .team-tagline .highlight {
+            color: var(--color-cyan);
+            font-weight: 600;
+        }
+
+        /* Company Badge */
+        .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .company-badge.microsoft { background: linear-gradient(135deg, #00a4ef22, #00a4ef11); border-color: #00a4ef55; }
+        .company-badge.amazon { background: linear-gradient(135deg, #ff990022, #ff990011); border-color: #ff990055; }
+        .company-badge.intel { background: linear-gradient(135deg, #0071c522, #0071c511); border-color: #0071c555; }
+        .company-badge.disney { background: linear-gradient(135deg, #113ccf22, #113ccf11); border-color: #113ccf55; }
+
+        /* Location Badge */
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--color-cyan);
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .location-badge svg {
+            width: 10px;
+            height: 10px;
+            fill: currentColor;
+        }
+
+        /* Experience highlight */
+        .exp-companies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .team-grid { grid-template-columns: repeat(3, 1fr); }
@@ -291,12 +399,16 @@
         @media (max-width: 900px) {
             .team-grid { grid-template-columns: repeat(2, 1fr); }
             .page-section { padding: 30px; }
+            .hero-stats { gap: 40px; padding: 25px 30px; }
         }
         @media (max-width: 600px) {
             .team-grid { grid-template-columns: 1fr; }
             .page-section { padding: 20px; }
             header { flex-direction: column; text-align: center; gap: 20px; }
             .header-meta { text-align: center; }
+            .hero-stats { gap: 30px; padding: 20px; }
+            .stat-number { font-size: 28px; }
+            .team-tagline p { font-size: 14px; }
         }
 
         /* Print Settings */
@@ -328,6 +440,16 @@
         </div>
     </header>
 
+    <!-- Team Tagline -->
+    <div class="team-tagline">
+        <p>
+            A global team of <strong>IIT & BITS alumni</strong> with experience at
+            <span class="highlight">Microsoft, Amazon, Intel, Disney+</span> and high-growth startups.
+            Engineers spanning <strong>India, Taiwan, and the USA</strong> — building cutting-edge AI,
+            scalable systems, and enterprise solutions.
+        </p>
+    </div>
+
     <!-- Grid -->
     <div class="team-grid">
         
@@ -337,7 +459,7 @@
                 <div class="avatar-placeholder">JK</div>
             </div>
             <h3 class="member-name">Jeevan Kumar</h3>
-            <div class="member-role">AI & Scalable Systems</div>
+            <div class="member-role">AI/ML Lead & Systems Architect</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -345,7 +467,7 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>5 years experience</span>
+                    <span>5 YoE at funded startups</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -357,8 +479,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">AI/ML</span>
-                <span class="badge">Scalable Products</span>
+                <span class="badge">GenAI</span>
+                <span class="badge">LLMs</span>
+                <span class="badge">Distributed Systems</span>
             </div>
             <a href="https://www.linkedin.com/in/sleep404" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Jeevan Kumar">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -372,15 +495,15 @@
                 <div class="avatar-placeholder">MK</div>
             </div>
             <h3 class="member-name">Manoj Kumar</h3>
-            <div class="member-role">Data Engineer</div>
+            <div class="member-role">Senior Data Engineer</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    <span><strong>BITS PILANI</strong>, Hyderabad</span>
+                    <span><strong>BITS Pilani</strong>, Hyderabad</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>4 years experience</span>
+                    <span>4 YoE at funded startups</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -392,8 +515,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">Data Engineering</span>
+                <span class="badge">Big Data</span>
                 <span class="badge">ETL Pipelines</span>
+                <span class="badge">Data Lakes</span>
             </div>
             <a href="#" class="linkedin-btn disabled" aria-label="LinkedIn: Manoj Kumar">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -407,7 +531,7 @@
                 <div class="avatar-placeholder">SB</div>
             </div>
             <h3 class="member-name">Sandeep BGS</h3>
-            <div class="member-role">Deep Learning & ML</div>
+            <div class="member-role">Deep Learning Research Engineer</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -415,7 +539,7 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>4 years MNC experience</span>
+                    <span>4 YoE at MNC</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -427,8 +551,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">Deep Learning</span>
-                <span class="badge">Research</span>
+                <span class="badge">Neural Networks</span>
+                <span class="badge">Computer Vision</span>
+                <span class="badge">NLP</span>
             </div>
             <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Sandeep BGS">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -442,7 +567,7 @@
                 <div class="avatar-placeholder">SL</div>
             </div>
             <h3 class="member-name">Sarath Lavu</h3>
-            <div class="member-role">Data Science & ML</div>
+            <div class="member-role">Data Scientist & ML Engineer</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -450,7 +575,7 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>4 years experience</span>
+                    <span>4 YoE at funded startups</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -462,8 +587,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">Data Science</span>
-                <span class="badge">Economics</span>
+                <span class="badge">Predictive Models</span>
+                <span class="badge">Analytics</span>
+                <span class="badge">ML Ops</span>
             </div>
             <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Sarath Lavu">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -477,7 +603,7 @@
                 <div class="avatar-placeholder">PR</div>
             </div>
             <h3 class="member-name">Praneeth Reddy</h3>
-            <div class="member-role">Software Architect</div>
+            <div class="member-role">Principal Software Architect</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -485,7 +611,7 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>5 years experience</span>
+                    <span>5 YoE building 0→1 products</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -497,8 +623,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">Scalable Products</span>
-                <span class="badge">Backend Systems</span>
+                <span class="badge">System Design</span>
+                <span class="badge">Microservices</span>
+                <span class="badge">Cloud Native</span>
             </div>
             <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Praneeth Reddy">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -511,8 +638,8 @@
             <div class="profile-pic-container">
                 <div class="avatar-placeholder">VK</div>
             </div>
-            <h3 class="member-name">Vamsi Krishna</h3>
-            <div class="member-role">AI & Deep Learning</div>
+            <h3 class="member-name">Vamsi Krishna Badri</h3>
+            <div class="member-role">AI Research Engineer</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -520,7 +647,7 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>4 years MNC experience</span>
+                    <span>4 YoE at MNC</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -532,8 +659,9 @@
                 </div>
             </div>
             <div class="badge-container">
-                <span class="badge">AI/Deep Learning</span>
-                <span class="badge">Research</span>
+                <span class="badge">Deep Learning</span>
+                <span class="badge">AI Research</span>
+                <span class="badge">MLOps</span>
             </div>
             <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Vamsi Krishna Badri">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -547,7 +675,7 @@
                 <div class="avatar-placeholder">YP</div>
             </div>
             <h3 class="member-name">Yashwanth Pathivada</h3>
-            <div class="member-role">Enterprise Systems</div>
+            <div class="member-role">Senior Fullstack Engineer</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -555,20 +683,17 @@
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>4 years experience @ Microsoft, Intel</span>
+                    <span>Ex-Microsoft, Intel</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <a href="tel:+917318018610">+91-7318018610</a>
                 </div>
-                <!-- <div class="detail-item missing-data">
-                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <span>Email: Not shared</span>
-                </div> -->
             </div>
             <div class="badge-container">
-                <span class="badge">Fullstack Engineering</span>
-                <!-- <span class="badge">Intel</span> -->
+                <span class="badge">Enterprise Apps</span>
+                <span class="badge">Cloud</span>
+                <span class="badge">React</span>
             </div>
             <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Yashwanth Pathivada">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -582,28 +707,25 @@
                 <div class="avatar-placeholder">VN</div>
             </div>
             <h3 class="member-name">Varanasi Nitesh</h3>
-            <div class="member-role">Streaming Systems</div>
+            <div class="member-role">Staff Engineer - Streaming</div>
             <div class="details">
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    <span><strong>University of Florida</strong></span>
+                    <span><strong>Univ. of Florida</strong></span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                    <span>3 years experience @ Amazon, Disney Hotstar</span>
+                    <span>Ex-Amazon, Disney+</span>
                 </div>
                 <div class="detail-item">
                     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                     <a href="tel:+917318019198">+91-7318019198</a>
                 </div>
-                <!-- <div class="detail-item missing-data">
-                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <span>Email: Not shared</span>
-                </div> -->
             </div>
             <div class="badge-container">
                 <span class="badge">Payments</span>
-                <span class="badge">Systems Security</span>
+                <span class="badge">High Scale</span>
+                <span class="badge">Security</span>
             </div>
             <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Varanasi Nitesh">
                 <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
