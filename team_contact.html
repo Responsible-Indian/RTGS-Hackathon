@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Contact | Responsible Indian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-cyan: #00f7ff;
+            --color-purple: #7c3aed;
+            --color-bg-main: #0a0d12;
+            --color-card-bg: rgba(17, 24, 39, 0.6);
+            --color-text-primary: #e6f1ff;
+            --color-text-secondary: #95a3b8;
+            --color-border: rgba(255, 255, 255, 0.1);
+            --color-border-accent: rgba(0, 247, 255, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Page Container - A4 Landscape Optimized */
+        .page-section {
+            width: 100%;
+            max-width: 297mm;
+            /* Height set to auto to prevent overflow cutting, but designed to fit A4 */
+            min-height: 210mm; 
+            position: relative;
+            background: var(--color-bg-main);
+            padding: 12mm 15mm;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        /* Decorative Corners */
+        .corner-accent {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--color-cyan);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .top-left { top: 12mm; left: 15mm; border-right: none; border-bottom: none; }
+        .bottom-right { bottom: 12mm; right: 15mm; border-left: none; border-top: none; }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .header-title span { color: var(--color-cyan); }
+        
+        .header-meta {
+            text-align: right;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+        }
+        .header-meta a { color: var(--color-cyan); text-decoration: none; font-family: monospace; }
+
+        /* Grid Layout */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        /* Member Card */
+        .member-card {
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-top: 2px solid var(--color-border-accent);
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            break-inside: avoid;
+        }
+
+        .member-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 2px 0;
+        }
+
+        .member-role {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--color-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            min-height: 24px; /* Alignment fix */
+            line-height: 1.2;
+        }
+
+        /* Details List */
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 10px;
+            line-height: 1.3;
+            color: var(--color-text-secondary);
+        }
+
+        .detail-item svg {
+            flex-shrink: 0;
+            width: 12px;
+            height: 12px;
+            stroke: var(--color-text-secondary);
+            stroke-width: 2;
+            fill: none;
+            margin-top: 1px;
+        }
+
+        .detail-item strong { color: #e6f1ff; font-weight: 600; }
+        .detail-item a { color: inherit; text-decoration: none; }
+        .detail-item a:hover { color: var(--color-cyan); }
+        .missing-data { opacity: 0.5; font-style: italic; }
+
+        /* Badges */
+        .badge-container {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        /* LinkedIn Button */
+        .linkedin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(0, 119, 181, 0.15);
+            border: 1px solid rgba(0, 119, 181, 0.3);
+            color: #e6f1ff;
+            font-size: 9px;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .linkedin-btn:hover { background: rgba(0, 119, 181, 0.25); border-color: rgba(0, 119, 181, 0.5); }
+        
+        .linkedin-btn.disabled {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-text-secondary);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .linkedin-btn svg { width: 10px; height: 10px; fill: currentColor; }
+
+        /* Footer */
+        footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Print Settings */
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: none; -webkit-print-color-adjust: exact; }
+            .page-section { width: 297mm; height: 210mm; padding: 10mm 12mm; }
+            .linkedin-btn { border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+<section class="page-section">
+    <!-- Decorators -->
+    <!-- <div class="corner-accent top-left"></div> -->
+    <!-- <div class="corner-accent bottom-right"></div> -->
+
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <h1>Team - <span style="color: var(--color-cyan);">Responsible Indian</span></h1>
+            <!-- <div style="font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; letter-spacing: 0.5px;"> -->
+                <!-- TEAM ID: RESPONSIBLE_INDIAN -->
+            <!-- </div> -->
+        </div>
+        <div class="header-meta">
+            <div>Primary Contact</div>
+            <a href="mailto:contact@responsibleindian.in">contact@responsibleindian.in</a>
+        </div>
+    </header>
+
+    <!-- Grid -->
+    <div class="team-grid">
+        
+        <!-- Member 1 -->
+        <article class="member-card">
+            <h3 class="member-name">Jeevan Kumar</h3>
+            <div class="member-role">AI & Scalable Systems</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>5 years experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+917318019339">+91-7318019339</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:jeevan@responsibleindian.in">jeevan@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">AI/ML</span>
+                <span class="badge">Scalable Products</span>
+            </div>
+            <a href="https://www.linkedin.com/in/sleep404" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Jeevan Kumar">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 2 -->
+        <article class="member-card">
+            <h3 class="member-name">Manoj Kumar</h3>
+            <div class="member-role">Data Engineer</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>BITS PILANI</strong>, Hyderabad</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>4 years experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+919515732481">+91-9515732481</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:manoj@responsibleindian.in">manoj@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">Data Engineering</span>
+                <span class="badge">ETL Pipelines</span>
+            </div>
+            <div style="height: 22px;"></div>
+        </article>
+
+        <!-- Member 3 -->
+        <article class="member-card">
+            <h3 class="member-name">Sandeep BGS</h3>
+            <div class="member-role">Deep Learning & ML</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>4 years MNC experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+919515732481">+91-9515732481</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:sandeep@responsibleindian.in">sandeep@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">Deep Learning</span>
+                <span class="badge">Research</span>
+            </div>
+            <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Sandeep BGS">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 4 -->
+        <article class="member-card">
+            <h3 class="member-name">Sarath Lavu</h3>
+            <div class="member-role">Data Science & ML</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>4 years experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+917382607212">+91-7382607212</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:sarath@responsibleindian.in">sarath@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">Data Science</span>
+                <span class="badge">Economics</span>
+            </div>
+            <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Sarath Lavu">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 5 -->
+        <article class="member-card">
+            <h3 class="member-name">Praneeth Reddy</h3>
+            <div class="member-role">Software Architect</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>5 years experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+919573337454">+91-9573337454</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:praneeth@responsibleindian.in">praneeth@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">Scalable Products</span>
+                <span class="badge">Backend Systems</span>
+            </div>
+            <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Praneeth Reddy">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 6 -->
+        <article class="member-card">
+            <h3 class="member-name">Vamsi Krishna</h3>
+            <div class="member-role">AI & Deep Learning</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>4 years MNC experience</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+917318016050">+91-7318016050</a>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <a href="mailto:badrivamsi@responsibleindian.in">badrivamsi@responsibleindian.in</a>
+                </div>
+            </div>
+            <div class="badge-container">
+                <span class="badge">AI/Deep Learning</span>
+                <span class="badge">Research</span>
+            </div>
+            <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Vamsi Krishna Badri">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 7 -->
+        <article class="member-card">
+            <h3 class="member-name">Yashwanth Pathivada</h3>
+            <div class="member-role">Enterprise Systems</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>IIT Kanpur</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>4 years experience @ Microsoft, Intel</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+917318018610">+91-7318018610</a>
+                </div>
+                <!-- <div class="detail-item missing-data">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <span>Email: Not shared</span>
+                </div> -->
+            </div>
+            <div class="badge-container">
+                <span class="badge">Fullstack Engineering</span>
+                <!-- <span class="badge">Intel</span> -->
+            </div>
+            <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Yashwanth Pathivada">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+        <!-- Member 8 -->
+        <article class="member-card">
+            <h3 class="member-name">Varanasi Nitesh</h3>
+            <div class="member-role">Streaming Systems</div>
+            <div class="details">
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <span><strong>University of Florida</strong></span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>3 years experience @ Amazon, Disney Hotstar</span>
+                </div>
+                <div class="detail-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <a href="tel:+917318019198">+91-7318019198</a>
+                </div>
+                <!-- <div class="detail-item missing-data">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <span>Email: Not shared</span>
+                </div> -->
+            </div>
+            <div class="badge-container">
+                <span class="badge">Payments</span>
+                <span class="badge">Systems Security</span>
+            </div>
+            <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" rel="noopener noreferrer" class="linkedin-btn" aria-label="LinkedIn: Varanasi Nitesh">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
+        </article>
+
+    </div>
+
+    <!-- Footer -->
+    <!-- <footer>
+        <div>SERP - Livelihood Smart — Team Submission</div>
+        <div style="font-family: monospace; color: var(--color-cyan);">CODE: 100038</div>
+    </footer> -->
+</section>
+
+</body>
+</html>
