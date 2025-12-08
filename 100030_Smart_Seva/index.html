@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Document | Smart Seva</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Submission Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
     <style>
-        /* GLOBAL RESET & PRINT SETTINGS */
+        /* --- MASTER STYLESHEET --- */
+        
+        /* 1. GLOBAL VARIABLES & RESET */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -18,59 +17,8 @@
             print-color-adjust: exact !important;
         }
 
-        body {
-            background-color: #0a0d12; /* Unifying background color */
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .document-wrapper {
-            width: 100%;
-            max-width: 297mm; /* A4 Landscape width */
-            margin: 0 auto;
-            background: #0a0d12;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        .page-break {
-            height: 1px;
-            background: rgba(255,255,255,0.05);
-            margin: 0;
-            width: 100%;
-        }
-
-        @media print {
-            @page { 
-                size: A4 landscape; 
-                margin: 0; 
-            }
-            body { 
-                background: none; 
-                width: 297mm;
-            }
-            .document-wrapper {
-                box-shadow: none;
-                margin: 0;
-                width: 100%;
-            }
-            .page-break {
-                break-after: page;
-                page-break-after: always;
-                height: 0;
-                background: none;
-                visibility: hidden;
-            }
-            /* Hide scroll indicators in print */
-            .scroll-indicator, .scroll-arrow {
-                display: none !important;
-            }
-        }
-
-        /* =========================================
-           SECTION 1 STYLES: COVER PAGE
-           ========================================= */
-        .section-cover {
+        :root {
+            /* Unified Color Palette */
             --bg-deep: #0a0f1a;
             --bg-surface: #121826;
             --bg-elevated: #1e293b;
@@ -78,30 +26,104 @@
             --accent-amber-glow: #fbbf24;
             --accent-cyan: #06b6d4;
             --accent-cyan-glow: #22d3ee;
+            --accent-purple: #7c3aed;
+            --accent-magenta: #ff00ea;
             --success: #10b981;
             --danger: #ef4444;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
 
-            position: relative;
-            min-height: 210mm; /* A4 Height */
-            padding-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: var(--bg-deep);
+            /* Font Stacks */
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Sizing for Technical Section */
+            --page-width: 297mm;
+            --page-height: 210mm;
         }
 
-        .section-cover .bg-container {
-            position: absolute;
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 2. LAYOUT & STRUCTURE */
+        .submission-section {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+            opacity: 0.15;
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* 3. PRINT STYLES */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            html, body {
+                background: #fff;
+                color: #000;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+            }
+            .submission-section {
+                page-break-after: always;
+                break-after: page;
+                margin: 0;
+                padding: 0;
+                overflow: hidden; /* Prevent content spill */
+            }
+            .submission-section:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+            .section-divider {
+                display: none;
+            }
+            /* Hide non-printable elements */
+            .bg-container, .scroll-indicator {
+                display: none !important;
+            }
+            /* Ensure technical pages render correctly */
+            #section-3 .page-section {
+                height: 100vh !important;
+                width: 100vw !important;
+            }
+        }
+        
+        /* --- SECTION 1: COVER PAGE STYLES --- */
+        #section-1 .page-container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .bg-container {
+            position: fixed;
             inset: 0;
             overflow: hidden;
             z-index: 0;
             pointer-events: none;
         }
-
-        .section-cover .bg-gradient {
+        .bg-gradient {
             position: absolute;
             inset: 0;
             background: 
@@ -109,510 +131,394 @@
                 radial-gradient(ellipse 60% 40% at 80% 100%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
                 linear-gradient(180deg, var(--bg-deep) 0%, #0d1321 100%);
         }
-
-        .section-cover .document-particle {
-            position: absolute;
-            width: 40px;
-            height: 52px;
+        .document-particle {
+            position: absolute; width: 40px; height: 52px;
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(30, 41, 59, 0.3) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 4px;
-            opacity: 0;
+            border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 4px; opacity: 0;
             animation: documentFloat 20s linear infinite;
         }
-
-        .section-cover .document-particle::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 6px;
-            right: 6px;
-            height: 2px;
+        .document-particle::before {
+            content: ''; position: absolute; top: 8px; left: 6px; right: 6px; height: 2px;
             background: rgba(148, 163, 184, 0.2);
             box-shadow: 0 6px 0 rgba(148, 163, 184, 0.15), 0 12px 0 rgba(148, 163, 184, 0.1);
         }
-
-        .section-cover .document-particle.verified::after {
-            content: '✓';
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            font-size: 10px;
-            color: var(--success);
-            opacity: 0;
-            animation: checkAppear 20s linear infinite;
+        .document-particle.verified::after {
+            content: '✓'; position: absolute; bottom: 4px; right: 4px; font-size: 10px;
+            color: var(--success); opacity: 0; animation: checkAppear 20s linear infinite;
         }
-
-        @keyframes documentFloat {
-            0% { transform: translateY(100vh) rotate(-15deg) scale(0.8); opacity: 0; }
-            5% { opacity: 0.4; }
-            50% { transform: translateY(40vh) rotate(0deg) scale(1); opacity: 0.6; }
-            95% { opacity: 0.2; }
-            100% { transform: translateY(-20vh) rotate(5deg) scale(0.9); opacity: 0; }
+        @keyframes documentFloat { 0% { transform: translateY(100vh) rotate(-15deg) scale(0.8); opacity: 0; } 5% { opacity: 0.4; } 50% { transform: translateY(40vh) rotate(0deg) scale(1); opacity: 0.6; } 95% { opacity: 0.2; } 100% { transform: translateY(-20vh) rotate(5deg) scale(0.9); opacity: 0; } }
+        @keyframes checkAppear { 0%, 40% { opacity: 0; transform: scale(0); } 50%, 90% { opacity: 1; transform: scale(1); } 100% { opacity: 0; } }
+        .grid-overlay {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
         }
-
-        @keyframes checkAppear {
-            0%, 40% { opacity: 0; transform: scale(0); }
-            50%, 90% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; }
+        #section-1 header { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; animation: fadeSlideDown 1s ease-out; }
+        @keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .dept-badge { display: flex; align-items: center; gap: 1rem; }
+        .govt-emblem {
+            width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent-amber) 0%, var(--accent-amber-glow) 100%);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.2rem; color: var(--bg-deep); box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
         }
-
-        .section-cover .grid-overlay {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
-        }
-
-        .section-cover .page-container {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            flex: 1;
-        }
-
-        .section-cover header {
-            padding: 2rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-cover .dept-badge { display: flex; align-items: center; gap: 1rem; }
-        .section-cover .govt-emblem {
-            width: 48px; height: 48px;
-            background: linear-gradient(135deg, var(--accent-amber) 0%, var(--accent-amber-glow) 100%);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1.2rem;
-            color: var(--bg-deep);
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-        }
-        .section-cover .dept-info { display: flex; flex-direction: column; gap: 0.25rem; }
-        .section-cover .dept-name { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); }
-        .section-cover .dept-full { font-size: 0.65rem; color: var(--text-muted); max-width: 280px; }
-        .section-cover .theme-badge {
-            padding: 0.5rem 1rem;
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 100px;
-            font-size: 0.7rem; font-weight: 500; color: var(--accent-cyan);
+        .dept-info { display: flex; flex-direction: column; gap: 0.25rem; }
+        .dept-name { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); }
+        .dept-full { font-size: 0.65rem; color: var(--text-muted); max-width: 280px; }
+        .theme-badge {
+            padding: 0.5rem 1rem; background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 100px; font-size: 0.7rem; font-weight: 500; color: var(--accent-cyan);
             text-transform: uppercase; letter-spacing: 0.05em;
         }
-
-        .section-cover .hero {
-            flex: 1;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            padding: 2rem; text-align: center;
-        }
-
-        .section-cover .solution-logo { width: 140px; height: 140px; margin-bottom: 2.5rem; }
-        .section-cover .logo-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.3)); }
-        .section-cover .logo-document { fill: var(--bg-elevated); stroke: var(--text-muted); stroke-width: 1.5; }
-        .section-cover .logo-scan-line { stroke: var(--accent-cyan); stroke-width: 2; stroke-linecap: round; animation: scanMove 2.5s ease-in-out infinite; }
+        .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+        .solution-logo { width: 140px; height: 140px; margin-bottom: 2.5rem; animation: fadeScaleIn 1s ease-out 0.3s both; }
+        @keyframes fadeScaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .logo-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.3)); }
+        .logo-document { fill: var(--bg-elevated); stroke: var(--text-muted); stroke-width: 1.5; }
+        .logo-scan-line { stroke: var(--accent-cyan); stroke-width: 2; stroke-linecap: round; animation: scanMove 2.5s ease-in-out infinite; }
         @keyframes scanMove { 0%, 100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(40px); opacity: 1; } }
-        .section-cover .logo-data-lines { stroke: var(--text-muted); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawLine 2.5s ease-in-out infinite; }
+        .logo-data-lines { stroke: var(--text-muted); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawLine 2.5s ease-in-out infinite; }
         @keyframes drawLine { 0%, 30% { stroke-dashoffset: 30; } 50%, 70% { stroke-dashoffset: 0; stroke: var(--accent-cyan-glow); } 100% { stroke-dashoffset: -30; } }
-        .section-cover .logo-check { fill: none; stroke: var(--success); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; animation: checkDraw 2.5s ease-in-out infinite; }
+        .logo-check { fill: none; stroke: var(--success); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; animation: checkDraw 2.5s ease-in-out infinite; }
         @keyframes checkDraw { 0%, 60% { stroke-dashoffset: 24; opacity: 0; } 70%, 90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-        .section-cover .logo-pulse-ring { fill: none; stroke: var(--accent-cyan); stroke-width: 1; opacity: 0; transform-origin: center; animation: pulseRing 2.5s ease-out infinite; }
+        .logo-pulse-ring { fill: none; stroke: var(--accent-cyan); stroke-width: 1; opacity: 0; transform-origin: center; animation: pulseRing 2.5s ease-out infinite; }
         @keyframes pulseRing { 0%, 60% { transform: scale(0.8); opacity: 0; } 70% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.4); opacity: 0; } }
-
-        .section-cover .challenge-name {
-            font-size: clamp(4rem, 10vw, 8rem);
-            font-weight: 900; letter-spacing: -0.03em; line-height: 0.95;
-            margin-bottom: 0.5rem;
+        .challenge-name {
+            font-size: clamp(4rem, 12vw, 9rem); font-weight: 900; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 0.5rem;
             background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 50%, var(--accent-amber) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: gradientShift 8s ease infinite, fadeSlideUp 1s ease-out 0.5s both;
         }
-
-        .section-cover .title { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 400; color: var(--text-secondary); max-width: 700px; margin-bottom: 2rem; }
-        .section-cover .tagline {
-            display: inline-flex; align-items: center; gap: 1rem;
-            padding: 1rem 2rem;
+        @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #section-1 .title { font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 400; color: var(--text-secondary); max-width: 700px; margin-bottom: 2rem; animation: fadeSlideUp 1s ease-out 0.7s both; }
+        .tagline {
+            display: inline-flex; align-items: center; gap: 1rem; padding: 1rem 2rem;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 100px;
-            font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em;
+            border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 100px;
+            font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; animation: fadeSlideUp 1s ease-out 0.9s both;
         }
-
-        .section-cover .transformation-section {
-            margin-top: 4rem;
-            display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap;
-        }
-
-        .section-cover .state-card {
-            padding: 1.5rem 2rem; border-radius: 16px; text-align: center; min-width: 200px; position: relative; overflow: hidden;
-        }
-        .section-cover .state-card.problem { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%); border: 1px solid rgba(239, 68, 68, 0.2); }
-        .section-cover .state-card.solution { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .section-cover .state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-        .section-cover .state-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .section-cover .state-items { display: flex; flex-direction: column; gap: 0.5rem; }
-        .section-cover .state-item { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
-        .section-cover .transform-arrow { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-        .section-cover .arrow-icon { width: 60px; height: 40px; }
-        .section-cover .arrow-path { fill: none; stroke: var(--accent-amber); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; animation: arrowDraw 2s ease-in-out infinite; }
+        .tagline-icon { font-size: 1.3rem; }
+        .transformation-section { margin-top: 4rem; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; animation: fadeSlideUp 1s ease-out 1.1s both; }
+        .state-card { padding: 1.5rem 2rem; border-radius: 16px; text-align: center; min-width: 200px; position: relative; overflow: hidden; }
+        .state-card.problem { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .state-card.solution { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .state-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .state-items { display: flex; flex-direction: column; gap: 0.5rem; }
+        .state-item { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
+        .state-card.problem .state-item::before { content: '✕'; color: var(--danger); font-size: 0.7rem; }
+        .state-card.solution .state-item::before { content: '✓'; color: var(--success); font-size: 0.7rem; }
+        .transform-arrow { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .arrow-icon { width: 60px; height: 40px; }
+        .arrow-path { fill: none; stroke: var(--accent-amber); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; animation: arrowDraw 2s ease-in-out infinite; }
         @keyframes arrowDraw { 0% { stroke-dashoffset: 100; } 50%, 100% { stroke-dashoffset: 0; } }
-        .section-cover .arrow-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-amber); font-weight: 500; }
-
-        .section-cover .stats-bar { margin-top: 3rem; display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; }
-        .section-cover .stat { text-align: center; }
-        .section-cover .stat-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-cyan-glow) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .section-cover .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-
-        .section-cover footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: flex-end; }
-        .section-cover .team-info { display: flex; flex-direction: column; gap: 0.25rem; }
-        .section-cover .team-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-        .section-cover .team-name { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
-        .section-cover .team-contact { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-cyan); text-decoration: none; }
-        
-        .section-cover .services-ticker { position: absolute; bottom: 30%; left: 3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.25rem; }
-        .section-cover .ticker-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-        .section-cover .ticker-value { color: var(--accent-amber); font-weight: 500; }
-        .section-cover .ticker-count { display: inline-block; animation: countPulse 3s ease-in-out infinite; }
+        .arrow-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); font-weight: 500; }
+        .stats-bar { margin-top: 3rem; display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; animation: fadeSlideUp 1s ease-out 1.3s both; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-cyan-glow) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        #section-1 footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: flex-end; animation: fadeSlideUp 1s ease-out 1.5s both; }
+        .team-info { display: flex; flex-direction: column; gap: 0.25rem; }
+        .team-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .team-name { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .team-contact { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); }
+        .scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; animation: gentleBounce 2s ease-in-out infinite; transition: opacity 0.5s ease; }
+        .scroll-indicator.hidden { opacity: 0; pointer-events: none; }
+        @keyframes gentleBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+        .scroll-arrow { width: 24px; height: 24px; }
+        .scroll-arrow-path { fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .services-ticker { position: absolute; bottom: 30%; left: 3rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.25rem; animation: fadeSlideUp 1s ease-out 1.7s both; }
+        .ticker-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .ticker-value { color: var(--accent-amber); font-weight: 500; }
+        .ticker-count { display: inline-block; animation: countPulse 3s ease-in-out infinite; }
         @keyframes countPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        .section-cover .verification-stream { position: absolute; bottom: 30%; right: 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .section-cover .stream-item { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted); opacity: 0; animation: streamFade 4s ease-in-out infinite; }
-        .section-cover .stream-item:nth-child(1) { animation-delay: 0s; }
-        .section-cover .stream-item:nth-child(2) { animation-delay: 1s; }
-        .section-cover .stream-item:nth-child(3) { animation-delay: 2s; }
-        .section-cover .stream-item:nth-child(4) { animation-delay: 3s; }
+        .verification-stream { position: absolute; bottom: 30%; right: 3rem; display: flex; flex-direction: column; gap: 0.5rem; animation: fadeSlideUp 1s ease-out 1.8s both; }
+        .stream-item { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); opacity: 0; animation: streamFade 4s ease-in-out infinite; }
+        .stream-item:nth-child(1) { animation-delay: 0s; } .stream-item:nth-child(2) { animation-delay: 1s; } .stream-item:nth-child(3) { animation-delay: 2s; } .stream-item:nth-child(4) { animation-delay: 3s; }
         @keyframes streamFade { 0%, 20% { opacity: 0; transform: translateX(10px); } 30%, 70% { opacity: 1; transform: translateX(0); } 80%, 100% { opacity: 0; transform: translateX(-10px); } }
-        .section-cover .stream-status { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
-        .section-cover .stream-status.pending { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
+        .stream-status { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .stream-status.pending { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
+        
+        /* --- SECTION 2: PROBLEM ANALYSIS STYLES --- */
+        #section-2 .content-wrapper { padding: 40px; max-width: 1400px; margin: 0 auto; }
+        #section-2 .section-header { margin-bottom: 3rem; border-left: 4px solid var(--accent-cyan); padding-left: 1.5rem; }
+        #section-2 .section-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; background: linear-gradient(90deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #section-2 .section-subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 3rem; }
+        .context-container { background: var(--bg-surface); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 2rem; position: relative; overflow: hidden; }
+        .metric-big { font-size: 3.5rem; font-weight: 900; color: var(--text-primary); line-height: 1; }
+        .metric-label { font-family: var(--font-mono); color: var(--accent-amber); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; }
+        .bottleneck-card { background: var(--bg-elevated); border-radius: 12px; padding: 1.5rem; border-top: 3px solid var(--danger); height: 100%; transition: transform 0.2s; }
+        .bottleneck-card:hover { transform: translateY(-4px); }
+        .visual-stage { height: 100px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; position: relative; }
+        .pain-title { font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .pain-desc { font-size: 0.85rem; color: var(--text-secondary); }
+        .bridge-card { background: linear-gradient(180deg, rgba(6, 182, 212, 0.05) 0%, rgba(18, 24, 38, 0) 100%); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 1.5rem; position: relative; }
+        .bridge-icon { width: 40px; height: 40px; background: rgba(6, 182, 212, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--accent-cyan); margin-bottom: 1rem; }
+        .bridge-title { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem; font-weight: 600; }
+        .bridge-desc { font-size: 0.85rem; color: var(--text-secondary); }
+        .funnel-container { display: flex; align-items: center; gap: 10px; }
+        .doc-stack { display: flex; flex-direction: column; gap: 4px; }
+        .doc-rect { width: 30px; height: 4px; background: var(--text-secondary); border-radius: 2px; }
+        .funnel-arrow { color: var(--danger); font-size: 1.2rem; }
+        .human-dot { width: 12px; height: 12px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .comparison-ui { display: flex; gap: 10px; font-family: var(--font-mono); font-size: 0.6rem; }
+        .field-box { padding: 4px; border: 1px solid var(--text-muted); border-radius: 4px; width: 48%; }
+        .field-label { color: var(--text-muted); font-size: 0.5rem; margin-bottom: 2px; }
+        .field-val-bad { color: var(--danger); text-decoration: line-through; }
+        .field-val-good { color: var(--success); }
+        .status-badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; }
+        .bg-red { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .bg-green { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        #section-2 footer { margin-top: 4rem; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 1rem; display: flex; justify-content: space-between; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
 
-        /* =========================================
-           SECTION 2 STYLES: PROBLEM ANALYSIS
-           ========================================= */
-        .section-problem {
-            --bg-deep: #0a0f1a;
-            --bg-surface: #121826;
-            --bg-card: #1e293b;
-            --accent-amber: #f59e0b;
-            --accent-cyan: #06b6d4;
-            --accent-cyan-dim: rgba(6, 182, 212, 0.1);
-            --success: #10b981;
-            --danger: #ef4444;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --font-main: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-
-            background-color: var(--bg-deep);
-            color: var(--text-primary);
-            font-family: var(--font-main);
-            line-height: 1.5;
-            padding: 40px;
-            min-height: 210mm;
+        /* --- SECTION 3: TECHNICAL SOLUTION STYLES --- */
+        #section-3 .page-section {
+            width: var(--page-width); height: var(--page-height); position: relative; padding: 40px;
+            overflow: hidden; background: radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+            display: flex; flex-direction: column;
         }
-
-        .section-problem .section-header { margin-bottom: 3rem; border-left: 4px solid var(--accent-cyan); padding-left: 1.5rem; }
-        .section-problem .section-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; background: linear-gradient(90deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-problem .section-subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
-        .section-problem .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
-        .section-problem .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
-        .section-problem .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 3rem; }
-        .section-problem .context-container { background: var(--bg-surface); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 2rem; position: relative; overflow: hidden; }
-        .section-problem .metric-big { font-size: 3.5rem; font-weight: 900; color: var(--text-primary); line-height: 1; }
-        .section-problem .metric-label { font-family: var(--font-mono); color: var(--accent-amber); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; }
-        .section-problem .bottleneck-card { background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border-top: 3px solid var(--danger); height: 100%; transition: transform 0.2s; }
-        .section-problem .visual-stage { height: 100px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; position: relative; }
-        .section-problem .pain-title { font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .section-problem .pain-desc { font-size: 0.85rem; color: var(--text-secondary); }
-        .section-problem .bridge-card { background: linear-gradient(180deg, rgba(6, 182, 212, 0.05) 0%, rgba(18, 24, 38, 0) 100%); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 1.5rem; position: relative; }
-        .section-problem .bridge-icon { width: 40px; height: 40px; background: var(--accent-cyan-dim); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--accent-cyan); margin-bottom: 1rem; }
-        .section-problem .bridge-title { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.5rem; font-weight: 600; }
-        .section-problem .bridge-desc { font-size: 0.85rem; color: var(--text-secondary); }
-        .section-problem .comparison-ui { display: flex; gap: 10px; font-family: var(--font-mono); font-size: 0.6rem; }
-        .section-problem .field-box { padding: 4px; border: 1px solid var(--text-muted); border-radius: 4px; width: 48%; }
-        .section-problem .field-label { color: var(--text-muted); font-size: 0.5rem; margin-bottom: 2px; }
-        .section-problem .status-badge { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; }
-        .section-problem .bg-red { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .section-problem .bg-green { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .section-problem footer { margin-top: 4rem; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 1rem; display: flex; justify-content: space-between; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
-
-        /* =========================================
-           SECTION 3 STYLES: TECHNICAL SOLUTION
-           ========================================= */
-        .section-technical {
-            --color-cyan: #00f7ff;
-            --color-purple: #7c3aed;
-            --color-magenta: #ff00ea;
-            --color-amber: #f59e0b;
-            --color-bg-main: #0a0d12;
-            --color-bg-card: #13161c;
-            --color-text-primary: #e6f1ff;
-            --color-text-secondary: #95a3b8;
-            --color-border-cyan: rgba(0, 247, 255, 0.2);
-            --color-border-purple: rgba(124, 58, 237, 0.2);
-            --color-success: #10b981;
-            
-            background-color: var(--color-bg-main);
-            color: var(--color-text-primary);
-        }
-
-        .section-technical .page-section {
-            width: 100%;
-            min-height: 210mm;
-            position: relative;
-            padding: 40px;
-            overflow: hidden;
-            background: radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
-                        radial-gradient(circle at 0% 100%, rgba(0, 247, 255, 0.05) 0%, transparent 40%);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .section-technical .corner-accent { position: absolute; width: 40px; height: 40px; border: 2px solid var(--color-cyan); opacity: 0.5; }
-        .section-technical .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-        .section-technical .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; border-color: var(--color-purple); }
-        .section-technical .neon-line { position: absolute; top: 70px; left: 40px; right: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--color-cyan), var(--color-purple), transparent); box-shadow: 0 0 10px var(--color-cyan); }
-        .section-technical .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--color-cyan); margin-bottom: 8px; }
-        .section-technical .section-title { font-size: 32px; font-weight: 800; margin-bottom: 25px; line-height: 1.1; color: var(--color-text-primary); }
-        .section-technical .accent { background: linear-gradient(135deg, var(--color-cyan), var(--color-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-technical .content { flex: 1; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 2; }
-        .section-technical .page-footer { position: absolute; bottom: 20px; left: 40px; right: 40px; display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--color-text-secondary); opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
-        .section-technical .arch-container { flex: 1; background: rgba(10, 13, 18, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
-        .section-technical .arch-node { fill: var(--color-bg-card); stroke-width: 1.5; rx: 6; ry: 6; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
-        .section-technical .node-title { font-family: 'Inter'; font-weight: 700; font-size: 14px; fill: var(--color-text-primary); }
-        .section-technical .node-desc { font-family: 'Inter'; font-weight: 400; font-size: 10px; fill: var(--color-text-secondary); }
-        .section-technical .tech-pill { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.1); rx: 4; }
-        .section-technical .tech-text { font-family: 'JetBrains Mono'; font-size: 8px; fill: var(--color-cyan); text-transform: uppercase; }
-        .section-technical .data-flow-line { fill: none; stroke-width: 2; stroke-dasharray: 6 4; animation: flowGlow 1.5s linear infinite; }
+        .corner-accent { position: absolute; width: 40px; height: 40px; border: 2px solid var(--accent-cyan); opacity: 0.5; }
+        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; border-color: var(--accent-purple); }
+        .neon-line { position: absolute; top: 70px; left: 40px; right: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent); box-shadow: 0 0 10px var(--accent-cyan); }
+        #section-3 .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 8px; }
+        #section-3 .section-title { font-size: 32px; font-weight: 800; margin-bottom: 25px; line-height: 1.1; }
+        #section-3 .accent { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #section-3 .content { flex: 1; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 2; }
+        .page-footer { position: absolute; bottom: 20px; left: 40px; right: 40px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+        .arch-container { flex: 1; background: rgba(10, 13, 18, 0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+        .arch-node { fill: var(--bg-surface); stroke-width: 1.5; rx: 6; ry: 6; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .node-title { font-family: var(--font-main); font-weight: 700; font-size: 14px; fill: var(--text-primary); }
+        .node-desc { font-family: var(--font-main); font-weight: 400; font-size: 10px; fill: var(--text-secondary); }
+        .tech-pill { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.1); rx: 4; }
+        .tech-text { font-family: var(--font-mono); font-size: 8px; fill: var(--accent-cyan); text-transform: uppercase; }
+        .data-flow-line { fill: none; stroke-width: 2; stroke-dasharray: 6 4; animation: flowGlow 1.5s linear infinite; }
         @keyframes flowGlow { 0% { stroke-dashoffset: 20; stroke-opacity: 0.6; } 100% { stroke-dashoffset: 0; stroke-opacity: 1; } }
+        #section-3 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        #section-3 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .tech-card { background: var(--bg-surface); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 8px; padding: 20px; position: relative; }
+        .tech-card.highlight { border-color: var(--accent-purple); }
+        .card-icon { width: 32px; height: 32px; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        #section-3 .card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+        #section-3 .card-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+        #section-3 .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; font-family: var(--font-mono); margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .process-flow { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 40px; position: relative; }
+        .process-line { position: absolute; top: 25px; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.1); z-index: 1; }
+        .process-step { position: relative; z-index: 2; width: 18%; text-align: center; }
+        .step-circle { width: 50px; height: 50px; background: var(--bg-deep); border: 2px solid var(--accent-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 20px; color: var(--accent-cyan); box-shadow: 0 0 15px rgba(6, 182, 212,0.2); }
+        .tech-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .tech-table th { text-align: left; color: var(--accent-cyan); padding: 10px; border-bottom: 1px solid rgba(124, 58, 237, 0.2); }
+        .tech-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); }
+        .tech-table tr:last-child td { border-bottom: none; }
         
-        .section-technical .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .section-technical .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .section-technical .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-
-        .section-technical .tech-card { background: var(--color-bg-card); border: 1px solid var(--color-border-cyan); border-radius: 8px; padding: 20px; position: relative; }
-        .section-technical .tech-card.highlight { border-color: var(--color-purple); }
-        .section-technical .card-icon { width: 32px; height: 32px; background: rgba(0, 247, 255, 0.1); color: var(--color-cyan); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
-        .section-technical .card-title { font-size: 16px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px; }
-        .section-technical .card-text { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
-        .section-technical .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono'; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .section-technical .process-flow { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 40px; position: relative; }
-        .section-technical .process-line { position: absolute; top: 25px; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.1); z-index: 1; }
-        .section-technical .process-step { position: relative; z-index: 2; width: 18%; text-align: center; }
-        .section-technical .step-circle { width: 50px; height: 50px; background: var(--color-bg-main); border: 2px solid var(--color-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 20px; color: var(--color-cyan); box-shadow: 0 0 15px rgba(0,247,255,0.2); }
-        
-        .section-technical .tech-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .section-technical .tech-table th { text-align: left; color: var(--color-cyan); padding: 10px; border-bottom: 1px solid var(--color-border-purple); }
-        .section-technical .tech-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--color-text-secondary); }
-        .section-technical .tech-table tr:last-child td { border-bottom: none; }
-
-        /* =========================================
-           SECTION 4 STYLES: TEAM
-           ========================================= */
-        .section-team {
-            --color-cyan: #00f7ff;
-            --color-purple: #7c3aed;
-            --color-bg-main: #0a0d12;
-            --color-card-bg: rgba(17, 24, 39, 0.6);
-            --color-text-primary: #e6f1ff;
-            --color-text-secondary: #95a3b8;
-            --color-border: rgba(255, 255, 255, 0.1);
-            --color-border-accent: rgba(0, 247, 255, 0.3);
-
-            background-color: var(--color-bg-main);
-            color: var(--color-text-primary);
-            padding: 12mm 15mm;
-            min-height: 210mm;
-            display: flex;
-            flex-direction: column;
+        /* --- SECTION 4: TEAM & CONTACT STYLES --- */
+        #section-4 {
+            background-image: radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
         }
-
-        .section-team header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 15px; }
-        .section-team .header-title h1 { font-size: 28px; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
-        .section-team .header-title span { color: var(--color-cyan); }
-        .section-team .header-meta { text-align: right; font-size: 11px; color: var(--color-text-secondary); }
-        .section-team .header-meta a { color: var(--color-cyan); text-decoration: none; font-family: monospace; }
+        #section-4 .page-section-wrapper { width: 100%; max-width: 1400px; position: relative; padding: 40px 50px; display: flex; flex-direction: column; margin: 0 auto; }
+        #section-4 header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; padding-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        #section-4 .header-title h1 { font-size: 36px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1; background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        #section-4 .header-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 8px; letter-spacing: 2px; text-transform: uppercase; }
+        #section-4 .header-meta { text-align: right; font-size: 13px; color: var(--text-secondary); }
+        #section-4 .header-meta a { color: var(--accent-cyan); text-decoration: none; font-family: var(--font-mono); font-weight: 500; }
+        #section-4 .header-meta a:hover { text-decoration: underline; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .member-card { background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; position: relative; overflow: hidden; }
+        .member-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); opacity: 0; transition: opacity 0.3s ease; }
+        .member-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border-color: rgba(6, 182, 212, 0.3); }
+        .member-card:hover::before { opacity: 1; }
+        .profile-pic-container { display: flex; justify-content: center; margin-bottom: 16px; }
+        .profile-pic { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; background: linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box, linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)) border-box; transition: transform 0.3s ease; }
+        .member-card:hover .profile-pic { transform: scale(1.05); }
+        .avatar-placeholder { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #fff; border: 3px solid transparent; background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)) padding-box, linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)) border-box; transition: transform 0.3s ease; }
+        .member-card:hover .avatar-placeholder { transform: scale(1.05); }
+        .member-name { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 4px 0; text-align: center; }
+        .member-role { font-size: 11px; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-align: center; }
+        .details { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; flex-grow: 1; }
+        .detail-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 1.4; color: var(--text-secondary); }
+        .detail-item svg { flex-shrink: 0; width: 14px; height: 14px; stroke: var(--text-secondary); stroke-width: 2; fill: none; margin-top: 2px; }
+        .detail-item strong { color: #e6f1ff; font-weight: 600; }
+        .detail-item a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+        .detail-item a:hover { color: var(--accent-cyan); }
+        .badge-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; justify-content: center; }
+        #section-4 .badge { font-size: 10px; font-weight: 600; color: var(--text-primary); background: rgba(124, 58, 237, 0.2); border: 1px solid rgba(124, 58, 237, 0.4); padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+        .linkedin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1)); border: 1px solid rgba(0, 119, 181, 0.4); color: #e6f1ff; font-size: 12px; font-weight: 500; text-decoration: none; padding: 10px 16px; border-radius: 8px; transition: all 0.3s ease; margin-top: auto; }
+        .linkedin-btn:hover { background: linear-gradient(135deg, rgba(0, 119, 181, 0.4), rgba(0, 119, 181, 0.2)); border-color: rgba(0, 119, 181, 0.7); transform: translateY(-2px); }
+        .linkedin-btn.disabled { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: var(--text-secondary); pointer-events: none; opacity: 0.6; }
+        .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; }
+        .team-tagline { text-align: center; margin-bottom: 40px; padding: 0 20px; }
+        .team-tagline p { font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 800px; margin: 0 auto; }
+        .team-tagline strong { color: var(--text-primary); }
+        .team-tagline .highlight { color: var(--accent-cyan); font-weight: 600; }
         
-        .section-team .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; flex-grow: 1; }
-        .section-team .member-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-top: 2px solid var(--color-border-accent); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; break-inside: avoid; }
-        .section-team .member-name { font-size: 14px; font-weight: 700; color: #fff; margin: 0 0 2px 0; }
-        .section-team .member-role { font-size: 10px; font-weight: 600; color: var(--color-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; min-height: 24px; line-height: 1.2; }
-        .section-team .details { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-        .section-team .detail-item { display: flex; align-items: flex-start; gap: 8px; font-size: 10px; line-height: 1.3; color: var(--color-text-secondary); }
-        .section-team .detail-item svg { flex-shrink: 0; width: 12px; height: 12px; stroke: var(--color-text-secondary); stroke-width: 2; fill: none; margin-top: 1px; }
-        .section-team .detail-item strong { color: #e6f1ff; font-weight: 600; }
-        .section-team .detail-item a { color: inherit; text-decoration: none; }
-        .section-team .badge-container { margin-top: auto; display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-        .section-team .badge { font-size: 8px; font-weight: 600; color: var(--color-text-primary); background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.3); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
-        .section-team .linkedin-btn { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 119, 181, 0.15); border: 1px solid rgba(0, 119, 181, 0.3); color: #e6f1ff; font-size: 9px; font-weight: 500; text-decoration: none; padding: 6px; border-radius: 4px; transition: background 0.2s; }
-        .section-team .linkedin-btn:hover { background: rgba(0, 119, 181, 0.25); border-color: rgba(0, 119, 181, 0.5); }
-        .section-team .linkedin-btn svg { width: 10px; height: 10px; fill: currentColor; }
-
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 900px) {
+            #section-1 header { flex-direction: column; gap: 1rem; text-align: center; }
+            .dept-badge { flex-direction: column; }
+            .transformation-section { flex-direction: column; }
+            .transform-arrow { transform: rotate(90deg); }
+            .services-ticker, .verification-stream { display: none; }
+            #section-1 footer { flex-direction: column; align-items: center; gap: 2rem; text-align: center; }
+            .stats-bar { gap: 1.5rem; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            #section-4 .page-section-wrapper { padding: 30px; }
+        }
+        @media (max-width: 600px) {
+            .team-grid { grid-template-columns: 1fr; }
+            #section-4 .page-section-wrapper { padding: 20px; }
+            #section-4 header { flex-direction: column; text-align: center; gap: 20px; }
+            #section-4 .header-meta { text-align: center; }
+            .team-tagline p { font-size: 14px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .grid-4 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="document-wrapper">
-        
-        <!-- SECTION 1: COVER PAGE -->
-        <div class="section-cover">
-            <div class="bg-container">
-                <div class="bg-gradient"></div>
-                <div class="grid-overlay"></div>
-                <!-- Document particles will be added via JS -->
-            </div>
-        
-            <div class="page-container">
-                <!-- Header -->
-                <header>
-                    <!-- <div class="dept-badge">
-                        <div class="govt-emblem">AP</div>
-                        <div class="dept-info">
-                            <span class="dept-name">GSWS Department</span>
-                            <span class="dept-full">Department of Grama Sachivalayams and Ward Sachivalayams, Government of Andhra Pradesh</span>
-                        </div>
-                    </div> -->
-                    <div class="team-info">
-                        <span class="team-label">Submitted by</span>
-                        <span class="team-name">Team Responsible Indian</span>
-                        <a href="mailto:contact@responsibleindian.in" class="team-contact">contact@responsibleindian.in</a>
-                    </div>
-                    <div class="theme-badge">AI for Governance & Service Delivery</div>
-                </header>
-        
-                <!-- Hero Section -->
-                <main class="hero">
-                    <!-- Animated Solution Logo -->
-                    <div class="solution-logo">
-                        <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="logo-pulse-ring" cx="50" cy="50" r="35"/>
-                            <rect class="logo-document" x="28" y="18" width="44" height="58" rx="4"/>
-                            <g class="logo-data-lines">
-                                <line x1="36" y1="35" x2="64" y2="35"/>
-                                <line x1="36" y1="45" x2="58" y2="45"/>
-                                <line x1="36" y1="55" x2="54" y2="55"/>
-                            </g>
-                            <line class="logo-scan-line" x1="32" y1="28" x2="68" y2="28"/>
-                            <polyline class="logo-check" points="56,62 62,68 72,54"/>
-                        </svg>
-                    </div>
-        
-                    <!-- Challenge Name -->
-                    <h1 class="challenge-name">Smart Seva</h1>
-                    
-                    <!-- Title -->
-                    <p class="title">AI-Based Automated Document Verification for GSWS Services</p>
-                    
-                    <!-- Tagline -->
-                    <div class="tagline">
-                        <span class="tagline-icon">⚡</span>
-                        <span>Zero Delay. Zero Error. Zero Fraud.</span>
-                    </div>
-        
-                    <!-- Problem → Solution Transformation -->
-                    <div class="transformation-section">
-                        <div class="state-card problem">
-                            <div class="state-icon">📋</div>
-                            <div class="state-label">Current State</div>
-                            <div class="state-items">
-                                <span class="state-item">Manual verification</span>
-                                <span class="state-item">Slow approvals</span>
-                                <span class="state-item">Error-prone process</span>
-                                <span class="state-item">Resubmissions</span>
-                            </div>
-                        </div>
-        
-                        <div class="transform-arrow">
-                            <svg class="arrow-icon" viewBox="0 0 60 40">
-                                <path class="arrow-path" d="M5,20 L45,20 M35,10 L45,20 L35,30"/>
-                            </svg>
-                            <span class="arrow-label">AI + OCR</span>
-                        </div>
-        
-                        <div class="state-card solution">
-                            <div class="state-icon">🤖</div>
-                            <div class="state-label">With Smart Seva</div>
-                            <div class="state-items">
-                                <span class="state-item">Instant verification</span>
-                                <span class="state-item">Real-time approvals</span>
-                                <span class="state-item">Fraud detection</span>
-                                <span class="state-item">Seamless delivery</span>
-                            </div>
-                        </div>
-                    </div>
-        
-                    <!-- Stats -->
-                    <div class="stats-bar">
-                        <div class="stat">
-                            <div class="stat-value">350+</div>
-                            <div class="stat-label">Services Covered</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">24/7</div>
-                            <div class="stat-label">Automated Processing</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">100%</div>
-                            <div class="stat-label">Document Traceability</div>
-                        </div>
-                    </div>
-                </main>
-        
-                <!-- Services Ticker -->
-                <div class="services-ticker">
-                    <span class="ticker-label">Services Processing</span>
-                    <span class="ticker-value">Birth Certificate <span class="ticker-count">●</span></span>
-                    <span class="ticker-value">Caste Certificate <span class="ticker-count">●</span></span>
-                    <span class="ticker-value">Income Certificate <span class="ticker-count">●</span></span>
-                </div>
-        
-                <!-- Verification Stream -->
-                <div class="verification-stream">
-                    <div class="stream-item">
-                        <span class="stream-status"></span>
-                        <span>DOC_2847 verified</span>
-                    </div>
-                    <div class="stream-item">
-                        <span class="stream-status pending"></span>
-                        <span>DOC_2848 processing</span>
-                    </div>
-                    <div class="stream-item">
-                        <span class="stream-status"></span>
-                        <span>DOC_2849 verified</span>
-                    </div>
-                    <div class="stream-item">
-                        <span class="stream-status"></span>
-                        <span>DOC_2850 verified</span>
-                    </div>
-                </div>
-        
-                <!-- Footer -->
-                <!-- <footer>
-                    <div class="team-info">
-                        <span class="team-label">Submitted by</span>
-                        <span class="team-name">ResponsibleIndian</span>
-                        <a href="mailto:contact@responsibleindian.in" class="team-contact">contact@responsibleindian.in</a>
-                    </div>
-                </footer> -->
-            </div>
+
+    <section id="section-1" class="submission-section">
+        <!-- Animated Background -->
+        <div class="bg-container">
+            <div class="bg-gradient"></div>
+            <div class="grid-overlay"></div>
+            <!-- Document particles will be added via JS -->
         </div>
 
-        <div class="page-break"></div>
+        <div class="page-container">
+            <!-- Header -->
+            <header>
+                <!-- <div class="dept-badge">
+                    <div class="govt-emblem">AP</div>
+                    <div class="dept-info">
+                        <span class="dept-name">GSWS Department</span>
+                        <span class="dept-full">Department of Grama Sachivalayams and Ward Sachivalayams, Government of Andhra Pradesh</span>
+                    </div>
+                </div> -->
+                <div class="team-info">
+                    <span class="team-label">Submitted by</span>
+                    <span class="team-name">ResponsibleIndian</span>
+                    <a href="mailto:contact@responsibleindian.in" class="team-contact">contact@responsibleindian.in</a>
+                </div>
+                <div class="theme-badge">AI for Governance & Service Delivery</div>
+            </header>
 
-        <!-- SECTION 2: PROBLEM ANALYSIS -->
-        <div class="section-problem">
-            <!-- SECTION 1: THE CURRENT REALITY -->
+            <!-- Hero Section -->
+            <main class="hero">
+                <!-- Animated Solution Logo -->
+                <div class="solution-logo">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="logo-pulse-ring" cx="50" cy="50" r="35"/>
+                        <rect class="logo-document" x="28" y="18" width="44" height="58" rx="4"/>
+                        <g class="logo-data-lines">
+                            <line x1="36" y1="35" x2="64" y2="35"/>
+                            <line x1="36" y1="45" x2="58" y2="45"/>
+                            <line x1="36" y1="55" x2="54" y2="55"/>
+                        </g>
+                        <line class="logo-scan-line" x1="32" y1="28" x2="68" y2="28"/>
+                        <polyline class="logo-check" points="56,62 62,68 72,54"/>
+                    </svg>
+                </div>
+                <h1 class="challenge-name">Smart Seva</h1>
+                <p class="title">AI-Based Automated Document Verification for GSWS Services</p>
+                <div class="tagline">
+                    <span class="tagline-icon">⚡</span>
+                    <span>Zero Delay. Zero Error. Zero Fraud.</span>
+                </div>
+                <div class="transformation-section">
+                    <div class="state-card problem">
+                        <div class="state-icon">📋</div>
+                        <div class="state-label">Current State</div>
+                        <div class="state-items">
+                            <span class="state-item">Manual verification</span>
+                            <span class="state-item">Slow approvals</span>
+                            <span class="state-item">Error-prone process</span>
+                            <span class="state-item">Resubmissions</span>
+                        </div>
+                    </div>
+                    <div class="transform-arrow">
+                        <svg class="arrow-icon" viewBox="0 0 60 40">
+                            <path class="arrow-path" d="M5,20 L45,20 M35,10 L45,20 L35,30"/>
+                        </svg>
+                        <span class="arrow-label">AI + OCR</span>
+                    </div>
+                    <div class="state-card solution">
+                        <div class="state-icon">🤖</div>
+                        <div class="state-label">With Smart Seva</div>
+                        <div class="state-items">
+                            <span class="state-item">Instant verification</span>
+                            <span class="state-item">Real-time approvals</span>
+                            <span class="state-item">Fraud detection</span>
+                            <span class="state-item">Seamless delivery</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-bar">
+                    <div class="stat">
+                        <div class="stat-value">350+</div>
+                        <div class="stat-label">Services Covered</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Automated Processing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Document Traceability</div>
+                    </div>
+                </div>
+            </main>
+
+            <div class="services-ticker">
+                <span class="ticker-label">Services Processing</span>
+                <span class="ticker-value">Birth Certificate <span class="ticker-count">●</span></span>
+                <span class="ticker-value">Caste Certificate <span class="ticker-count">●</span></span>
+                <span class="ticker-value">Income Certificate <span class="ticker-count">●</span></span>
+            </div>
+            <div class="verification-stream">
+                <div class="stream-item">
+                    <span class="stream-status"></span>
+                    <span>DOC_2847 verified</span>
+                </div>
+                <div class="stream-item">
+                    <span class="stream-status pending"></span>
+                    <span>DOC_2848 processing</span>
+                </div>
+                <div class="stream-item">
+                    <span class="stream-status"></span>
+                    <span>DOC_2849 verified</span>
+                </div>
+                <div class="stream-item">
+                    <span class="stream-status"></span>
+                    <span>DOC_2850 verified</span>
+                </div>
+            </div>
+
+            <footer>
+                <div class="scroll-indicator" id="scrollIndicator">
+                    <span>Scroll</span>
+                    <svg class="scroll-arrow" viewBox="0 0 24 24">
+                        <path class="scroll-arrow-path" d="M12 5v14M5 12l7 7 7-7"/>
+                    </svg>
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="section-2" class="submission-section">
+        <div class="content-wrapper">
             <div class="section-header">
                 <h1 class="section-title">The Bottleneck in Service Delivery</h1>
                 <p class="section-subtitle">Why manual verification is failing Andhra Pradesh's citizens</p>
             </div>
 
-            <!-- Context Cards -->
             <div class="grid-2">
                 <div class="context-container">
                     <div class="metric-big">350+</div>
@@ -622,20 +528,19 @@
                     </p>
                 </div>
                 <div class="context-container" style="display: flex; flex-direction: column; justify-content: center;">
-                    <!-- Visual Bottleneck Representation -->
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
                         <div style="text-align: center;">
                             <div style="font-size: 2rem;">📂</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Thousands of<br>Uploads</div>
                         </div>
-                        <div style="height: 2px; flex-grow: 1; background: var(--bg-card); margin: 0 10px; position: relative;">
+                        <div style="height: 2px; flex-grow: 1; background: var(--bg-elevated); margin: 0 10px; position: relative;">
                             <div style="position: absolute; left: 50%; top: -10px; transform: translateX(-50%); font-size: 1.2rem;">⏳</div>
                         </div>
                         <div style="text-align: center;">
                             <div style="font-size: 2rem;">👤</div>
                             <div style="font-size: 0.7rem; color: var(--danger);">Single Reviewer<br>Bottleneck</div>
                         </div>
-                        <div style="height: 2px; flex-grow: 1; background: var(--bg-card); margin: 0 10px;"></div>
+                        <div style="height: 2px; flex-grow: 1; background: var(--bg-elevated); margin: 0 10px;"></div>
                         <div style="text-align: center;">
                             <div style="font-size: 2rem;">📜</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">Delayed<br>Approval</div>
@@ -646,10 +551,8 @@
                     </p>
                 </div>
             </div>
-
-            <!-- SECTION 2: SPECIFIC FRICTION POINTS -->
+            
             <div class="grid-3">
-                <!-- Pain Point 1 -->
                 <div class="bottleneck-card">
                     <div class="visual-stage">
                         <div class="comparison-ui">
@@ -664,31 +567,17 @@
                         </div>
                         <div style="position: absolute; right: 10px; top: 10px; color: var(--danger);">✕</div>
                     </div>
-                    <div class="pain-title">
-                        <span style="color: var(--danger);">⚠</span> Error & Rejection
-                    </div>
-                    <p class="pain-desc">
-                        Minor mismatches (spelling, abbreviations) cause rejection loops. Citizens must resubmit, restarting the queue.
-                    </p>
+                    <div class="pain-title"><span style="color: var(--danger);">⚠</span> Error & Rejection</div>
+                    <p class="pain-desc">Minor mismatches (spelling, abbreviations) cause rejection loops. Citizens must resubmit, restarting the queue.</p>
                 </div>
-
-                <!-- Pain Point 2 -->
                 <div class="bottleneck-card">
                     <div class="visual-stage">
                         <div style="position: relative; width: 60px; height: 80px; background: #fff; border-radius: 4px; opacity: 0.1;"></div>
-                        <div style="position: absolute;">
-                            <div style="font-size: 2.5rem; opacity: 0.5;">🔍</div>
-                        </div>
+                        <div style="position: absolute;"><div style="font-size: 2.5rem; opacity: 0.5;">🔍</div></div>
                     </div>
-                    <div class="pain-title">
-                        <span style="color: var(--danger);">⚠</span> Invisible Fraud
-                    </div>
-                    <p class="pain-desc">
-                        Tampered dates or amounts in PDFs are hard to spot with the naked eye, especially on low-res scans.
-                    </p>
+                    <div class="pain-title"><span style="color: var(--danger);">⚠</span> Invisible Fraud</div>
+                    <p class="pain-desc">Tampered dates or amounts in PDFs are hard to spot with the naked eye, especially on low-res scans.</p>
                 </div>
-
-                <!-- Pain Point 3 -->
                 <div class="bottleneck-card">
                     <div class="visual-stage">
                         <div style="display: flex; gap: 5px; align-items: flex-end; height: 40px;">
@@ -699,1011 +588,329 @@
                         </div>
                         <div style="position: absolute; top: 10px; right: 10px; font-size: 0.7rem; color: var(--danger);">NO SIGNAL</div>
                     </div>
-                    <div class="pain-title">
-                        <span style="color: var(--danger);">⚠</span> Rural Disconnect
-                    </div>
-                    <p class="pain-desc">
-                        Reviewers in remote Sachivalayams face internet outages, halting the verification process completely.
-                    </p>
+                    <div class="pain-title"><span style="color: var(--danger);">⚠</span> Rural Disconnect</div>
+                    <p class="pain-desc">Reviewers in remote Sachivalayams face internet outages, halting the verification process completely.</p>
                 </div>
             </div>
 
-            <!-- SECTION 3: THE AI BRIDGE -->
             <div class="section-header" style="border-color: var(--success); margin-top: 4rem;">
                 <h1 class="section-title">How Smart Seva Bridges the Gap</h1>
                 <p class="section-subtitle">Transforming friction into flow with Intelligent Automation</p>
             </div>
 
             <div class="grid-4">
-                <!-- Solution 1 -->
                 <div class="bridge-card">
                     <div class="bridge-icon">👁️</div>
                     <div class="bridge-title">Multi-Engine OCR</div>
-                    <p class="bridge-desc">
-                        Ensemble of Google Vision + Azure + Tesseract to read <strong>Telugu & English</strong> documents with >95% accuracy, even from phone scans.
-                    </p>
+                    <p class="bridge-desc">Ensemble of Google Vision + Azure + Tesseract to read <strong>Telugu & English</strong> documents with >95% accuracy, even from phone scans.</p>
                 </div>
-
-                <!-- Solution 2 -->
                 <div class="bridge-card">
                     <div class="bridge-icon">⚡</div>
                     <div class="bridge-title">Auto-Validation</div>
-                    <p class="bridge-desc">
-                        Instantly compares extracted text against AP Seva form data. Handles fuzzy matches ("Ravi Kumar" ≈ "R. Kumar") automatically.
-                    </p>
+                    <p class="bridge-desc">Instantly compares extracted text against AP Seva form data. Handles fuzzy matches ("Ravi Kumar" ≈ "R. Kumar") automatically.</p>
                 </div>
-
-                <!-- Solution 3 -->
                 <div class="bridge-card">
                     <div class="bridge-icon">🛡️</div>
                     <div class="bridge-title">Fraud Forensics</div>
-                    <p class="bridge-desc">
-                        Scans metadata and pixel patterns to detect tampering invisible to humans (e.g., Photoshop edits, compression artifacts).
-                    </p>
+                    <p class="bridge-desc">Scans metadata and pixel patterns to detect tampering invisible to humans (e.g., Photoshop edits, compression artifacts).</p>
                 </div>
-
-                <!-- Solution 4 -->
                 <div class="bridge-card">
                     <div class="bridge-icon">💾</div>
                     <div class="bridge-title">Offline-First</div>
-                    <p class="bridge-desc">
-                        Enables rural Digital Assistants to continue reviewing cached documents during internet outages, syncing when online.
-                    </p>
+                    <p class="bridge-desc">Enables rural Digital Assistants to continue reviewing cached documents during internet outages, syncing when online.</p>
                 </div>
             </div>
 
-            <!-- Visual Summary Flow -->
-            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
                 <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">RESULT:</span>
                 <div class="status-badge bg-green">INSTANT FEEDBACK</div>
                 <div class="status-badge bg-green">ZERO BACKLOG</div>
                 <div class="status-badge bg-green">SECURE DELIVERY</div>
             </div>
-
             <footer>
                 <div>Challenge Code: 100030</div>
                 <div>Smart Seva Architecture Narrative</div>
             </footer>
         </div>
+    </section>
 
-        <div class="page-break"></div>
+    <div class="section-divider"></div>
 
-        <!-- SECTION 3: TECHNICAL SOLUTION (Pages) -->
-        <div class="section-technical">
-            <!-- C1: Business Process Flow -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION C1</div>
-                    <h2 class="section-title">Business Process <span class="accent">Flow</span></h2>
-                    
-                    <div style="margin-bottom: 20px; font-size: 14px; color: var(--color-text-secondary); max-width: 800px;">
-                        Streamlining certificate verification for 350+ GSWS services. The process transitions from manual, multi-day delays to instant AI-powered validation with "Human-in-the-Loop" for high-risk cases.
-                    </div>
-
-                    <div class="process-flow">
-                        <div class="process-line"></div>
-                        
-                        <!-- Step 1 -->
-                        <div class="process-step">
-                            <div class="step-circle">1</div>
-                            <div class="card-title">Ingestion</div>
-                            <div class="card-text">Citizen uploads document via AP Seva. System checks file integrity & queues.</div>
-                            <div class="badge" style="color: var(--color-cyan)">Citizen / Portal</div>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="process-step">
-                            <div class="step-circle">2</div>
-                            <div class="card-title">AI Processing</div>
-                            <div class="card-text">Multi-engine OCR extracts text. Validation Engine compares with form data.</div>
-                            <div class="badge" style="color: var(--color-purple)">Auto-Scaling</div>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div class="process-step">
-                            <div class="step-circle">3</div>
-                            <div class="card-title">Fraud Check</div>
-                            <div class="card-text">Metadata, pixel forensics & template matching analysis.</div>
-                            <div class="badge" style="color: var(--color-magenta)">Multi-Signal</div>
-                        </div>
-
-                        <!-- Step 4 -->
-                        <div class="process-step">
-                            <div class="step-circle">4</div>
-                            <div class="card-title">Routing</div>
-                            <div class="card-text">
-                                <span style="color:var(--color-success)">≥90%:</span> Auto-Approve<br>
-                                <span style="color:var(--color-amber)">70-89%:</span> Flagged Review<br>
-                                <span style="color:var(--color-magenta)">&lt;70%:</span> Mandatory Check
-                            </div>
-                        </div>
-
-                        <!-- Step 5 -->
-                        <div class="process-step">
-                            <div class="step-circle">5</div>
-                            <div class="card-title">Feedback</div>
-                            <div class="card-text">Results pushed to AP Seva. Corrections feed Active Learning loop.</div>
-                            <div class="badge" style="color: var(--color-cyan)">Closed Loop</div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="tech-card">
-                            <div class="card-title" style="font-size: 14px; color: var(--color-cyan);">CURRENT STATE PAIN POINTS</div>
-                            <ul style="list-style: none; padding: 0; font-size: 12px; color: var(--color-text-secondary);">
-                                <li style="margin-bottom: 8px;">❌ 3-5 day turnaround for manual verification</li>
-                                <li style="margin-bottom: 8px;">❌ High rejection rate due to minor typos</li>
-                                <li style="margin-bottom: 8px;">❌ Inconsistent validation across Mandals</li>
-                            </ul>
-                        </div>
-                        <div class="tech-card highlight">
-                            <div class="card-title" style="font-size: 14px; color: var(--color-purple);">SMART SEVA IMPROVEMENTS</div>
-                            <ul style="list-style: none; padding: 0; font-size: 12px; color: var(--color-text-secondary);">
-                                <li style="margin-bottom: 8px;">✅ < 30s processing time (P95)</li>
-                                <li style="margin-bottom: 8px;">✅ Offline mode for rural Digital Assistants</li>
-                                <li style="margin-bottom: 8px;">✅ 70% reduction in manual workload</li>
-                            </ul>
-                        </div>
-                    </div>
+    <section id="section-3" class="submission-section">
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION C1</div>
+                <h2 class="section-title">Business Process <span class="accent">Flow</span></h2>
+                <div style="margin-bottom: 20px; font-size: 14px; color: var(--text-secondary); max-width: 800px;">Streamlining certificate verification for 350+ GSWS services. The process transitions from manual, multi-day delays to instant AI-powered validation with "Human-in-the-Loop" for high-risk cases.</div>
+                <div class="process-flow">
+                    <div class="process-line"></div>
+                    <div class="process-step"><div class="step-circle">1</div><div class="card-title">Ingestion</div><div class="card-text">Citizen uploads document via AP Seva. System checks file integrity & queues.</div><div class="badge" style="color: var(--accent-cyan)">Citizen / Portal</div></div>
+                    <div class="process-step"><div class="step-circle">2</div><div class="card-title">AI Processing</div><div class="card-text">Multi-engine OCR extracts text. Validation Engine compares with form data.</div><div class="badge" style="color: var(--accent-purple)">Auto-Scaling</div></div>
+                    <div class="process-step"><div class="step-circle">3</div><div class="card-title">Fraud Check</div><div class="card-text">Metadata, pixel forensics & template matching analysis.</div><div class="badge" style="color: var(--accent-magenta)">Multi-Signal</div></div>
+                    <div class="process-step"><div class="step-circle">4</div><div class="card-title">Routing</div><div class="card-text"><span style="color:var(--success)">≥90%:</span> Auto-Approve<br><span style="color:var(--accent-amber)">70-89%:</span> Flagged Review<br><span style="color:var(--accent-magenta)">&lt;70%:</span> Mandatory Check</div></div>
+                    <div class="process-step"><div class="step-circle">5</div><div class="card-title">Feedback</div><div class="card-text">Results pushed to AP Seva. Corrections feed Active Learning loop.</div><div class="badge" style="color: var(--accent-cyan)">Closed Loop</div></div>
                 </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
+                <div style="margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="tech-card"><div class="card-title" style="font-size: 14px; color: var(--accent-cyan);">CURRENT STATE PAIN POINTS</div><ul style="list-style: none; padding: 0; font-size: 12px; color: var(--text-secondary);"><li style="margin-bottom: 8px;">❌ 3-5 day turnaround for manual verification</li><li style="margin-bottom: 8px;">❌ High rejection rate due to minor typos</li><li style="margin-bottom: 8px;">❌ Inconsistent validation across Mandals</li></ul></div>
+                    <div class="tech-card highlight"><div class="card-title" style="font-size: 14px; color: var(--accent-purple);">SMART SEVA IMPROVEMENTS</div><ul style="list-style: none; padding: 0; font-size: 12px; color: var(--text-secondary);"><li style="margin-bottom: 8px;">✅ &lt; 30s processing time (P95)</li><li style="margin-bottom: 8px;">✅ Offline mode for rural Digital Assistants</li><li style="margin-bottom: 8px;">✅ 70% reduction in manual workload</li></ul></div>
                 </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- C2: High Level Architecture -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION C2</div>
-                    <h2 class="section-title">High-Level <span class="accent">Architecture</span></h2>
-                    
-                    <div class="arch-container">
-                        <svg width="100%" height="100%" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
-                            <defs>
-                                <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:var(--color-cyan);stop-opacity:0.2" />
-                                    <stop offset="100%" style="stop-color:var(--color-cyan);stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-
-                            <!-- User Layer -->
-                            <g transform="translate(50, 50)">
-                                <rect x="0" y="0" width="180" height="80" class="arch-node" style="stroke: var(--color-cyan)"/>
-                                <text x="50" y="30" class="node-title">AP Seva Portal</text>
-                                <text x="50" y="45" class="node-desc">Citizen Interface</text>
-                                <rect x="50" y="55" width="80" height="16" class="tech-pill" />
-                                <text x="90" y="66" class="tech-text" text-anchor="middle">REST API</text>
-                                <rect x="10" y="20" width="30" height="40" fill="none" stroke="var(--color-cyan)" stroke-width="2"/>
-                            </g>
-
-                            <g transform="translate(50, 200)">
-                                <rect x="0" y="0" width="180" height="80" class="arch-node" style="stroke: var(--color-cyan)"/>
-                                <text x="50" y="30" class="node-title">Digital Assistant</text>
-                                <text x="50" y="45" class="node-desc">PWA Interface</text>
-                                <rect x="50" y="55" width="80" height="16" class="tech-pill" />
-                                <text x="90" y="66" class="tech-text" text-anchor="middle">REACT + PWA</text>
-                                <circle cx="25" cy="40" r="15" fill="none" stroke="var(--color-cyan)" stroke-width="2"/>
-                            </g>
-
-                            <!-- Ingestion Layer -->
-                            <g transform="translate(300, 125)">
-                                <rect x="0" y="0" width="160" height="200" class="arch-node" style="stroke: var(--color-purple)"/>
-                                <text x="80" y="30" class="node-title" text-anchor="middle">Ingestion Layer</text>
-                                
-                                <g transform="translate(20, 50)">
-                                    <rect x="0" y="0" width="120" height="50" fill="rgba(124, 58, 237, 0.1)" rx="4"/>
-                                    <text x="60" y="20" class="node-title" font-size="12" text-anchor="middle">API Gateway</text>
-                                    <text x="60" y="35" class="tech-text" text-anchor="middle">KONG</text>
-                                </g>
-
-                                <g transform="translate(20, 120)">
-                                    <rect x="0" y="0" width="120" height="50" fill="rgba(124, 58, 237, 0.1)" rx="4"/>
-                                    <text x="60" y="20" class="node-title" font-size="12" text-anchor="middle">Msg Queue</text>
-                                    <text x="60" y="35" class="tech-text" text-anchor="middle">RABBITMQ</text>
-                                </g>
-                            </g>
-
-                            <!-- Processing Core -->
-                            <g transform="translate(550, 50)">
-                                <rect x="0" y="0" width="400" height="350" class="arch-node" style="stroke: var(--color-magenta); stroke-dasharray: 4 2;"/>
-                                <text x="200" y="30" class="node-title" text-anchor="middle" fill="var(--color-magenta)">AI Processing Core</text>
-                                
-                                <g transform="translate(30, 60)">
-                                    <rect x="0" y="0" width="100" height="60" class="arch-node" style="stroke: var(--color-cyan)"/>
-                                    <text x="50" y="25" class="node-title" font-size="11" text-anchor="middle">Pre-Process</text>
-                                    <text x="50" y="45" class="tech-text" text-anchor="middle">OPENCV</text>
-                                </g>
-
-                                <g transform="translate(150, 60)">
-                                    <rect x="0" y="0" width="220" height="60" class="arch-node" style="stroke: var(--color-cyan)"/>
-                                    <text x="110" y="25" class="node-title" font-size="11" text-anchor="middle">OCR Ensemble</text>
-                                    <text x="110" y="45" class="tech-text" text-anchor="middle">GOOGLE VISION + AZURE + TESSERACT</text>
-                                </g>
-
-                                <g transform="translate(30, 150)">
-                                    <rect x="0" y="0" width="150" height="60" class="arch-node" style="stroke: var(--color-magenta)"/>
-                                    <text x="75" y="25" class="node-title" font-size="11" text-anchor="middle">Fraud Detection</text>
-                                    <text x="75" y="45" class="tech-text" text-anchor="middle">FORENSICS + META</text>
-                                </g>
-
-                                <g transform="translate(220, 150)">
-                                    <rect x="0" y="0" width="150" height="60" class="arch-node" style="stroke: var(--color-cyan)"/>
-                                    <text x="75" y="25" class="node-title" font-size="11" text-anchor="middle">Validation Engine</text>
-                                    <text x="75" y="45" class="tech-text" text-anchor="middle">PYTHON / FUZZY</text>
-                                </g>
-
-                                <g transform="translate(130, 250)">
-                                    <rect x="0" y="0" width="140" height="60" class="arch-node" style="stroke: var(--color-purple)"/>
-                                    <text x="70" y="25" class="node-title" font-size="11" text-anchor="middle">Decision Router</text>
-                                    <text x="70" y="45" class="tech-text" text-anchor="middle">RULES ENGINE</text>
-                                </g>
-                            </g>
-
-                            <!-- Data Layer -->
-                            <g transform="translate(300, 450)">
-                                <rect x="0" y="0" width="650" height="100" class="arch-node" style="stroke: var(--color-text-secondary)"/>
-                                <text x="20" y="30" class="node-title">Data & Compliance Layer</text>
-                                
-                                <g transform="translate(50, 40)">
-                                    <rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/>
-                                    <text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">POSTGRESQL (AUDIT)</text>
-                                </g>
-                                <g transform="translate(250, 40)">
-                                    <rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/>
-                                    <text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">REDIS (CACHE)</text>
-                                </g>
-                                <g transform="translate(450, 40)">
-                                    <rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/>
-                                    <text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">MEGHRAJ CLOUD</text>
-                                </g>
-                            </g>
-
-                            <!-- Connection Lines -->
-                            <path d="M 230 90 L 300 175" stroke="url(#flowGradient)" class="data-flow-line"/>
-                            <path d="M 230 240 L 300 275" stroke="url(#flowGradient)" class="data-flow-line"/>
-                            <path d="M 460 225 L 550 225" stroke="url(#flowGradient)" class="data-flow-line"/>
-                            <path d="M 630 120 L 630 150" stroke="url(#flowGradient)" class="data-flow-line" />
-                            <path d="M 820 120 L 820 150" stroke="url(#flowGradient)" class="data-flow-line" />
-                            <path d="M 655 210 L 750 250" stroke="url(#flowGradient)" class="data-flow-line" />
-                            <path d="M 825 210 L 750 250" stroke="url(#flowGradient)" class="data-flow-line" />
-                            <path d="M 750 400 L 750 450" stroke="url(#flowGradient)" class="data-flow-line" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- C2.1: Component Deep Dives -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION C2.1</div>
-                    <h2 class="section-title">Component <span class="accent">Deep Dive</span></h2>
-
-                    <div class="grid-3">
-                        <div class="tech-card highlight">
-                            <div class="card-icon">👁️</div>
-                            <div class="card-title">Multi-Engine OCR Ensemble</div>
-                            <div class="card-text">
-                                Combines Google Cloud Vision (primary for Telugu), Azure Form Recognizer (Layouts), and fine-tuned Tesseract (Offline).
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <div class="section-label" style="font-size: 9px; margin-bottom: 5px;">STRATEGY</div>
-                                <div class="card-text" style="color: var(--color-cyan)">Weighted Voting</div>
-                            </div>
-                            <div class="badge">CER < 0.146</div>
-                        </div>
-
-                        <div class="tech-card">
-                            <div class="card-icon">🛡️</div>
-                            <div class="card-title">Multi-Signal Fraud Detection</div>
-                            <div class="card-text">
-                                Analyzes four signals: Metadata (EXIF/SW), Pixel Forensics (ELA/Copy-Move), Logical Consistency (LLM), and Template Matching.
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <div class="section-label" style="font-size: 9px; margin-bottom: 5px;">TECH</div>
-                                <div class="card-text" style="color: var(--color-purple)">OpenCV + SIFT + GPT-4o</div>
-                            </div>
-                            <div class="badge">TPR ≥ 85%</div>
-                        </div>
-
-                        <div class="tech-card">
-                            <div class="card-icon">🧠</div>
-                            <div class="card-title">Active Learning Loop</div>
-                            <div class="card-text">
-                                Captures operator corrections on low-confidence docs. Updates 'Golden Set' for bi-weekly LoRA fine-tuning of post-processing models.
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <div class="section-label" style="font-size: 9px; margin-bottom: 5px;">GATE</div>
-                                <div class="card-text" style="color: var(--color-magenta)">Human Approval Required</div>
-                            </div>
-                            <div class="badge">MLFlow + DVC</div>
-                        </div>
-                    </div>
-
-                    <div class="section-label" style="margin-top: 20px;">DEPLOYMENT STRATEGY</div>
-                    <div class="tech-card" style="display: flex; gap: 20px; align-items: center;">
-                        <div style="flex: 1;">
-                            <h3 class="card-title" style="font-size: 14px;">Hybrid Cloud (MeghRaj + Edge)</h3>
-                            <p class="card-text">
-                                Core processing runs on MeghRaj Government Cloud (Kubernetes). Digital Assistants use PWA with IndexedDB for offline capability. Sensitive data remains in India regions.
-                            </p>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="badge" style="border-color: var(--color-cyan); color: var(--color-cyan);">DPDP Act Compliant</div>
-                        </div>
-                    </div>
-
-                    <table class="tech-table" style="margin-top: 20px;">
-                        <thead>
-                            <tr>
-                                <th>Capability</th>
-                                <th>Target Metric</th>
-                                <th>Fallback Strategy</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>OCR Accuracy</td>
-                                <td>≥95% field-level</td>
-                                <td>Failover to Tesseract + Human Review</td>
-                            </tr>
-                            <tr>
-                                <td>Validation Latency</td>
-                                <td>&lt; 2s (P95)</td>
-                                <td>Local cache (15 min TTL)</td>
-                            </tr>
-                            <tr>
-                                <td>Offline Capacity</td>
-                                <td>50 documents</td>
-                                <td>Sync on connectivity restore</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- C3: User Flows -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION C3</div>
-                    <h2 class="section-title">User <span class="accent">Flows</span></h2>
-
-                    <div class="grid-2">
-                        <!-- Digital Assistant Journey -->
-                        <div class="tech-card">
-                            <div class="card-title" style="color: var(--color-cyan)">Digital Assistant (Sachivalayam)</div>
-                            <div class="card-text" style="margin-bottom: 20px;">Primary Actor: Handling citizen requests & overrides.</div>
-                            
-                            <div style="display: flex; flex-direction: column; gap: 15px;">
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(0,247,255,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-cyan);">1</div>
-                                    <div class="card-text">Scans physical certificate via PWA.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(0,247,255,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-cyan);">2</div>
-                                    <div class="card-text">Views AI overlay: <span style="color: var(--color-success)">Green ticks</span> for matches, <span style="color: var(--color-magenta)">Red highlights</span> for mismatches.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(0,247,255,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-cyan);">3</div>
-                                    <div class="card-text">"Flagged" document (Score 0.82): Reviews extracted Name vs Form Name.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(0,247,255,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-cyan);">4</div>
-                                    <div class="card-text">Correction: Updates "Ravi K." to "Ravi Kumar". Logs decision.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(0,247,255,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-cyan);">5</div>
-                                    <div class="card-text">Offline Sync: Data syncs to server when internet returns.</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Citizen Journey -->
-                        <div class="tech-card">
-                            <div class="card-title" style="color: var(--color-purple)">Citizen (AP Seva Portal)</div>
-                            <div class="card-text" style="margin-bottom: 20px;">Beneficiary: Seeking service approval.</div>
-
-                            <div style="display: flex; flex-direction: column; gap: 15px;">
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-purple);">1</div>
-                                    <div class="card-text">Uploads Income Certificate PDF.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-purple);">2</div>
-                                    <div class="card-text">Real-time Feedback (30s): "Name Mismatch detected".</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-purple);">3</div>
-                                    <div class="card-text">Guidance: "Form says 'Ravi Kumar', Doc says 'R. Kumar'. Please clarify."</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-purple);">4</div>
-                                    <div class="card-text">Confirm: Citizen confirms it is the same person.</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--color-purple);">5</div>
-                                    <div class="card-text">Approval: Instant SMS notification of successful verification.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 30px;">
-                        <div class="section-label">EXCEPTION HANDLING</div>
-                        <div class="grid-3" style="margin-top: 10px;">
-                            <div class="tech-card" style="padding: 15px;">
-                                <div class="node-title" style="font-size: 12px; color: var(--color-magenta);">Suspected Fraud (>0.40)</div>
-                                <div class="card-text">Escalated to Mandal Officer. Visual evidence (ELA map) provided.</div>
-                            </div>
-                            <div class="tech-card" style="padding: 15px;">
-                                <div class="node-title" style="font-size: 12px; color: var(--color-text-primary);">System Outage</div>
-                                <div class="card-text">Failover to manual queue. Provisional acceptance with async validation.</div>
-                            </div>
-                            <div class="tech-card" style="padding: 15px;">
-                                <div class="node-title" style="font-size: 12px; color: var(--color-text-primary);">Unknown Template</div>
-                                <div class="card-text">Routed to Admin for classification. Updates Template Repo.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- D1: Timeline -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION D1</div>
-                    <h2 class="section-title">PoC Scope & <span class="accent">Timeline</span></h2>
-
-                    <div style="display: flex; gap: 20px; height: 100%; align-items: stretch;">
-                        
-                        <!-- Phase 1: PoC -->
-                        <div class="tech-card highlight" style="flex: 1; display: flex; flex-direction: column;">
-                            <div class="badge" style="background: var(--color-cyan); color: #000; align-self: flex-start;">PHASE 1: PoC</div>
-                            <div class="card-title" style="margin-top: 10px;">Weeks 1-6</div>
-                            <div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div>
-                            <ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--color-text-secondary); line-height: 2;">
-                                <li>OCR Pipeline (Google+Azure+Tesseract)</li>
-                                <li>Basic Validation Engine</li>
-                                <li>Fraud Detection (Metadata)</li>
-                                <li>Review Interface (Basic)</li>
-                                <li>Processing 3,000 Sample Docs</li>
-                            </ul>
-                            <div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                                <div class="section-label">SUCCESS METRIC</div>
-                                <div class="card-title" style="color: var(--color-cyan)">≥95% Accuracy</div>
-                            </div>
-                        </div>
-
-                        <!-- Phase 2: Pilot -->
-                        <div class="tech-card" style="flex: 1; display: flex; flex-direction: column;">
-                            <div class="badge" style="background: var(--color-purple); color: #fff; align-self: flex-start;">PHASE 2: PILOT</div>
-                            <!-- <div class="card-title" style="margin-top: 10px;">Weeks 7-18</div> -->
-                            <div style="height: 32px;"></div>
-                            <div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div>
-                            <ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--color-text-secondary); line-height: 2;">
-                                <li>AP Seva Integration</li>
-                                <li>Offline Capability</li>
-                                <li>Active Learning Pipeline</li>
-                                <li>Staff Training</li>
-                                <li>Deploy to 50 Sachivalayams</li>
-                            </ul>
-                            <div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                                <div class="section-label">SUCCESS METRIC</div>
-                                <div class="card-title" style="color: var(--color-purple)">500+ Daily Docs</div>
-                            </div>
-                        </div>
-
-                        <!-- Phase 3: Scale -->
-                        <div class="tech-card" style="flex: 1; display: flex; flex-direction: column;">
-                            <div class="badge" style="background: var(--color-text-secondary); color: #000; align-self: flex-start;">PHASE 3: SCALE</div>
-                            <!-- <div class="card-title" style="margin-top: 10px;">Weeks 19-34</div> -->
-                            <div style="height: 32px;"></div>
-                            <div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div>
-                            <ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--color-text-secondary); line-height: 2;">
-                                <li>Statewide Rollout (13 Districts)</li>
-                                <li>HA Infrastructure & DR</li>
-                                <li>Advanced Fraud (All signals)</li>
-                                <li>Executive Dashboard</li>
-                            </ul>
-                            <div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                                <div class="section-label">SUCCESS METRIC</div>
-                                <div class="card-title" style="color: var(--color-text-primary)">10k+ Daily Docs</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- D2: Impact -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION D2</div>
-                    <h2 class="section-title">Expected <span class="accent">Impact</span></h2>
-
-                    <div class="grid-3" style="margin-bottom: 30px;">
-                        <div class="tech-card highlight" style="text-align: center;">
-                            <div class="section-label">EFFICIENCY</div>
-                            <div style="font-size: 48px; font-weight: 800; color: var(--color-cyan); margin: 10px 0;">70%</div>
-                            <div class="card-text">Reduction in Manual Verification Time</div>
-                        </div>
-                        <div class="tech-card highlight" style="text-align: center;">
-                            <div class="section-label">ACCURACY</div>
-                            <div style="font-size: 48px; font-weight: 800; color: var(--color-purple); margin: 10px 0;">50%</div>
-                            <div class="card-text">Decrease in Citizen Resubmission Rates</div>
-                        </div>
-                        <div class="tech-card highlight" style="text-align: center;">
-                            <div class="section-label">INTEGRITY</div>
-                            <div style="font-size: 48px; font-weight: 800; color: var(--color-magenta); margin: 10px 0;">85%</div>
-                            <div class="card-text">Fraud Detection Rate (Confirmed Forgeries)</div>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- Impact Grid -->
-                        <div class="tech-card">
-                            <div class="card-title">Stakeholder Benefits</div>
-                            <table class="tech-table">
-                                <tr>
-                                    <td style="color: var(--color-cyan)">Citizens</td>
-                                    <td>Zero delay approvals, instant feedback on errors, fewer trips to office.</td>
-                                </tr>
-                                <tr>
-                                    <td style="color: var(--color-purple)">GSWS Officers</td>
-                                    <td>Focus on complex cases, reduced backlog, offline tools for rural work.</td>
-                                </tr>
-                                <tr>
-                                    <td style="color: var(--color-magenta)">Government</td>
-                                    <td>Fraud prevention, audit trail compliance (DPDP), data-driven insights.</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <!-- Cost Analysis -->
-                        <div class="tech-card">
-                            <div class="card-title">Cost & Sustainability</div>
-                            <div class="card-text" style="margin-bottom: 15px;">
-                                Hybrid approach balances accuracy and cost. Initial commercial APIs (POC) transition to open-source models at scale.
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--color-border-cyan); padding: 10px; border-radius: 6px;">
-                                <span style="font-size: 12px;">Target Cost Per Verification</span>
-                                <span style="font-size: 24px; font-weight: 700; color: var(--color-success);"> < ₹5</span>
-                            </div>
-                            <div style="margin-top: 10px; font-size: 10px; color: var(--color-text-secondary);">
-                                *Includes infrastructure and API costs at scale phase (10k docs/day).
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
-
-            <div class="page-break"></div>
-
-            <!-- E: Privacy -->
-            <section class="page-section">
-                <div class="corner-accent top-left"></div>
-                <div class="corner-accent bottom-right"></div>
-                <div class="neon-line"></div>
-                <div class="content">
-                    <div class="section-label">SECTION E</div>
-                    <h2 class="section-title">Data Privacy & <span class="accent">Compliance</span></h2>
-
-                    <div class="grid-3" style="margin-bottom: 20px;">
-                        <div class="tech-card" style="border-top: 3px solid var(--color-cyan);">
-                            <div class="card-title" style="font-size: 14px;">DPDP Act 2023</div>
-                            <div class="card-text">
-                                System operates under "Legitimate Use" (Section 7). Data minimization principles applied: only required fields extracted.
-                            </div>
-                        </div>
-                        <div class="tech-card" style="border-top: 3px solid var(--color-purple);">
-                            <div class="card-title" style="font-size: 14px;">MeitY / MeghRaj</div>
-                            <div class="card-text">
-                                Deployment on Government Cloud (MeghRaj). Data sovereignty guaranteed. All servers within India.
-                            </div>
-                        </div>
-                        <div class="tech-card" style="border-top: 3px solid var(--color-magenta);">
-                            <div class="card-title" style="font-size: 14px;">Audit & Retention</div>
-                            <div class="card-text">
-                                Immutable logs (7-year retention). Auto-deletion of original docs after 90 days.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-title">Security Architecture Controls</div>
-                        <div class="grid-4" style="margin-top: 15px;">
-                            <div style="text-align: center;">
-                                <div class="card-icon" style="margin: 0 auto 10px;">🔒</div>
-                                <div class="node-title" style="font-size: 12px;">Encryption</div>
-                                <div class="node-desc">AES-256 (Rest)<br>TLS 1.3 (Transit)</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div class="card-icon" style="margin: 0 auto 10px;">🔑</div>
-                                <div class="node-title" style="font-size: 12px;">Access Control</div>
-                                <div class="node-desc">RBAC (Least Privilege)<br>MFA for Officers</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div class="card-icon" style="margin: 0 auto 10px;">🎭</div>
-                                <div class="node-title" style="font-size: 12px;">PII Handling</div>
-                                <div class="node-desc">Aadhaar Tokenization<br>Masking in UI</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div class="card-icon" style="margin: 0 auto 10px;">🛡️</div>
-                                <div class="node-title" style="font-size: 12px;">Network</div>
-                                <div class="node-desc">MeghRaj VPC<br>Mutual TLS API</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <div class="section-label">DATA LIFECYCLE</div>
-                        <div style="display: flex; gap: 10px; margin-top: 10px;">
-                            <div style="flex: 1; border: 1px dashed var(--color-border-cyan); padding: 10px; border-radius: 6px; text-align: center;">
-                                <div class="tech-text">INGEST</div>
-                                <div style="font-size: 10px; color: var(--color-text-secondary);">Transient Storage</div>
-                            </div>
-                            <div style="flex: 1; border: 1px dashed var(--color-border-cyan); padding: 10px; border-radius: 6px; text-align: center;">
-                                <div class="tech-text">PROCESS</div>
-                                <div style="font-size: 10px; color: var(--color-text-secondary);">In-Memory Encryption</div>
-                            </div>
-                            <div style="flex: 1; border: 1px dashed var(--color-border-cyan); padding: 10px; border-radius: 6px; text-align: center;">
-                                <div class="tech-text">VERIFY</div>
-                                <div style="font-size: 10px; color: var(--color-text-secondary);">Masked Display</div>
-                            </div>
-                            <div style="flex: 1; border: 1px dashed var(--color-border-purple); padding: 10px; border-radius: 6px; text-align: center;">
-                                <div class="tech-text">ARCHIVE</div>
-                                <div style="font-size: 10px; color: var(--color-text-secondary);">Anonymized Logs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-footer">
-                    <div class="footer-left">Smart Seva — AI-Based Document Verification</div>
-                    <div class="footer-code">CODE: 100030</div>
-                </div>
-            </section>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
         </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION C2</div>
+                <h2 class="section-title">High-Level <span class="accent">Architecture</span></h2>
+                <div class="arch-container">
+                    <svg width="100%" height="100%" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+                        <defs><linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:0.2" /><stop offset="100%" style="stop-color:var(--accent-cyan);stop-opacity:1" /></linearGradient></defs>
+                        <g transform="translate(50, 50)"><rect x="0" y="0" width="180" height="80" class="arch-node" style="stroke: var(--accent-cyan)"/><text x="50" y="30" class="node-title">AP Seva Portal</text><text x="50" y="45" class="node-desc">Citizen Interface</text><rect x="50" y="55" width="80" height="16" class="tech-pill" /><text x="90" y="66" class="tech-text" text-anchor="middle">REST API</text><rect x="10" y="20" width="30" height="40" fill="none" stroke="var(--accent-cyan)" stroke-width="2"/></g>
+                        <g transform="translate(50, 200)"><rect x="0" y="0" width="180" height="80" class="arch-node" style="stroke: var(--accent-cyan)"/><text x="50" y="30" class="node-title">Digital Assistant</text><text x="50" y="45" class="node-desc">PWA Interface</text><rect x="50" y="55" width="80" height="16" class="tech-pill" /><text x="90" y="66" class="tech-text" text-anchor="middle">REACT + PWA</text><circle cx="25" cy="40" r="15" fill="none" stroke="var(--accent-cyan)" stroke-width="2"/></g>
+                        <g transform="translate(300, 125)"><rect x="0" y="0" width="160" height="200" class="arch-node" style="stroke: var(--accent-purple)"/><text x="80" y="30" class="node-title" text-anchor="middle">Ingestion Layer</text><g transform="translate(20, 50)"><rect x="0" y="0" width="120" height="50" fill="rgba(124, 58, 237, 0.1)" rx="4"/><text x="60" y="20" class="node-title" font-size="12" text-anchor="middle">API Gateway</text><text x="60" y="35" class="tech-text" text-anchor="middle">KONG</text></g><g transform="translate(20, 120)"><rect x="0" y="0" width="120" height="50" fill="rgba(124, 58, 237, 0.1)" rx="4"/><text x="60" y="20" class="node-title" font-size="12" text-anchor="middle">Msg Queue</text><text x="60" y="35" class="tech-text" text-anchor="middle">RABBITMQ</text></g></g>
+                        <g transform="translate(550, 50)"><rect x="0" y="0" width="400" height="350" class="arch-node" style="stroke: var(--accent-magenta); stroke-dasharray: 4 2;"/><text x="200" y="30" class="node-title" text-anchor="middle" fill="var(--accent-magenta)">AI Processing Core</text><g transform="translate(30, 60)"><rect x="0" y="0" width="100" height="60" class="arch-node" style="stroke: var(--accent-cyan)"/><text x="50" y="25" class="node-title" font-size="11" text-anchor="middle">Pre-Process</text><text x="50" y="45" class="tech-text" text-anchor="middle">OPENCV</text></g><g transform="translate(150, 60)"><rect x="0" y="0" width="220" height="60" class="arch-node" style="stroke: var(--accent-cyan)"/><text x="110" y="25" class="node-title" font-size="11" text-anchor="middle">OCR Ensemble</text><text x="110" y="45" class="tech-text" text-anchor="middle">GOOGLE VISION + AZURE + TESSERACT</text></g><g transform="translate(30, 150)"><rect x="0" y="0" width="150" height="60" class="arch-node" style="stroke: var(--accent-magenta)"/><text x="75" y="25" class="node-title" font-size="11" text-anchor="middle">Fraud Detection</text><text x="75" y="45" class="tech-text" text-anchor="middle">FORENSICS + META</text></g><g transform="translate(220, 150)"><rect x="0" y="0" width="150" height="60" class="arch-node" style="stroke: var(--accent-cyan)"/><text x="75" y="25" class="node-title" font-size="11" text-anchor="middle">Validation Engine</text><text x="75" y="45" class="tech-text" text-anchor="middle">PYTHON / FUZZY</text></g><g transform="translate(130, 250)"><rect x="0" y="0" width="140" height="60" class="arch-node" style="stroke: var(--accent-purple)"/><text x="70" y="25" class="node-title" font-size="11" text-anchor="middle">Decision Router</text><text x="70" y="45" class="tech-text" text-anchor="middle">RULES ENGINE</text></g></g>
+                        <g transform="translate(300, 450)"><rect x="0" y="0" width="650" height="100" class="arch-node" style="stroke: var(--text-secondary)"/><text x="20" y="30" class="node-title">Data & Compliance Layer</text><g transform="translate(50, 40)"><rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/><text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">POSTGRESQL (AUDIT)</text></g><g transform="translate(250, 40)"><rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/><text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">REDIS (CACHE)</text></g><g transform="translate(450, 40)"><rect x="0" y="0" width="150" height="40" fill="rgba(255,255,255,0.05)" rx="4"/><text x="75" y="25" class="tech-text" text-anchor="middle" font-size="12">MEGHRAJ CLOUD</text></g></g>
+                        <path d="M 230 90 L 300 175" stroke="url(#flowGradient)" class="data-flow-line"/><path d="M 230 240 L 300 275" stroke="url(#flowGradient)" class="data-flow-line"/><path d="M 460 225 L 550 225" stroke="url(#flowGradient)" class="data-flow-line"/><path d="M 630 120 L 630 150" stroke="url(#flowGradient)" class="data-flow-line" /><path d="M 820 120 L 820 150" stroke="url(#flowGradient)" class="data-flow-line" /><path d="M 655 210 L 750 250" stroke="url(#flowGradient)" class="data-flow-line" /><path d="M 825 210 L 750 250" stroke="url(#flowGradient)" class="data-flow-line" /><path d="M 750 400 L 750 450" stroke="url(#flowGradient)" class="data-flow-line" />
+                    </svg>
+                </div>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION C2.1</div>
+                <h2 class="section-title">Component <span class="accent">Deep Dive</span></h2>
+                <div class="grid-3">
+                    <div class="tech-card highlight"><div class="card-icon">👁️</div><div class="card-title">Multi-Engine OCR Ensemble</div><div class="card-text">Combines Google Cloud Vision (primary for Telugu), Azure Form Recognizer (Layouts), and fine-tuned Tesseract (Offline).</div><div style="margin-top: 15px;"><div class="section-label" style="font-size: 9px; margin-bottom: 5px;">STRATEGY</div><div class="card-text" style="color: var(--accent-cyan)">Weighted Voting</div></div><div class="badge">CER &lt; 0.146</div></div>
+                    <div class="tech-card"><div class="card-icon">🛡️</div><div class="card-title">Multi-Signal Fraud Detection</div><div class="card-text">Analyzes four signals: Metadata (EXIF/SW), Pixel Forensics (ELA/Copy-Move), Logical Consistency (LLM), and Template Matching.</div><div style="margin-top: 15px;"><div class="section-label" style="font-size: 9px; margin-bottom: 5px;">TECH</div><div class="card-text" style="color: var(--accent-purple)">OpenCV + SIFT + GPT-4o</div></div><div class="badge">TPR ≥ 85%</div></div>
+                    <div class="tech-card"><div class="card-icon">🧠</div><div class="card-title">Active Learning Loop</div><div class="card-text">Captures operator corrections on low-confidence docs. Updates 'Golden Set' for bi-weekly LoRA fine-tuning of post-processing models.</div><div style="margin-top: 15px;"><div class="section-label" style="font-size: 9px; margin-bottom: 5px;">GATE</div><div class="card-text" style="color: var(--accent-magenta)">Human Approval Required</div></div><div class="badge">MLFlow + DVC</div></div>
+                </div>
+                <div class="section-label" style="margin-top: 20px;">DEPLOYMENT STRATEGY</div>
+                <div class="tech-card" style="display: flex; gap: 20px; align-items: center;"><div style="flex: 1;"><h3 class="card-title" style="font-size: 14px;">Hybrid Cloud (MeghRaj + Edge)</h3><p class="card-text">Core processing runs on MeghRaj Government Cloud (Kubernetes). Digital Assistants use PWA with IndexedDB for offline capability. Sensitive data remains in India regions.</p></div><div style="text-align: right;"><div class="badge" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">DPDP Act Compliant</div></div></div>
+                <table class="tech-table" style="margin-top: 20px;"><thead><tr><th>Capability</th><th>Target Metric</th><th>Fallback Strategy</th></tr></thead><tbody><tr><td>OCR Accuracy</td><td>≥95% field-level</td><td>Failover to Tesseract + Human Review</td></tr><tr><td>Validation Latency</td><td>&lt; 2s (P95)</td><td>Local cache (15 min TTL)</td></tr><tr><td>Offline Capacity</td><td>50 documents</td><td>Sync on connectivity restore</td></tr></tbody></table>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION C3</div>
+                <h2 class="section-title">User <span class="accent">Flows</span></h2>
+                <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="tech-card"><div class="card-title" style="color: var(--accent-cyan)">Digital Assistant (Sachivalayam)</div><div class="card-text" style="margin-bottom: 20px;">Primary Actor: Handling citizen requests & overrides.</div><div style="display: flex; flex-direction: column; gap: 15px;"><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(6, 182, 212, 0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-cyan);">1</div><div class="card-text">Scans physical certificate via PWA.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(6, 182, 212, 0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-cyan);">2</div><div class="card-text">Views AI overlay: <span style="color: var(--success)">Green ticks</span> for matches, <span style="color: var(--accent-magenta)">Red highlights</span> for mismatches.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(6, 182, 212, 0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-cyan);">3</div><div class="card-text">"Flagged" document (Score 0.82): Reviews extracted Name vs Form Name.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(6, 182, 212, 0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-cyan);">4</div><div class="card-text">Correction: Updates "Ravi K." to "Ravi Kumar". Logs decision.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(6, 182, 212, 0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-cyan);">5</div><div class="card-text">Offline Sync: Data syncs to server when internet returns.</div></div></div></div>
+                    <div class="tech-card"><div class="card-title" style="color: var(--accent-purple)">Citizen (AP Seva Portal)</div><div class="card-text" style="margin-bottom: 20px;">Beneficiary: Seeking service approval.</div><div style="display: flex; flex-direction: column; gap: 15px;"><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-purple);">1</div><div class="card-text">Uploads Income Certificate PDF.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-purple);">2</div><div class="card-text">Real-time Feedback (30s): "Name Mismatch detected".</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-purple);">3</div><div class="card-text">Guidance: "Form says 'Ravi Kumar', Doc says 'R. Kumar'. Please clarify."</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-purple);">4</div><div class="card-text">Confirm: Citizen confirms it is the same person.</div></div><div style="display: flex; gap: 10px; align-items: center;"><div style="background: rgba(124,58,237,0.1); padding: 5px; border-radius: 4px; font-weight: bold; color: var(--accent-purple);">5</div><div class="card-text">Approval: Instant SMS notification of successful verification.</div></div></div></div>
+                </div>
+                <div style="margin-top: 30px;"><div class="section-label">EXCEPTION HANDLING</div><div class="grid-3" style="margin-top: 10px;"><div class="tech-card" style="padding: 15px;"><div class="node-title" style="font-size: 12px; color: var(--accent-magenta);">Suspected Fraud (>0.40)</div><div class="card-text">Escalated to Mandal Officer. Visual evidence (ELA map) provided.</div></div><div class="tech-card" style="padding: 15px;"><div class="node-title" style="font-size: 12px; color: var(--text-primary);">System Outage</div><div class="card-text">Failover to manual queue. Provisional acceptance with async validation.</div></div><div class="tech-card" style="padding: 15px;"><div class="node-title" style="font-size: 12px; color: var(--text-primary);">Unknown Template</div><div class="card-text">Routed to Admin for classification. Updates Template Repo.</div></div></div></div>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION D1</div>
+                <h2 class="section-title">PoC Scope & <span class="accent">Timeline</span></h2>
+                <div style="display: flex; gap: 20px; height: 100%; align-items: stretch;">
+                    <div class="tech-card highlight" style="flex: 1; display: flex; flex-direction: column;"><div class="badge" style="background: var(--accent-cyan); color: #000; align-self: flex-start;">PHASE 1: PoC</div><div class="card-title" style="margin-top: 10px;">Weeks 1-6</div><div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div><ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--text-secondary); line-height: 2;"><li>OCR Pipeline (Google+Azure+Tesseract)</li><li>Basic Validation Engine</li><li>Fraud Detection (Metadata)</li><li>Review Interface (Basic)</li><li>Processing 3,000 Sample Docs</li></ul><div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;"><div class="section-label">SUCCESS METRIC</div><div class="card-title" style="color: var(--accent-cyan)">≥95% Accuracy</div></div></div>
+                    <div class="tech-card" style="flex: 1; display: flex; flex-direction: column;"><div class="badge" style="background: var(--accent-purple); color: #fff; align-self: flex-start;">PHASE 2: PILOT</div><div class="card-title" style="margin-top: 10px;">Weeks 7-18</div><div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div><ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--text-secondary); line-height: 2;"><li>AP Seva Integration</li><li>Offline Capability</li><li>Active Learning Pipeline</li><li>Staff Training</li><li>Deploy to 50 Sachivalayams</li></ul><div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;"><div class="section-label">SUCCESS METRIC</div><div class="card-title" style="color: var(--accent-purple)">500+ Daily Docs</div></div></div>
+                    <div class="tech-card" style="flex: 1; display: flex; flex-direction: column;"><div class="badge" style="background: var(--text-secondary); color: #000; align-self: flex-start;">PHASE 3: SCALE</div><div class="card-title" style="margin-top: 10px;">Weeks 19-34</div><div class="section-label" style="margin-top: 10px;">KEY DELIVERABLES</div><ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--text-secondary); line-height: 2;"><li>Statewide Rollout (13 Districts)</li><li>HA Infrastructure & DR</li><li>Advanced Fraud (All signals)</li><li>Executive Dashboard</li></ul><div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;"><div class="section-label">SUCCESS METRIC</div><div class="card-title" style="color: var(--text-primary)">10k+ Daily Docs</div></div></div>
+                </div>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION D2</div>
+                <h2 class="section-title">Expected <span class="accent">Impact</span></h2>
+                <div class="grid-3" style="margin-bottom: 30px;">
+                    <div class="tech-card highlight" style="text-align: center;"><div class="section-label">EFFICIENCY</div><div style="font-size: 48px; font-weight: 800; color: var(--accent-cyan); margin: 10px 0;">70%</div><div class="card-text">Reduction in Manual Verification Time</div></div>
+                    <div class="tech-card highlight" style="text-align: center;"><div class="section-label">ACCURACY</div><div style="font-size: 48px; font-weight: 800; color: var(--accent-purple); margin: 10px 0;">50%</div><div class="card-text">Decrease in Citizen Resubmission Rates</div></div>
+                    <div class="tech-card highlight" style="text-align: center;"><div class="section-label">INTEGRITY</div><div style="font-size: 48px; font-weight: 800; color: var(--accent-magenta); margin: 10px 0;">85%</div><div class="card-text">Fraud Detection Rate (Confirmed Forgeries)</div></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="tech-card"><div class="card-title">Stakeholder Benefits</div><table class="tech-table"><tr><td style="color: var(--accent-cyan)">Citizens</td><td>Zero delay approvals, instant feedback on errors, fewer trips to office.</td></tr><tr><td style="color: var(--accent-purple)">GSWS Officers</td><td>Focus on complex cases, reduced backlog, offline tools for rural work.</td></tr><tr><td style="color: var(--accent-magenta)">Government</td><td>Fraud prevention, audit trail compliance (DPDP), data-driven insights.</td></tr></table></div>
+                    <div class="tech-card"><div class="card-title">Cost & Sustainability</div><div class="card-text" style="margin-bottom: 15px;">Hybrid approach balances accuracy and cost. Initial commercial APIs (POC) transition to open-source models at scale.</div><div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(6, 182, 212, 0.2); padding: 10px; border-radius: 6px;"><span style="font-size: 12px;">Target Cost Per Verification</span><span style="font-size: 24px; font-weight: 700; color: var(--success);"> &lt; ₹5</span></div><div style="margin-top: 10px; font-size: 10px; color: var(--text-secondary);">*Includes infrastructure and API costs at scale phase (10k docs/day).</div></div>
+                </div>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+        <div class="page-section">
+            <div class="corner-accent top-left"></div> <div class="corner-accent bottom-right"></div> <div class="neon-line"></div>
+            <div class="content">
+                <div class="section-label">SECTION E</div>
+                <h2 class="section-title">Data Privacy & <span class="accent">Compliance</span></h2>
+                <div class="grid-3" style="margin-bottom: 20px;">
+                    <div class="tech-card" style="border-top: 3px solid var(--accent-cyan);"><div class="card-title" style="font-size: 14px;">DPDP Act 2023</div><div class="card-text">System operates under "Legitimate Use" (Section 7). Data minimization principles applied: only required fields extracted.</div></div>
+                    <div class="tech-card" style="border-top: 3px solid var(--accent-purple);"><div class="card-title" style="font-size: 14px;">MeitY / MeghRaj</div><div class="card-text">Deployment on Government Cloud (MeghRaj). Data sovereignty guaranteed. All servers within India.</div></div>
+                    <div class="tech-card" style="border-top: 3px solid var(--accent-magenta);"><div class="card-title" style="font-size: 14px;">Audit & Retention</div><div class="card-text">Immutable logs (7-year retention). Auto-deletion of original docs after 90 days.</div></div>
+                </div>
+                <div class="tech-card"><div class="card-title">Security Architecture Controls</div><div class="grid-4" style="margin-top: 15px;"><div style="text-align: center;"><div class="card-icon" style="margin: 0 auto 10px;">🔒</div><div class="node-title" style="font-size: 12px;">Encryption</div><div class="node-desc">AES-256 (Rest)<br>TLS 1.3 (Transit)</div></div><div style="text-align: center;"><div class="card-icon" style="margin: 0 auto 10px;">🔑</div><div class="node-title" style="font-size: 12px;">Access Control</div><div class="node-desc">RBAC (Least Privilege)<br>MFA for Officers</div></div><div style="text-align: center;"><div class="card-icon" style="margin: 0 auto 10px;">🎭</div><div class="node-title" style="font-size: 12px;">PII Handling</div><div class="node-desc">Aadhaar Tokenization<br>Masking in UI</div></div><div style="text-align: center;"><div class="card-icon" style="margin: 0 auto 10px;">🛡️</div><div class="node-title" style="font-size: 12px;">Network</div><div class="node-desc">MeghRaj VPC<br>Mutual TLS API</div></div></div></div>
+                <div style="margin-top: 20px;"><div class="section-label">DATA LIFECYCLE</div><div style="display: flex; gap: 10px; margin-top: 10px;"><div style="flex: 1; border: 1px dashed rgba(6, 182, 212, 0.2); padding: 10px; border-radius: 6px; text-align: center;"><div class="tech-text">INGEST</div><div style="font-size: 10px; color: var(--text-secondary);">Transient Storage</div></div><div style="flex: 1; border: 1px dashed rgba(6, 182, 212, 0.2); padding: 10px; border-radius: 6px; text-align: center;"><div class="tech-text">PROCESS</div><div style="font-size: 10px; color: var(--text-secondary);">In-Memory Encryption</div></div><div style="flex: 1; border: 1px dashed rgba(6, 182, 212, 0.2); padding: 10px; border-radius: 6px; text-align: center;"><div class="tech-text">VERIFY</div><div style="font-size: 10px; color: var(--text-secondary);">Masked Display</div></div><div style="flex: 1; border: 1px dashed rgba(124, 58, 237, 0.2); padding: 10px; border-radius: 6px; text-align: center;"><div class="tech-text">ARCHIVE</div><div style="font-size: 10px; color: var(--text-secondary);">Anonymized Logs</div></div></div></div>
+            </div>
+            <div class="page-footer"><div class="footer-left">Smart Seva — AI-Based Document Verification</div><div class="footer-code">CODE: 100030</div></div>
+        </div>
+    </section>
 
-        <div class="page-break"></div>
+    <div class="section-divider"></div>
 
-        <!-- SECTION 4: TEAM DETAILS -->
-        <div class="section-team">
+    <section id="section-4" class="submission-section">
+        <div class="page-section-wrapper">
             <header>
                 <div class="header-title">
-                    <h1>Team - <span style="color: var(--color-cyan);">Responsible Indian</span></h1>
+                    <h1>Team Responsible Indian</h1>
+                    <div class="header-subtitle">Building the Future Together</div>
                 </div>
                 <div class="header-meta">
                     <div>Primary Contact</div>
                     <a href="mailto:contact@responsibleindian.in">contact@responsibleindian.in</a>
                 </div>
             </header>
-
+            <div class="team-tagline">
+                <p>
+                    A global team of <strong>IIT &amp; BITS alumni</strong> with experience at
+                    <span class="highlight">Microsoft, Amazon, Intel, Disney+</span> and high-growth startups.
+                    Engineers spanning <strong>India, Taiwan, and the USA</strong> — building cutting-edge AI,
+                    scalable systems, and enterprise solutions.
+                </p>
+            </div>
             <div class="team-grid">
-                
-                <!-- Member 1 -->
                 <article class="member-card">
-                    <h3 class="member-name">Jeevan Kumar</h3>
-                    <div class="member-role">AI & Scalable Systems</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/jeevan.jpeg" alt="Jeevan Kumar"><div class="avatar-placeholder" style="display:none;">JK</div></div>
+                    <h3 class="member-name">Jeevan Kumar</h3><div class="member-role">AI/ML Lead &amp; Systems Architect</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>5 years experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+917318019339">+91-7318019339</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:jeevan@responsibleindian.in">jeevan@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>5 YoE · Coderabbit, LevelAI, Goldcast</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+917318019339">+91-7318019339</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:jeevan@responsibleindian.in">jeevan@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">AI/ML</span>
-                        <span class="badge">Scalable Products</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/sleep404" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">GenAI</span><span class="badge">LLMs</span><span class="badge">Distributed Systems</span></div>
+                    <a href="https://www.linkedin.com/in/sleep404" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 2 -->
                 <article class="member-card">
-                    <h3 class="member-name">Manoj Kumar</h3>
-                    <div class="member-role">Data Engineer</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/manoj.png" alt="Manoj Kumar"><div class="avatar-placeholder" style="display:none;">MK</div></div>
+                    <h3 class="member-name">Manoj Kumar</h3><div class="member-role">Senior Data Engineer</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>BITS PILANI</strong>, Hyderabad</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>4 years experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+919515732481">+91-9515732481</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:manoj@responsibleindian.in">manoj@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>BITS Pilani</strong>, Hyderabad</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>4 YoE · Funded Startups</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+919515732481">+91-9515732481</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:manoj@responsibleindian.in">manoj@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Data Engineering</span>
-                        <span class="badge">ETL Pipelines</span>
-                    </div>
-                    <div style="height: 22px;"></div>
+                    <div class="badge-container"><span class="badge">Big Data</span><span class="badge">ETL Pipelines</span><span class="badge">Data Lakes</span></div>
+                    <a href="#" class="linkedin-btn disabled"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 3 -->
                 <article class="member-card">
-                    <h3 class="member-name">Sandeep BGS</h3>
-                    <div class="member-role">Deep Learning & ML</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/sandeep.png" alt="Sandeep BGS"><div class="avatar-placeholder" style="display:none;">SB</div></div>
+                    <h3 class="member-name">Sandeep BGS</h3><div class="member-role">Deep Learning Research Engineer</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>4 years MNC experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+919515732481">+91-9515732481</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:sandeep@responsibleindian.in">sandeep@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>4 YoE · KLA</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+919515732481">+91-9515732481</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:sandeep@responsibleindian.in">sandeep@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Deep Learning</span>
-                        <span class="badge">Research</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">Neural Networks</span><span class="badge">Computer Vision</span><span class="badge">NLP</span></div>
+                    <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 4 -->
                 <article class="member-card">
-                    <h3 class="member-name">Sarath Lavu</h3>
-                    <div class="member-role">Data Science & ML</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/sarath.jpeg" alt="Sarath Lavu"><div class="avatar-placeholder" style="display:none;">SL</div></div>
+                    <h3 class="member-name">Sarath Lavu</h3><div class="member-role">Data Scientist &amp; ML Engineer</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>4 years experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+917382607212">+91-7382607212</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:sarath@responsibleindian.in">sarath@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>4 YoE · Funded Startups</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+917382607212">+91-7382607212</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:sarath@responsibleindian.in">sarath@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Data Science</span>
-                        <span class="badge">Economics</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">Predictive Models</span><span class="badge">Analytics</span><span class="badge">ML Ops</span></div>
+                    <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 5 -->
                 <article class="member-card">
-                    <h3 class="member-name">Praneeth Reddy</h3>
-                    <div class="member-role">Software Architect</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/praneeth.jpeg" alt="Praneeth Reddy"><div class="avatar-placeholder" style="display:none;">PR</div></div>
+                    <h3 class="member-name">Praneeth Reddy</h3><div class="member-role">Principal Software Architect</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>5 years experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+919573337454">+91-9573337454</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:praneeth@responsibleindian.in">praneeth@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>5 YoE · EightFold, ClearTax, MoEngage</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+919573337454">+91-9573337454</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:praneeth@responsibleindian.in">praneeth@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Scalable Products</span>
-                        <span class="badge">Backend Systems</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">System Design</span><span class="badge">Microservices</span><span class="badge">Cloud Native</span></div>
+                    <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 6 -->
                 <article class="member-card">
-                    <h3 class="member-name">Vamsi Krishna</h3>
-                    <div class="member-role">AI & Deep Learning</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/vamsi.jpeg" alt="Vamsi Krishna Badri"><div class="avatar-placeholder" style="display:none;">VK</div></div>
+                    <h3 class="member-name">Vamsi Krishna Badri</h3><div class="member-role">AI Research Engineer</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>4 years MNC experience</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+917318016050">+91-7318016050</a>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <a href="mailto:badrivamsi@responsibleindian.in">badrivamsi@responsibleindian.in</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>4 YoE · KLA</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+917318016050">+91-7318016050</a></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><a href="mailto:badrivamsi@responsibleindian.in">badrivamsi@responsibleindian.in</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">AI/Deep Learning</span>
-                        <span class="badge">Research</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">Deep Learning</span><span class="badge">AI Research</span><span class="badge">MLOps</span></div>
+                    <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 7 -->
                 <article class="member-card">
-                    <h3 class="member-name">Yashwanth Pathivada</h3>
-                    <div class="member-role">Enterprise Systems</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/yashwanth.jpeg" alt="Yashwanth Pathivada"><div class="avatar-placeholder" style="display:none;">YP</div></div>
+                    <h3 class="member-name">Yashwanth Pathivada</h3><div class="member-role">Senior Fullstack Engineer</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>IIT Kanpur</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>4 years experience @ Microsoft, Intel</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+917318018610">+91-7318018610</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>4 YoE · Microsoft, Intel</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+917318018610">+91-7318018610</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Fullstack Engineering</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">Enterprise Apps</span><span class="badge">Cloud</span><span class="badge">React</span></div>
+                    <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
-
-                <!-- Member 8 -->
                 <article class="member-card">
-                    <h3 class="member-name">Varanasi Nitesh</h3>
-                    <div class="member-role">Streaming Systems</div>
+                    <div class="profile-pic-container"><img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/nitesh.jpeg" alt="Varanasi Nitesh"><div class="avatar-placeholder" style="display:none;">VN</div></div>
+                    <h3 class="member-name">Varanasi Nitesh</h3><div class="member-role">Staff Engineer - Streaming</div>
                     <div class="details">
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span><strong>University of Florida</strong></span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                            <span>3 years experience @ Amazon, Disney Hotstar</span>
-                        </div>
-                        <div class="detail-item">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <a href="tel:+917318019198">+91-7318019198</a>
-                        </div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span><strong>Univ. of Florida</strong></span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>3 YoE · Amazon, Disney+, Cashfree, Fi</span></div>
+                        <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><a href="tel:+917318019198">+91-7318019198</a></div>
                     </div>
-                    <div class="badge-container">
-                        <span class="badge">Payments</span>
-                        <span class="badge">Systems Security</span>
-                    </div>
-                    <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                        LinkedIn Profile
-                    </a>
+                    <div class="badge-container"><span class="badge">Payments</span><span class="badge">High Scale</span><span class="badge">Security</span></div>
+                    <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" rel="noopener noreferrer" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>LinkedIn Profile</a>
                 </article>
             </div>
         </div>
-    </div>
+    </section>
 
     <script>
-        // Cover Page Scripts
+        // Create floating document particles
         function createDocumentParticles() {
-            const container = document.querySelector('.bg-container');
-            if(!container) return;
+            const container = document.querySelector('#section-1 .bg-container');
+            if (!container) return;
             const particleCount = 15;
-
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'document-particle' + (Math.random() > 0.3 ? ' verified' : '');
-                
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 20 + 's';
                 particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                
                 container.appendChild(particle);
             }
         }
-
+        // Hide scroll indicator on scroll
+        function setupScrollIndicator() {
+            const indicator = document.getElementById('scrollIndicator');
+            if (!indicator) return;
+            let hasScrolled = false;
+            function handleScroll() {
+                if (!hasScrolled && window.scrollY > 50) {
+                    hasScrolled = true;
+                    indicator.classList.add('hidden');
+                }
+            }
+            window.addEventListener('scroll', handleScroll, { passive: true });
+        }
+        // Animate counter in stats
         function animateCounters() {
-            const counters = document.querySelectorAll('.stat-value');
-            if(!counters.length) return;
-            
+            const counters = document.querySelectorAll('#section-1 .stat-value');
+            if (counters.length === 0) return;
             counters.forEach(counter => {
                 const text = counter.textContent;
                 const hasPlus = text.includes('+');
                 const hasPercent = text.includes('%');
                 const number = parseInt(text);
-                
                 if (!isNaN(number) && number > 0) {
                     let current = 0;
                     const increment = number / 50;
@@ -1721,10 +928,22 @@
                 }
             });
         }
-
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             createDocumentParticles();
-            setTimeout(animateCounters, 1500);
+            setupScrollIndicator();
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            const statsBar = document.querySelector('#section-1 .stats-bar');
+            if (statsBar) {
+                observer.observe(statsBar);
+            }
         });
     </script>
 </body>
