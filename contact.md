@@ -5,6 +5,7 @@ Member 1
 Name: Jeevan Kumar
 contact: +91-7318019339
 email: jeevan@responsibleindian.in
+companies: Coderabbit, LevelAI, Goldcast
 Education: IIT Kanpur
 Exp: 5 YoE at leading startups with deep expertise in AI & Scalable Systems
 Linkedin: https://www.linkedin.com/in/sleep404
@@ -20,6 +21,7 @@ Member 3
 Name: Sandeep BGS
 contact: +91-9515732481
 email: sandeep@responsibleindian.in
+company: KLA
 Education: IIT Kanpur
 Exp: 4 YoE at an MnC with deep expertise in Deep Learning & Machine Learning.
 Linkedin: https://www.linkedin.com/in/balla-sandeep-7642b2199/
@@ -35,6 +37,7 @@ Linkedin: https://www.linkedin.com/in/sarath-lavu/
 Member 5
 Name: Praneeth Reddy
 contact: +91-9573337454
+company: EightFold.AI, ClearTax, MoEngage, Ambient Security
 email: praneeth@responsibleindian.in
 Education: IIT Kanpur
 Exp: 5 YoE at leading startups with deep expertise in building scalable products from inception.
@@ -43,6 +46,7 @@ Linkedin: https://www.linkedin.com/in/praneeth-reddy-gopu/
 Member 6
 Name: Vamsi Krishna Badri
 contact: +91-7318016050
+company: KLA
 email: badrivamsi@responsibleindian.in
 Education: IIT Kanpur
 Exp: 4 YoE at an MnC with deep expertise in AI & Deep Learning.
@@ -51,6 +55,7 @@ Linkedin: https://www.linkedin.com/in/badri-vamsi-krishna/
 Member 7
 Name: Yashwanth Pathivada
 contact: +91-7318018610
+companies: Intel, Microsoft
 Education: IIT Kanpur
 Exp: 4 YoE at Fortune 500 companies such as Microsoft & Intel.
 Linkedin: https://www.linkedin.com/in/yashwanth-pathivada/
@@ -58,6 +63,7 @@ Linkedin: https://www.linkedin.com/in/yashwanth-pathivada/
 Member 8
 Name: Varanasi Nitesh
 contact: +91-7318019198
+companies: Cashfree, Fi, Disney+ Hotstar, Amazon
 Education: IIT Kanpur
 Exp: 3 YoE at Fortune 500 companies such as Amazon & Disney Hotstar.
 Linkedin: https://www.linkedin.com/in/varanasi-nitesh/
