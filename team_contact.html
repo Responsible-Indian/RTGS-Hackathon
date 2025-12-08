@@ -12,7 +12,7 @@
             --color-cyan: #00f7ff;
             --color-purple: #7c3aed;
             --color-bg-main: #0a0d12;
-            --color-card-bg: rgba(17, 24, 39, 0.6);
+            --color-card-bg: rgba(17, 24, 39, 0.8);
             --color-text-primary: #e6f1ff;
             --color-text-secondary: #95a3b8;
             --color-border: rgba(255, 255, 255, 0.1);
@@ -28,154 +28,225 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--color-bg-main);
+            background: var(--color-bg-main);
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 50%);
             color: var(--color-text-primary);
             font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
+            min-height: 100vh;
         }
 
-        /* Page Container - A4 Landscape Optimized */
+        /* Page Container */
         .page-section {
             width: 100%;
-            max-width: 297mm;
-            /* Height set to auto to prevent overflow cutting, but designed to fit A4 */
-            min-height: 210mm; 
+            max-width: 1400px;
             position: relative;
-            background: var(--color-bg-main);
-            padding: 12mm 15mm;
+            padding: 40px 50px;
             display: flex;
             flex-direction: column;
             margin: 0 auto;
         }
 
-        /* Decorative Corners */
-        .corner-accent {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--color-cyan);
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        .top-left { top: 12mm; left: 15mm; border-right: none; border-bottom: none; }
-        .bottom-right { bottom: 12mm; right: 15mm; border-left: none; border-top: none; }
-
         /* Header */
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 20px;
+            align-items: center;
+            margin-bottom: 50px;
+            padding-bottom: 25px;
             border-bottom: 1px solid var(--color-border);
-            padding-bottom: 15px;
         }
 
         .header-title h1 {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 800;
             margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: -0.5px;
             line-height: 1;
+            background: linear-gradient(135deg, #fff 0%, var(--color-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .header-title span { color: var(--color-cyan); }
-        
+        .header-subtitle {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-top: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
         .header-meta {
             text-align: right;
-            font-size: 11px;
+            font-size: 13px;
             color: var(--color-text-secondary);
         }
-        .header-meta a { color: var(--color-cyan); text-decoration: none; font-family: monospace; }
+        .header-meta a {
+            color: var(--color-cyan);
+            text-decoration: none;
+            font-family: 'Inter', monospace;
+            font-weight: 500;
+        }
+        .header-meta a:hover { text-decoration: underline; }
 
         /* Grid Layout */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            flex-grow: 1;
+            gap: 24px;
         }
 
         /* Member Card */
         .member-card {
             background: var(--color-card-bg);
             border: 1px solid var(--color-border);
-            border-top: 2px solid var(--color-border-accent);
-            border-radius: 6px;
-            padding: 12px;
+            border-radius: 16px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            break-inside: avoid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-cyan), var(--color-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--color-border-accent);
+        }
+
+        .member-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Profile Picture */
+        .profile-pic-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+            background: linear-gradient(var(--color-card-bg), var(--color-card-bg)) padding-box,
+                        linear-gradient(135deg, var(--color-cyan), var(--color-purple)) border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .member-card:hover .profile-pic {
+            transform: scale(1.05);
+        }
+
+        /* Avatar placeholder with initials */
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            border: 3px solid transparent;
+            background: linear-gradient(135deg, var(--color-purple), var(--color-cyan)) padding-box,
+                        linear-gradient(135deg, var(--color-cyan), var(--color-purple)) border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .member-card:hover .avatar-placeholder {
+            transform: scale(1.05);
         }
 
         .member-name {
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 700;
             color: #fff;
-            margin: 0 0 2px 0;
+            margin: 0 0 4px 0;
+            text-align: center;
         }
 
         .member-role {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--color-cyan);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-            min-height: 24px; /* Alignment fix */
-            line-height: 1.2;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-align: center;
         }
 
         /* Details List */
         .details {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-grow: 1;
         }
 
         .detail-item {
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            font-size: 10px;
-            line-height: 1.3;
+            gap: 10px;
+            font-size: 12px;
+            line-height: 1.4;
             color: var(--color-text-secondary);
         }
 
         .detail-item svg {
             flex-shrink: 0;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             stroke: var(--color-text-secondary);
             stroke-width: 2;
             fill: none;
-            margin-top: 1px;
+            margin-top: 2px;
         }
 
         .detail-item strong { color: #e6f1ff; font-weight: 600; }
-        .detail-item a { color: inherit; text-decoration: none; }
+        .detail-item a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
         .detail-item a:hover { color: var(--color-cyan); }
-        .missing-data { opacity: 0.5; font-style: italic; }
 
         /* Badges */
         .badge-container {
-            margin-top: auto;
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 16px;
+            justify-content: center;
         }
 
         .badge {
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--color-text-primary);
-            background: rgba(124, 58, 237, 0.15);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 4px 10px;
+            border-radius: 20px;
             white-space: nowrap;
         }
 
@@ -184,20 +255,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            background: rgba(0, 119, 181, 0.15);
-            border: 1px solid rgba(0, 119, 181, 0.3);
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1));
+            border: 1px solid rgba(0, 119, 181, 0.4);
             color: #e6f1ff;
-            font-size: 9px;
+            font-size: 12px;
             font-weight: 500;
             text-decoration: none;
-            padding: 6px;
-            border-radius: 4px;
-            transition: background 0.2s;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: auto;
         }
-        
-        .linkedin-btn:hover { background: rgba(0, 119, 181, 0.25); border-color: rgba(0, 119, 181, 0.5); }
-        
+
+        .linkedin-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 119, 181, 0.4), rgba(0, 119, 181, 0.2));
+            border-color: rgba(0, 119, 181, 0.7);
+            transform: translateY(-2px);
+        }
+
         .linkedin-btn.disabled {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.1);
@@ -206,24 +282,29 @@
             opacity: 0.6;
         }
 
-        .linkedin-btn svg { width: 10px; height: 10px; fill: currentColor; }
+        .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
-        /* Footer */
-        footer {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            font-size: 9px;
-            color: var(--color-text-secondary);
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .team-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 900px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .page-section { padding: 30px; }
+        }
+        @media (max-width: 600px) {
+            .team-grid { grid-template-columns: 1fr; }
+            .page-section { padding: 20px; }
+            header { flex-direction: column; text-align: center; gap: 20px; }
+            .header-meta { text-align: center; }
         }
 
         /* Print Settings */
         @media print {
             @page { size: A4 landscape; margin: 0; }
-            body { background: none; -webkit-print-color-adjust: exact; }
-            .page-section { width: 297mm; height: 210mm; padding: 10mm 12mm; }
+            body { background: #fff; }
+            .page-section { padding: 10mm; }
+            .member-card { break-inside: avoid; }
             .linkedin-btn { border: 1px solid #ccc; }
         }
     </style>
@@ -238,10 +319,8 @@
     <!-- Header -->
     <header>
         <div class="header-title">
-            <h1>Team - <span style="color: var(--color-cyan);">Responsible Indian</span></h1>
-            <!-- <div style="font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; letter-spacing: 0.5px;"> -->
-                <!-- TEAM ID: RESPONSIBLE_INDIAN -->
-            <!-- </div> -->
+            <h1>Team Responsible Indian</h1>
+            <div class="header-subtitle">Building the Future Together</div>
         </div>
         <div class="header-meta">
             <div>Primary Contact</div>
@@ -254,6 +333,9 @@
         
         <!-- Member 1 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">JK</div>
+            </div>
             <h3 class="member-name">Jeevan Kumar</h3>
             <div class="member-role">AI & Scalable Systems</div>
             <div class="details">
@@ -286,6 +368,9 @@
 
         <!-- Member 2 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">MK</div>
+            </div>
             <h3 class="member-name">Manoj Kumar</h3>
             <div class="member-role">Data Engineer</div>
             <div class="details">
@@ -310,11 +395,17 @@
                 <span class="badge">Data Engineering</span>
                 <span class="badge">ETL Pipelines</span>
             </div>
-            <div style="height: 22px;"></div>
+            <a href="#" class="linkedin-btn disabled" aria-label="LinkedIn: Manoj Kumar">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn Profile
+            </a>
         </article>
 
         <!-- Member 3 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">SB</div>
+            </div>
             <h3 class="member-name">Sandeep BGS</h3>
             <div class="member-role">Deep Learning & ML</div>
             <div class="details">
@@ -347,6 +438,9 @@
 
         <!-- Member 4 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">SL</div>
+            </div>
             <h3 class="member-name">Sarath Lavu</h3>
             <div class="member-role">Data Science & ML</div>
             <div class="details">
@@ -379,6 +473,9 @@
 
         <!-- Member 5 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">PR</div>
+            </div>
             <h3 class="member-name">Praneeth Reddy</h3>
             <div class="member-role">Software Architect</div>
             <div class="details">
@@ -411,6 +508,9 @@
 
         <!-- Member 6 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">VK</div>
+            </div>
             <h3 class="member-name">Vamsi Krishna</h3>
             <div class="member-role">AI & Deep Learning</div>
             <div class="details">
@@ -443,6 +543,9 @@
 
         <!-- Member 7 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">YP</div>
+            </div>
             <h3 class="member-name">Yashwanth Pathivada</h3>
             <div class="member-role">Enterprise Systems</div>
             <div class="details">
@@ -475,6 +578,9 @@
 
         <!-- Member 8 -->
         <article class="member-card">
+            <div class="profile-pic-container">
+                <div class="avatar-placeholder">VN</div>
+            </div>
             <h3 class="member-name">Varanasi Nitesh</h3>
             <div class="member-role">Streaming Systems</div>
             <div class="details">
