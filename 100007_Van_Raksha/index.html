@@ -1,0 +1,4056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Van Raksha - AI Forest Protection - Submission</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* === PRINT CONFIG === */
+        @page { size: A4 landscape; margin: 0; }
+
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        *, *::before, *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        [style*="opacity: 0"], .animate-in {
+            opacity: 1 !important;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222;
+        }
+
+        .section {
+            width: 297mm;
+            min-height: 210mm;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+
+        .section:last-child {
+            page-break-after: auto;
+        }
+
+        @media screen {
+            body {
+                background: #222;
+                padding: 20px;
+            }
+            .section {
+                margin: 20px auto;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            }
+        }
+
+        /* === SECTION 1 CSS (Cover Page) === */
+        .section-1 {
+            --bg-color: #051A12;
+            --forest-green: #0F3D2E;
+            --accent-tech: #00FFCC;
+            --alert-red: #FF3333;
+            --text-main: #E0F2E9;
+            --grid-line: rgba(0, 255, 204, 0.08);
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            height: 210mm;
+            width: 297mm;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-1 #sim-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .section-1 #vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 60%, #051A12 120%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .section-1 .tech-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .section-1 .container {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-1 .header-group {
+            margin-bottom: 2rem;
+            opacity: 1;
+        }
+
+        .section-1 .dept-name {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 1.5rem;
+            border: 1px solid #00FFCC;
+            padding: 0.6rem 1.5rem;
+            display: inline-block;
+            background: rgba(0, 255, 204, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .section-1 .challenge-name {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #fff, #0F3D2E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-1 .challenge-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #d0e6dc;
+            margin-bottom: 2rem;
+            max-width: 900px;
+        }
+
+        .section-1 .logo-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 2.5rem;
+            opacity: 1;
+            position: relative;
+        }
+
+        .section-1 .logo-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.2));
+        }
+
+        .section-1 .leaf-path {
+            fill: #0F3D2E;
+        }
+
+        .section-1 .shield-path {
+            stroke: #00FFCC;
+            stroke-width: 2.5;
+            fill: none;
+        }
+
+        .section-1 .eye-iris {
+            fill: #00FFCC;
+        }
+
+        .section-1 .tagline {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            color: #00FFCC;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            opacity: 1;
+            background: rgba(5, 26, 18, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .section-1 .tagline::before, .section-1 .tagline::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-1 .tagline::before { left: -50px; transform: rotate(180deg); }
+        .section-1 .tagline::after { right: -50px; }
+
+        .section-1 .footer-group {
+            position: absolute;
+            bottom: 3rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 4rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.8);
+            opacity: 1;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .section-1 .team-info {
+            text-align: left;
+        }
+
+        .section-1 .team-name {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .section-1 .hud-panel {
+            position: absolute;
+            top: 50%;
+            right: 4rem;
+            transform: translateY(-50%);
+            width: 260px;
+            background: rgba(5, 26, 18, 0.9);
+            border: 1px solid #0F3D2E;
+            padding: 1.2rem;
+            border-left: 4px solid #00FFCC;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            display: block;
+            opacity: 1;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.8);
+            z-index: 20;
+        }
+
+        .section-1 .hud-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.3rem;
+        }
+
+        .section-1 .status-alert { color: #FF3333; font-weight: bold; }
+        .section-1 .status-safe { color: #00FFCC; }
+
+        /* === SECTION 2 CSS (Problem Analysis) === */
+        .section-2 {
+            --bg-color: #051A12;
+            --bg-secondary: #071F16;
+            --forest-green: #0F3D2E;
+            --forest-green-light: #165C45;
+            --accent-tech: #00FFCC;
+            --accent-tech-dim: rgba(0, 255, 204, 0.3);
+            --alert-red: #FF3333;
+            --alert-red-dim: rgba(255, 51, 51, 0.2);
+            --text-main: #E0F2E9;
+            --text-muted: rgba(224, 242, 233, 0.7);
+            --text-muted-strong: rgba(224, 242, 233, 0.85);
+            --grid-line: rgba(0, 255, 204, 0.05);
+            --card-bg: rgba(15, 61, 46, 0.3);
+            --card-border: rgba(0, 255, 204, 0.15);
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .section-2 .skip-link { display: none; }
+
+        .section-2 .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-2 .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(15, 61, 46, 0.4) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(255, 51, 51, 0.08) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-2 .page-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 3rem;
+        }
+
+        .section-2 .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 1;
+        }
+
+        .section-2 .section-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-2 .section-eyebrow::before,
+        .section-2 .section-eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-2 .section-eyebrow::before {
+            transform: rotate(180deg);
+        }
+
+        .section-2 .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #E0F2E9 0%, #165C45 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-2 .section-intro {
+            font-size: 1rem;
+            color: rgba(224, 242, 233, 0.85);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .section-2 .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-2 .problem-card {
+            background: rgba(15, 61, 46, 0.3);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+            transform: none;
+        }
+
+        .section-2 .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #FF3333, transparent);
+            opacity: 0.8;
+        }
+
+        .section-2 .card-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: #FF3333;
+            background: rgba(255, 51, 51, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        .section-2 .card-visual {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 26, 18, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .section-2 .card-visual svg {
+            width: 90%;
+            height: 90%;
+        }
+
+        .section-2 .card-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-2 .card-title .alert-dot {
+            width: 8px;
+            height: 8px;
+            background: #FF3333;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .section-2 .card-description {
+            font-size: 0.85rem;
+            color: rgba(224, 242, 233, 0.85);
+            line-height: 1.6;
+        }
+
+        .section-2 .impact-section {
+            background: linear-gradient(135deg, rgba(255, 51, 51, 0.08) 0%, rgba(15, 61, 46, 0.3) 100%);
+            border: 1px solid rgba(255, 51, 51, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .section-2 .impact-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #FF3333;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .section-2 .impact-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-2 .impact-text .highlight {
+            color: #FF3333;
+        }
+
+        .section-2 .footer-watermark {
+            text-align: center;
+            padding: 1rem 0;
+            opacity: 1;
+        }
+
+        .section-2 .footer-watermark span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .section-2 .svg-label {
+            fill: rgba(224, 242, 233, 0.85);
+        }
+
+        .section-2 .svg-label-alert {
+            fill: #FF6666;
+        }
+
+        .section-2 .svg-label-accent {
+            fill: #00FFCC;
+        }
+
+        /* === SECTION 3 CSS (Bottlenecks) === */
+        .section-3 {
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .section-3 .bottlenecks-section {
+            position: relative;
+            min-height: 100%;
+        }
+
+        .section-3 .bottlenecks-skip-link { display: none; }
+
+        .section-3 .bottlenecks-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-3 .bottlenecks-bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 30%, rgba(0, 255, 204, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(255, 51, 51, 0.04) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-3 .bottlenecks-transition {
+            display: none;
+        }
+
+        .section-3 .bottlenecks-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .section-3 .bottlenecks-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .section-3 .bottlenecks-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-3 .bottlenecks-eyebrow::before,
+        .section-3 .bottlenecks-eyebrow::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-3 .bottlenecks-eyebrow::before {
+            transform: rotate(180deg);
+        }
+
+        .section-3 .bottlenecks-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #E0F2E9 0%, #165C45 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .section-3 .bottlenecks-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #00FFCC;
+            opacity: 0.8;
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .section-3 .bottlenecks-intro {
+            font-size: 0.9rem;
+            color: rgba(224, 242, 233, 0.85);
+            max-width: 850px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section-3 .bottlenecks-intro em {
+            color: #00FFCC;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .section-3 .bottlenecks-pipeline-overview {
+            margin-bottom: 1.5rem;
+            background: rgba(15, 61, 46, 0.25);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        .section-3 .bottlenecks-pipeline-overview h3 {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: #00FFCC;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .section-3 .bottlenecks-pipeline-svg {
+            width: 100%;
+            max-height: 140px;
+        }
+
+        .section-3 .bottlenecks-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-3 .bottleneck-card {
+            background: rgba(15, 61, 46, 0.25);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+            transform: none;
+        }
+
+        .section-3 .bottleneck-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00FFCC, transparent);
+            opacity: 0.8;
+        }
+
+        .section-3 .bottleneck-card[data-severity="high"]::before {
+            background: linear-gradient(90deg, #FF9933, transparent);
+        }
+
+        .section-3 .bottleneck-number {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: #00FFCC;
+            background: rgba(0, 255, 204, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        .section-3 .bottleneck-card[data-severity="high"] .bottleneck-number {
+            color: #FF9933;
+            background: rgba(255, 153, 51, 0.15);
+        }
+
+        .section-3 .bottleneck-visual {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 26, 18, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-3 .bottleneck-visual svg {
+            width: 95%;
+            height: 95%;
+        }
+
+        .section-3 .bottleneck-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .section-3 .bottleneck-title .bottlenecks-constrict-icon {
+            width: 8px;
+            height: 8px;
+            background: #00FFCC;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            flex-shrink: 0;
+        }
+
+        .section-3 .bottleneck-card[data-severity="high"] .bottlenecks-constrict-icon {
+            background: #FF9933;
+        }
+
+        .section-3 .bottleneck-description {
+            font-size: 0.75rem;
+            color: rgba(224, 242, 233, 0.85);
+            line-height: 1.5;
+        }
+
+        .section-3 .bottleneck-root-cause {
+            display: none;
+        }
+
+        .section-3 .bottleneck-domain-tag {
+            display: none;
+        }
+
+        .section-3 .bottlenecks-summary {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(15, 61, 46, 0.25) 100%);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 1;
+        }
+
+        .section-3 .bottlenecks-summary-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #00FFCC;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .section-3 .bottlenecks-summary-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            line-height: 1.5;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .section-3 .bottlenecks-summary-text .bottlenecks-highlight-cyan {
+            color: #00FFCC;
+        }
+
+        .section-3 .bottlenecks-summary-text .bottlenecks-highlight-red {
+            color: #FF3333;
+        }
+
+        .section-3 .bottlenecks-footer {
+            text-align: center;
+            padding: 0.5rem 0;
+            opacity: 1;
+        }
+
+        .section-3 .bottlenecks-footer span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .section-3 .bottlenecks-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+        }
+
+        .section-3 .bottlenecks-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        .section-3 .bottlenecks-legend-swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        .section-3 .bottlenecks-svg-label {
+            fill: rgba(224, 242, 233, 0.85);
+        }
+
+        .section-3 .bottlenecks-svg-label-warn {
+            fill: #FF9933;
+        }
+
+        .section-3 .bottlenecks-svg-label-alert {
+            fill: #FF6666;
+        }
+
+        .section-3 .bottlenecks-svg-label-accent {
+            fill: #00FFCC;
+        }
+
+        .section-3 .bottlenecks-svg-label-dim {
+            fill: rgba(224, 242, 233, 0.5);
+        }
+
+        /* === SECTION 4 CSS (AI Bridge) === */
+        .section-4 {
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .section-4 .aibridge-section {
+            position: relative;
+            min-height: 100%;
+        }
+
+        .section-4 .aibridge-skip-link { display: none; }
+
+        .section-4 .aibridge-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-4 .aibridge-bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 30%, rgba(0, 255, 204, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 80%, rgba(0, 255, 204, 0.04) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 70%, rgba(0, 255, 204, 0.04) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-4 .aibridge-transition {
+            display: none;
+        }
+
+        .section-4 .aibridge-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .section-4 .aibridge-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .section-4 .aibridge-dept-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: #00FFCC;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .section-4 .aibridge-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-4 .aibridge-eyebrow::before,
+        .section-4 .aibridge-eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-4 .aibridge-eyebrow::before {
+            transform: rotate(180deg);
+        }
+
+        .section-4 .aibridge-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #E0F2E9 0%, #00FFCC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .section-4 .aibridge-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: #00FFCC;
+            opacity: 0.9;
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .section-4 .aibridge-intro {
+            font-size: 0.9rem;
+            color: rgba(224, 242, 233, 0.85);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section-4 .aibridge-intro em {
+            color: #00FFCC;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .section-4 .aibridge-transformation {
+            margin-bottom: 1.5rem;
+            background: rgba(15, 61, 46, 0.2);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 16px;
+            padding: 1rem;
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        .section-4 .aibridge-transformation-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: #00FFCC;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .section-4 .aibridge-transformation-svg {
+            width: 100%;
+            max-height: 200px;
+        }
+
+        .section-4 .aibridge-transformation-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.75rem;
+            padding: 0 2rem;
+        }
+
+        .section-4 .aibridge-label-group {
+            text-align: center;
+        }
+
+        .section-4 .aibridge-label-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.15rem;
+        }
+
+        .section-4 .aibridge-label-before {
+            color: rgba(255, 51, 51, 0.6);
+        }
+
+        .section-4 .aibridge-label-ai {
+            color: #00FFCC;
+        }
+
+        .section-4 .aibridge-label-after {
+            color: #22C55E;
+        }
+
+        .section-4 .aibridge-label-desc {
+            font-size: 0.65rem;
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        .section-4 .aibridge-solution-identity {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .section-4 .aibridge-solution-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff 0%, #165C45 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .section-4 .aibridge-solution-tagline {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            color: #00FFCC;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-4 .aibridge-solution-desc {
+            font-size: 0.9rem;
+            color: rgba(224, 242, 233, 0.85);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section-4 .aibridge-capabilities {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-4 .aibridge-capability {
+            background: rgba(15, 61, 46, 0.2);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+            transform: none;
+        }
+
+        .section-4 .aibridge-capability::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00FFCC, rgba(0, 255, 204, 0.2));
+        }
+
+        .section-4 .aibridge-capability-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .section-4 .aibridge-capability-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .section-4 .aibridge-capability-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            margin-bottom: 0.4rem;
+        }
+
+        .section-4 .aibridge-capability-outcome {
+            font-size: 0.75rem;
+            color: rgba(224, 242, 233, 0.85);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-4 .aibridge-capability-maps {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            color: #00FFCC;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .section-4 .aibridge-capability-maps span {
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        .section-4 .aibridge-forward {
+            display: none;
+        }
+
+        .section-4 .aibridge-footer {
+            text-align: center;
+            padding: 0.5rem 0;
+            opacity: 1;
+        }
+
+        .section-4 .aibridge-footer-brand {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-4 .aibridge-footer-contact {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        .section-4 .aibridge-svg-label {
+            fill: rgba(224, 242, 233, 0.85);
+        }
+
+        .section-4 .aibridge-svg-label-dim {
+            fill: rgba(224, 242, 233, 0.5);
+        }
+
+        .section-4 .aibridge-svg-label-accent {
+            fill: #00FFCC;
+        }
+
+        .section-4 .aibridge-svg-label-resolved {
+            fill: #22C55E;
+        }
+
+        .section-4 .aibridge-svg-label-alert {
+            fill: rgba(255, 51, 51, 0.7);
+        }
+
+        .section-4 .aibridge-motion-group {
+            display: none;
+        }
+
+        /* === SECTION 5 CSS (Technical Architecture) === */
+        .section-5 {
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+        }
+
+        .section-5 .hld-section {
+            position: relative;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-5 .hld-skip-link { display: none; }
+
+        .section-5 .hld-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-5 .hld-bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(0, 255, 204, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(0, 255, 204, 0.04) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-5 .hld-transition {
+            display: none;
+        }
+
+        .section-5 .hld-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1700px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0.75rem 1rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-5 .hld-header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            flex-shrink: 0;
+            opacity: 1;
+        }
+
+        .section-5 .hld-dept-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem;
+            color: #00FFCC;
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+            opacity: 0.8;
+        }
+
+        .section-5 .hld-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-5 .hld-eyebrow::before,
+        .section-5 .hld-eyebrow::after {
+            content: '';
+            width: 25px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-5 .hld-eyebrow::before {
+            transform: rotate(180deg);
+        }
+
+        .section-5 .hld-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #E0F2E9 0%, #00FFCC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.15rem;
+            line-height: 1.2;
+        }
+
+        .section-5 .hld-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .section-5 .hld-diagram-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            opacity: 1;
+        }
+
+        .section-5 .hld-diagram-svg {
+            width: 100%;
+            flex: 1;
+            min-height: 400px;
+            max-height: calc(210mm - 100px);
+        }
+
+        .section-5 .hld-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 0.5rem 0;
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+            opacity: 1;
+        }
+
+        .section-5 .hld-legend-group {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .section-5 .hld-legend-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.5rem;
+            color: #00FFCC;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-right: 0.3rem;
+        }
+
+        .section-5 .hld-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.5rem;
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        .section-5 .hld-legend-shape {
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-5 .hld-legend-line {
+            width: 16px;
+            height: 2px;
+            position: relative;
+        }
+
+        .section-5 .hld-legend-line.hld-primary {
+            background: #00FFCC;
+        }
+
+        .section-5 .hld-legend-line.hld-response {
+            background: #22C55E;
+        }
+
+        .section-5 .hld-legend-line.hld-queue {
+            background: #A78BFA;
+        }
+
+        .section-5 .hld-legend-line.hld-feedback {
+            background: #F59E0B;
+        }
+
+        .section-5 .hld-footer {
+            text-align: center;
+            padding: 0.5rem 0;
+            flex-shrink: 0;
+            opacity: 1;
+        }
+
+        .section-5 .hld-footer-brand {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .section-5 .hld-zone-rect {
+            fill: rgba(15, 61, 46, 0.15);
+            stroke: none;
+        }
+
+        .section-5 .hld-zone-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 8px;
+            fill: #00FFCC;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .section-5 .hld-component-box {
+            fill: #0F3D2E;
+            stroke: #00FFCC;
+            stroke-width: 1.5;
+        }
+
+        .section-5 .hld-component-box-external {
+            fill: rgba(15, 61, 46, 0.5);
+            stroke: rgba(224, 242, 233, 0.7);
+            stroke-width: 1;
+            stroke-dasharray: 4 2;
+        }
+
+        .section-5 .hld-component-box-ai {
+            fill: #0F3D2E;
+            stroke: #00FFCC;
+            stroke-width: 2;
+        }
+
+        .section-5 .hld-component-box-storage {
+            fill: #0F3D2E;
+            stroke: #22C55E;
+            stroke-width: 1.5;
+        }
+
+        .section-5 .hld-component-box-queue {
+            fill: #0F3D2E;
+            stroke: #A78BFA;
+            stroke-width: 1.5;
+        }
+
+        .section-5 .hld-component-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            fill: #E0F2E9;
+            text-anchor: middle;
+        }
+
+        .section-5 .hld-component-sublabel {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 6px;
+            fill: rgba(224, 242, 233, 0.7);
+            text-anchor: middle;
+        }
+
+        .section-5 .hld-flow-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 5.5px;
+            fill: rgba(224, 242, 233, 0.7);
+            opacity: 0.9;
+        }
+
+        .section-5 .hld-icon {
+            fill: none;
+            stroke: #00FFCC;
+            stroke-width: 1.3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .section-5 .hld-icon-fill {
+            fill: #00FFCC;
+            stroke: none;
+        }
+
+        .section-5 .hld-icon-storage {
+            stroke: #22C55E;
+        }
+
+        .section-5 .hld-icon-fill-storage {
+            fill: #22C55E;
+        }
+
+        .section-5 .hld-icon-queue {
+            stroke: #A78BFA;
+        }
+
+        .section-5 .hld-icon-fill-queue {
+            fill: #A78BFA;
+        }
+
+        .section-5 .hld-flow-line {
+            fill: none;
+            stroke: #00FFCC;
+            stroke-width: 1.5;
+        }
+
+        .section-5 .hld-flow-line-secondary {
+            stroke: #22C55E;
+            stroke-width: 1.3;
+        }
+
+        .section-5 .hld-flow-line-queue {
+            stroke: #A78BFA;
+            stroke-width: 1.5;
+        }
+
+        .section-5 .hld-flow-line-feedback {
+            stroke: #F59E0B;
+            stroke-width: 1.2;
+        }
+
+        .section-5 .hld-flow-arrow {
+            fill: #00FFCC;
+            stroke: none;
+        }
+
+        .section-5 .hld-flow-arrow-secondary {
+            fill: #22C55E;
+        }
+
+        .section-5 .hld-flow-arrow-queue {
+            fill: #A78BFA;
+        }
+
+        .section-5 .hld-flow-arrow-feedback {
+            fill: #F59E0B;
+        }
+
+        /* === SECTION 6 CSS (Business Process) === */
+        .section-6 {
+            background-color: #051A12;
+            color: #E0F2E9;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .section-6 .uft-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-6 .uft-bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 25% 20%, rgba(0, 255, 204, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 75% 60%, rgba(0, 255, 204, 0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 90%, rgba(34, 197, 94, 0.03) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .section-6 .uft-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 1.5rem;
+        }
+
+        .section-6 .uft-section-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .section-6 .uft-section-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00FFCC;
+            margin-bottom: 0.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-6 .uft-section-eyebrow::before,
+        .section-6 .uft-section-eyebrow::after {
+            content: '';
+            width: 35px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00FFCC);
+        }
+
+        .section-6 .uft-section-eyebrow::before {
+            transform: rotate(180deg);
+        }
+
+        .section-6 .uft-section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, #E0F2E9 0%, #00FFCC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+        }
+
+        .section-6 .uft-section-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(224, 242, 233, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .section-6 .uft-actors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-6 .uft-actor-card {
+            background: rgba(15, 61, 46, 0.25);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-6 .uft-actor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00FFCC, transparent);
+        }
+
+        .section-6 .uft-actor-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .section-6 .uft-actor-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00FFCC;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .section-6 .uft-actor-info h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            margin-bottom: 0.1rem;
+        }
+
+        .section-6 .uft-actor-role {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem;
+            color: #00FFCC;
+            letter-spacing: 1px;
+        }
+
+        .section-6 .uft-actor-goal {
+            font-size: 0.7rem;
+            color: rgba(224, 242, 233, 0.85);
+            margin-bottom: 0.75rem;
+            padding: 0.4rem;
+            background: rgba(0, 255, 204, 0.05);
+            border-left: 2px solid #00FFCC;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .section-6 .uft-journey-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .section-6 .uft-step {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .section-6 .uft-step-number {
+            width: 20px;
+            height: 20px;
+            background: #0F3D2E;
+            border: 2px solid #00FFCC;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: #00FFCC;
+            flex-shrink: 0;
+        }
+
+        .section-6 .uft-step-content {
+            flex: 1;
+            background: rgba(5, 26, 18, 0.5);
+            border-radius: 4px;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid rgba(0, 255, 204, 0.08);
+        }
+
+        .section-6 .uft-step-action {
+            font-size: 0.7rem;
+            color: #E0F2E9;
+            margin-bottom: 0.3rem;
+            line-height: 1.3;
+        }
+
+        .section-6 .uft-step-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            align-items: center;
+        }
+
+        .section-6 .uft-tech-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.5rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-6 .uft-tech-component {
+            background: rgba(0, 255, 204, 0.15);
+            color: #00FFCC;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+        }
+
+        .section-6 .uft-tech-ai {
+            background: rgba(167, 139, 250, 0.15);
+            color: #A78BFA;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+        }
+
+        .section-6 .uft-tech-data {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .section-6 .uft-secondary-actors {
+            display: none;
+        }
+
+        .section-6 .uft-impact-section {
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .section-6 .uft-impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .section-6 .uft-impact-card {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.08) 0%, rgba(15, 61, 46, 0.25) 100%);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-6 .uft-impact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00FFCC, #22C55E);
+        }
+
+        .section-6 .uft-impact-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-6 .uft-impact-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #00FFCC;
+            margin-bottom: 0.3rem;
+        }
+
+        .section-6 .uft-impact-desc {
+            font-size: 0.7rem;
+            color: rgba(224, 242, 233, 0.85);
+            line-height: 1.4;
+        }
+
+        .section-6 .uft-impact-metrics {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .section-6 .uft-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem;
+            color: rgba(224, 242, 233, 0.7);
+            margin-bottom: 0.2rem;
+        }
+
+        .section-6 .uft-metric-value {
+            color: #00FFCC;
+            font-weight: bold;
+        }
+
+        .section-6 .uft-timeline-section {
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .section-6 .uft-timeline-wrapper {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .section-6 .uft-timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00FFCC, #22C55E);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .section-6 .uft-timeline-milestones {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-6 .uft-milestone {
+            background: rgba(15, 61, 46, 0.25);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 6px;
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-6 .uft-milestone::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #0F3D2E;
+            border: 2px solid #00FFCC;
+            border-radius: 50%;
+        }
+
+        .section-6 .uft-milestone.uft-current::before {
+            background: #00FFCC;
+            box-shadow: 0 0 8px #00FFCC;
+        }
+
+        .section-6 .uft-milestone-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.5rem;
+            color: #00FFCC;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .section-6 .uft-milestone-icon {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .section-6 .uft-milestone-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #E0F2E9;
+            margin-bottom: 0.2rem;
+            line-height: 1.1;
+        }
+
+        .section-6 .uft-milestone-deliverable {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.45rem;
+            color: rgba(224, 242, 233, 0.7);
+            line-height: 1.3;
+        }
+
+        .section-6 .uft-privacy-section {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .section-6 .uft-privacy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .section-6 .uft-privacy-card {
+            background: rgba(15, 61, 46, 0.25);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            position: relative;
+        }
+
+        .section-6 .uft-privacy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, #00FFCC, transparent);
+            border-radius: 8px 0 0 8px;
+        }
+
+        .section-6 .uft-privacy-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-6 .uft-privacy-icon {
+            font-size: 1rem;
+        }
+
+        .section-6 .uft-privacy-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #00FFCC;
+        }
+
+        .section-6 .uft-privacy-list {
+            list-style: none;
+        }
+
+        .section-6 .uft-privacy-list li {
+            font-size: 0.6rem;
+            color: rgba(224, 242, 233, 0.85);
+            padding: 0.25rem 0;
+            padding-left: 0.8rem;
+            position: relative;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.05);
+        }
+
+        .section-6 .uft-privacy-list li:last-child {
+            border-bottom: none;
+        }
+
+        .section-6 .uft-privacy-list li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: #00FFCC;
+            font-weight: bold;
+        }
+
+        .section-6 .uft-footer {
+            text-align: center;
+            padding: 1rem 0 0.5rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .section-6 .uft-footer-brand {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: #E0F2E9;
+            letter-spacing: 2px;
+            margin-bottom: 0.2rem;
+        }
+
+        .section-6 .uft-footer-contact {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(224, 242, 233, 0.7);
+        }
+
+        /* === SECTION 7 CSS (Team Contact) === */
+        .section-7 {
+            --color-cyan: #00f7ff;
+            --color-purple: #7c3aed;
+            --color-bg-main: #0a0d12;
+            --color-card-bg: rgba(17, 24, 39, 0.8);
+            --color-text-primary: #e6f1ff;
+            --color-text-secondary: #95a3b8;
+            --color-border: rgba(255, 255, 255, 0.1);
+            --color-border-accent: rgba(0, 247, 255, 0.3);
+            background: #0a0d12;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 50%);
+            color: #e6f1ff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .section-7 .page-section {
+            width: 100%;
+            max-width: 1400px;
+            position: relative;
+            padding: 25px 35px;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        .section-7 header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-7 .header-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 0%, #00f7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-7 .header-subtitle {
+            font-size: 11px;
+            color: #95a3b8;
+            margin-top: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-7 .header-meta {
+            text-align: right;
+            font-size: 11px;
+            color: #95a3b8;
+        }
+
+        .section-7 .header-meta a {
+            color: #00f7ff;
+            text-decoration: none;
+            font-family: 'Inter', monospace;
+            font-weight: 500;
+        }
+
+        .section-7 .team-tagline {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        .section-7 .team-tagline p {
+            font-size: 13px;
+            color: #95a3b8;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-7 .team-tagline strong {
+            color: #e6f1ff;
+        }
+
+        .section-7 .team-tagline .highlight {
+            color: #00f7ff;
+            font-weight: 600;
+        }
+
+        .section-7 .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .section-7 .member-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-7 .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f7ff, #7c3aed);
+            opacity: 0.7;
+        }
+
+        .section-7 .profile-pic-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .section-7 .profile-pic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            background: linear-gradient(rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.8)) padding-box,
+                        linear-gradient(135deg, #00f7ff, #7c3aed) border-box;
+        }
+
+        .section-7 .avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, #7c3aed, #00f7ff) padding-box,
+                        linear-gradient(135deg, #00f7ff, #7c3aed) border-box;
+        }
+
+        .section-7 .member-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 3px 0;
+            text-align: center;
+        }
+
+        .section-7 .member-role {
+            font-size: 8px;
+            font-weight: 600;
+            color: #00f7ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .section-7 .details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+            flex-grow: 1;
+        }
+
+        .section-7 .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 9px;
+            line-height: 1.3;
+            color: #95a3b8;
+        }
+
+        .section-7 .detail-item svg {
+            flex-shrink: 0;
+            width: 10px;
+            height: 10px;
+            stroke: #95a3b8;
+            stroke-width: 2;
+            fill: none;
+            margin-top: 1px;
+        }
+
+        .section-7 .detail-item strong { 
+            color: #e6f1ff; 
+            font-weight: 600; 
+        }
+
+        .section-7 .detail-item a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .section-7 .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .section-7 .badge {
+            font-size: 7px;
+            font-weight: 600;
+            color: #e6f1ff;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 2px 6px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        .section-7 .linkedin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1));
+            border: 1px solid rgba(0, 119, 181, 0.4);
+            color: #e6f1ff;
+            font-size: 9px;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: auto;
+        }
+
+        .section-7 .linkedin-btn.disabled {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #95a3b8;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .section-7 .linkedin-btn svg { 
+            width: 10px; 
+            height: 10px; 
+            fill: currentColor; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Cover Page -->
+    <div class="section section-1">
+        <canvas id="sim-canvas"></canvas>
+        <div id="vignette"></div>
+        <div class="tech-grid"></div>
+
+        <div class="container">
+            <div class="header-group">
+                <div class="dept-name">Forest Department, Government of Andhra Pradesh</div>
+                <h1 class="challenge-name">VAN RAKSHA</h1>
+                <h2 class="challenge-title">AI-Powered Early Detection of Forest Land Encroachments</h2>
+            </div>
+
+            <div class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path class="shield-path" d="M50 5 L85 20 V50 C85 75 50 95 50 95 C50 95 15 75 15 50 V20 L50 5 Z" />
+                    <g transform="translate(25, 25) scale(0.5)">
+                        <path class="leaf-path" d="M50 0 C50 0 20 20 20 60 C20 85 40 100 50 100 C60 100 80 85 80 60 C80 20 50 0 50 0 Z" opacity="0.9"/>
+                        <circle cx="50" cy="60" r="14" class="eye-iris" filter="url(#glow)" />
+                        <line x1="25" y1="60" x2="75" y2="60" stroke="#051A12" stroke-width="3"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="tagline">Sentinel of the Green: Geospatial Defense System</div>
+        </div>
+
+        <div class="hud-panel">
+            <div style="color:#00FFCC; font-weight:bold; margin-bottom:12px; border-bottom:1px solid #00FFCC; padding-bottom:5px; letter-spacing:1px;">SYSTEM STATUS</div>
+            <div class="hud-row">
+                <span>TARGET REGION:</span>
+                <span>EASTERN GHATS</span>
+            </div>
+            <div class="hud-row">
+                <span>SATELLITE LINK:</span>
+                <span style="color:#fff;">CARTOSAT-2</span>
+            </div>
+            <div class="hud-row">
+                <span>SCAN MODE:</span>
+                <span>HYPERSPECTRAL</span>
+            </div>
+            <div style="margin-top:15px; font-size:0.75rem; color:#888; font-weight:bold;">REAL-TIME ANALYSIS</div>
+            <div class="hud-row">
+                <span>ZONE A-12:</span>
+                <span class="status-safe">DENSE COVER</span>
+            </div>
+            <div class="hud-row">
+                <span>ZONE B-04:</span>
+                <span class="status-alert">ENCROACHMENT</span>
+            </div>
+            <div id="dynamic-action" style="margin-top:12px; color:#00FFCC; font-size:0.75rem; border-top:1px dashed #333; padding-top:5px;">> INITIATING SEGMENTATION...</div>
+        </div>
+
+        <div class="footer-group">
+            <div class="team-info">
+                <div class="team-name">ResponsibleIndian</div>
+                <div class="team-contact">contact@responsibleindian.in</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Problem Analysis -->
+    <div class="section section-2">
+        <div class="bg-grid" aria-hidden="true"></div>
+        <div class="bg-gradient" aria-hidden="true"></div>
+
+        <main id="main-content" class="page-container">
+            <header class="section-header">
+                <p class="section-eyebrow">Critical Gaps</p>
+                <h1 class="section-title">Guardians Without Eyes</h1>
+                <p class="section-intro">
+                    Andhra Pradesh's forests face an invisible crisis. While encroachments silently consume protected lands, 
+                    the systems meant to detect them remain constrained by human limitations and outdated methods.
+                </p>
+            </header>
+
+            <div class="problems-grid" role="list" aria-label="Key problems in forest protection">
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 01</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="#165C45" opacity="0.6">
+                                <circle cx="30" cy="30" r="8"/><circle cx="60" cy="25" r="6"/>
+                                <circle cx="90" cy="35" r="9"/><circle cx="120" cy="28" r="7"/>
+                                <circle cx="150" cy="32" r="8"/><circle cx="180" cy="26" r="6"/>
+                                <circle cx="210" cy="38" r="9"/><circle cx="240" cy="30" r="7"/>
+                                <circle cx="270" cy="34" r="8"/>
+                                <circle cx="45" cy="55" r="7"/><circle cx="75" cy="50" r="8"/>
+                                <circle cx="105" cy="58" r="6"/><circle cx="135" cy="52" r="9"/>
+                                <circle cx="165" cy="56" r="7"/><circle cx="195" cy="48" r="8"/>
+                                <circle cx="225" cy="60" r="6"/><circle cx="255" cy="54" r="7"/>
+                            </g>
+                            <g transform="translate(145, 115)">
+                                <circle cx="0" cy="-8" r="4" fill="#E0F2E9"/>
+                                <rect x="-3" y="-4" width="6" height="12" rx="2" fill="#E0F2E9"/>
+                                <path d="M4 0 L25 -10 L25 10 Z" fill="#00FFCC" opacity="0.3"/>
+                            </g>
+                            <circle cx="150" cy="110" r="20" fill="none" stroke="#00FFCC" stroke-width="1" stroke-dasharray="4 2" opacity="0.5"/>
+                            <text x="150" y="145" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="10" class="svg-label-alert">VAST UNCOVERED TERRITORY</text>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Limited Human Coverage</h2>
+                    <p class="card-description">
+                        Field inspections rely on patrol officers who can only physically cover a fraction of the forest expanse. 
+                        Thousands of hectares remain unseen between inspection cycles.
+                    </p>
+                </article>
+
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 02</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="30" y1="100" x2="270" y2="100" stroke="#165C45" stroke-width="2"/>
+                            <g transform="translate(50, 60)">
+                                <rect x="-15" y="0" width="30" height="40" fill="#0F3D2E" rx="3"/>
+                                <text x="0" y="55" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label">START</text>
+                            </g>
+                            <g transform="translate(120, 45)">
+                                <rect x="-20" y="0" width="40" height="55" fill="#0F3D2E" rx="3"/>
+                                <text x="0" y="70" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label">EXPANSION</text>
+                                <rect x="-10" y="20" width="20" height="15" fill="#FF3333" opacity="0.6"/>
+                            </g>
+                            <g transform="translate(200, 30)">
+                                <rect x="-25" y="0" width="50" height="70" fill="#0F3D2E" rx="3"/>
+                                <text x="0" y="85" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label-alert">DETECTED</text>
+                                <rect x="-15" y="15" width="30" height="25" fill="#FF3333" opacity="0.8"/>
+                                <circle cx="0" cy="5" r="8" fill="none" stroke="#FF3333" stroke-width="2"/>
+                                <text x="0" y="8" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#FF3333" font-weight="bold">!</text>
+                            </g>
+                            <text x="245" y="115" font-family="Share Tech Mono, monospace" font-size="9" class="svg-label-alert">TOO LATE</text>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Reactive Detection Pattern</h2>
+                    <p class="card-description">
+                        By the time encroachments are discovered through manual inspection, they have often progressed from initial 
+                        clearing to permanent structures. The damage becomes irreversible.
+                    </p>
+                </article>
+
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 03</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="40" y="20" width="100" height="100" rx="8" fill="none" stroke="#165C45" stroke-width="2"/>
+                            <rect x="40" y="60" width="100" height="60" fill="#00FFCC" opacity="0.2"/>
+                            <g transform="translate(55, 85)" opacity="0.8">
+                                <circle r="8" fill="#E0F2E9"/>
+                            </g>
+                            <g transform="translate(90, 90)" opacity="0.6">
+                                <circle r="7" fill="#E0F2E9"/>
+                            </g>
+                            <g transform="translate(120, 88)" opacity="0.7">
+                                <circle r="8" fill="#E0F2E9"/>
+                            </g>
+                            <path d="M140 70 Q160 70 170 90 L170 120" stroke="#FF3333" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+                            <polygon points="165,120 170,130 175,120" fill="#FF3333"/>
+                            <g transform="translate(230, 100)">
+                                <rect x="-25" y="0" width="50" height="25" fill="none" stroke="#FF3333" stroke-width="1" stroke-dasharray="3 2"/>
+                                <text x="0" y="16" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="svg-label-alert">MINIMAL</text>
+                                <text x="0" y="40" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label">OUTPUT</text>
+                            </g>
+                            <text x="90" y="140" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="svg-label-accent">DEPARTMENT RESOURCES</text>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Resource-Intensive Operations</h2>
+                    <p class="card-description">
+                        Manual patrolling consumes substantial departmental resources—personnel time, vehicle deployment, 
+                        and operational budget—while yielding coverage of only a small percentage of total forest area.
+                    </p>
+                </article>
+
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 04</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(80, 75)">
+                                <path d="M0 -35 Q-25 -35 -25 0 L-30 10 L30 10 L25 0 Q25 -35 0 -35" fill="none" stroke="#555" stroke-width="3"/>
+                                <circle cy="18" r="6" fill="#555"/>
+                                <line x1="-5" y1="-45" x2="5" y2="-45" stroke="#555" stroke-width="3"/>
+                                <line x1="0" y1="-45" x2="0" y2="-35" stroke="#555" stroke-width="3"/>
+                                <g transform="translate(35, -20)">
+                                    <line x1="-10" y1="-10" x2="10" y2="10" stroke="#FF3333" stroke-width="3"/>
+                                    <line x1="10" y1="-10" x2="-10" y2="10" stroke="#FF3333" stroke-width="3"/>
+                                </g>
+                                <text x="0" y="45" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="10" fill="#666">SILENT</text>
+                            </g>
+                            <g transform="translate(200, 45)">
+                                <path d="M-50 60 L50 60" stroke="#00FFCC" stroke-width="1" stroke-dasharray="4 2"/>
+                                <text x="0" y="75" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="svg-label-accent">BOUNDARY</text>
+                                <g opacity="0.4">
+                                    <circle cx="-35" cy="20" r="8" fill="#165C45"/>
+                                    <circle cx="-15" cy="15" r="10" fill="#165C45"/>
+                                    <circle cx="10" cy="22" r="7" fill="#165C45"/>
+                                    <circle cx="35" cy="18" r="9" fill="#165C45"/>
+                                </g>
+                                <rect x="-40" y="25" width="25" height="30" fill="#FF3333" opacity="0.3"/>
+                                <text x="-25" y="10" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label-alert">SPREADING</text>
+                            </g>
+                            <line x1="115" y1="75" x2="145" y2="75" stroke="#555" stroke-width="1" stroke-dasharray="2 4"/>
+                            <text x="130" y="90" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" fill="#555">NO LINK</text>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Absence of Early Warning</h2>
+                    <p class="card-description">
+                        No mechanism exists to alert authorities when encroachment activity begins. Without continuous monitoring 
+                        and predictive signals, forest officers cannot intervene during critical early stages.
+                    </p>
+                </article>
+
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 05</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="30" y="15" width="240" height="110" fill="#071F16" rx="4" stroke="#165C45" stroke-width="1"/>
+                            <path d="M50 30 Q90 25 130 35 Q170 20 210 30 Q240 35 250 45 L250 100 Q200 110 150 105 Q100 115 50 100 Z" fill="#0F3D2E" opacity="0.6"/>
+                            <path d="M50 30 Q90 25 130 35 Q170 20 210 30 Q240 35 250 45" fill="none" stroke="#00FFCC" stroke-width="2" stroke-dasharray="6 3" opacity="0.5"/>
+                            <g>
+                                <circle cx="75" cy="32" r="12" fill="none" stroke="#FF3333" stroke-width="2"/>
+                                <text x="75" y="36" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#FF3333">?</text>
+                            </g>
+                            <g>
+                                <circle cx="150" cy="28" r="12" fill="none" stroke="#FF3333" stroke-width="2"/>
+                                <text x="150" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#FF3333">?</text>
+                            </g>
+                            <g>
+                                <circle cx="225" cy="38" r="12" fill="none" stroke="#FF3333" stroke-width="2"/>
+                                <text x="225" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#FF3333">?</text>
+                            </g>
+                            <rect x="70" y="40" width="15" height="12" fill="#FF3333" opacity="0.6" rx="2"/>
+                            <rect x="145" y="36" width="12" height="10" fill="#FF3333" opacity="0.5" rx="2"/>
+                            <rect x="218" y="48" width="18" height="14" fill="#FF3333" opacity="0.6" rx="2"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Unmonitored Boundaries</h2>
+                    <p class="card-description">
+                        Forest boundaries extend across hundreds of kilometers. Without continuous geospatial monitoring, 
+                        changes along these edges—the most vulnerable zones for encroachment—go unnoticed.
+                    </p>
+                </article>
+
+                <article class="problem-card" role="listitem">
+                    <span class="card-number" aria-hidden="true">ISSUE 06</span>
+                    <div class="card-visual" aria-hidden="true">
+                        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(60, 75)">
+                                <rect x="-35" y="-30" width="20" height="15" fill="#FF3333" opacity="0.5" transform="rotate(-15)"/>
+                                <rect x="-15" y="-20" width="25" height="20" fill="#FF3333" opacity="0.6" transform="rotate(10)"/>
+                                <rect x="5" y="-35" width="18" height="12" fill="#FF3333" opacity="0.4" transform="rotate(-5)"/>
+                                <rect x="-25" y="5" width="22" height="18" fill="#FF3333" opacity="0.5" transform="rotate(8)"/>
+                                <rect x="0" y="10" width="15" height="10" fill="#FF3333" opacity="0.6" transform="rotate(-12)"/>
+                                <text x="-20" y="-45" font-family="Arial, sans-serif" font-size="14" fill="#888">?</text>
+                                <text x="15" y="40" font-family="Arial, sans-serif" font-size="14" fill="#888">?</text>
+                                <text x="-40" y="25" font-family="Arial, sans-serif" font-size="14" fill="#888">?</text>
+                            </g>
+                            <path d="M100 75 L130 75" stroke="#555" stroke-width="2"/>
+                            <polygon points="130,72 137,75 130,78" fill="#555"/>
+                            <g transform="translate(190, 75)">
+                                <rect x="-45" y="-35" width="90" height="70" fill="none" stroke="#555" stroke-width="2" rx="4"/>
+                                <rect x="-35" y="-20" width="70" height="12" fill="#555" opacity="0.3" rx="2"/>
+                                <rect x="-35" y="-3" width="70" height="12" fill="#555" opacity="0.3" rx="2"/>
+                                <rect x="-35" y="14" width="70" height="12" fill="#555" opacity="0.3" rx="2"/>
+                                <circle cx="35" cy="-14" r="5" fill="#FF3333" opacity="0.5"/>
+                                <circle cx="35" cy="3" r="5" fill="#FF3333" opacity="0.5"/>
+                                <circle cx="35" cy="20" r="5" fill="#FF3333" opacity="0.5"/>
+                                <text x="0" y="50" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="svg-label">SAME RESPONSE</text>
+                            </g>
+                            <text x="150" y="18" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="svg-label-alert">NO DIFFERENTIATION</text>
+                        </svg>
+                    </div>
+                    <h2 class="card-title"><span class="alert-dot" aria-hidden="true"></span>Classification Blindspot</h2>
+                    <p class="card-description">
+                        Different encroachment types—agricultural expansion, illegal construction, mining, logging—require 
+                        different response strategies. Without systematic classification, all threats receive the same generic treatment.
+                    </p>
+                </article>
+            </div>
+
+            <section class="impact-section" aria-labelledby="impact-heading">
+                <h2 class="impact-title" id="impact-heading">The Cumulative Cost</h2>
+                <p class="impact-text">
+                    Every day without effective detection, Andhra Pradesh's forests suffer 
+                    <span class="highlight">irreversible biodiversity loss</span>, diminished 
+                    <span class="highlight">carbon sequestration capacity</span>, and escalating 
+                    <span class="highlight">human-wildlife conflicts</span>. The gap between encroachment and detection 
+                    grows wider—and so does the damage.
+                </p>
+            </section>
+        </main>
+
+        <footer class="footer-watermark" role="contentinfo">
+            <span>ResponsibleIndian</span>
+        </footer>
+    </div>
+
+    <!-- Section 3: Bottlenecks -->
+    <div class="section section-3">
+        <section class="bottlenecks-section" id="bottlenecks">
+            <div class="bottlenecks-bg-grid" aria-hidden="true"></div>
+            <div class="bottlenecks-bg-gradient" aria-hidden="true"></div>
+
+            <main id="bottlenecks-main" class="bottlenecks-container">
+                <header class="bottlenecks-header">
+                    <p class="bottlenecks-eyebrow">Systemic Root Causes</p>
+                    <h1 class="bottlenecks-title">Where the Signal Dies</h1>
+                    <p class="bottlenecks-subtitle">Breakpoints in the Encroachment Detection Pipeline</p>
+                    <p class="bottlenecks-intro">
+                        The problems aren't mysteries. Satellite data exists. Boundaries are mapped. Field officers patrol. 
+                        Yet encroachments flourish. The dysfunction lies not in missing pieces, but in 
+                        <em>how those pieces fail to connect</em>—a pipeline with fractures at every joint.
+                    </p>
+                </header>
+
+                <div class="bottlenecks-pipeline-overview">
+                    <h3>The Detection Pipeline: Points of Failure</h3>
+                    <svg class="bottlenecks-pipeline-svg" viewBox="0 0 900 160" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 80 L850 80" stroke="#165C45" stroke-width="20" stroke-linecap="round" opacity="0.4"/>
+                        <g font-family="Share Tech Mono, monospace" font-size="9">
+                            <text x="100" y="130" text-anchor="middle" class="bottlenecks-svg-label-dim">SATELLITE</text>
+                            <text x="100" y="142" text-anchor="middle" class="bottlenecks-svg-label-dim">ACQUISITION</text>
+                            <text x="280" y="130" text-anchor="middle" class="bottlenecks-svg-label-dim">DATA</text>
+                            <text x="280" y="142" text-anchor="middle" class="bottlenecks-svg-label-dim">INGESTION</text>
+                            <text x="450" y="130" text-anchor="middle" class="bottlenecks-svg-label-dim">CHANGE</text>
+                            <text x="450" y="142" text-anchor="middle" class="bottlenecks-svg-label-dim">DETECTION</text>
+                            <text x="620" y="130" text-anchor="middle" class="bottlenecks-svg-label-dim">ALERT</text>
+                            <text x="620" y="142" text-anchor="middle" class="bottlenecks-svg-label-dim">GENERATION</text>
+                            <text x="800" y="130" text-anchor="middle" class="bottlenecks-svg-label-dim">FIELD</text>
+                            <text x="800" y="142" text-anchor="middle" class="bottlenecks-svg-label-dim">ACTION</text>
+                        </g>
+                        <circle cx="100" cy="80" r="18" fill="#0F3D2E" stroke="#00FFCC" stroke-width="2"/>
+                        <circle cx="280" cy="80" r="18" fill="#0F3D2E" stroke="#00FFCC" stroke-width="2"/>
+                        <circle cx="450" cy="80" r="18" fill="#0F3D2E" stroke="#FF9933" stroke-width="2"/>
+                        <circle cx="620" cy="80" r="18" fill="#0F3D2E" stroke="#FF9933" stroke-width="2"/>
+                        <circle cx="800" cy="80" r="18" fill="#0F3D2E" stroke="#FF3333" stroke-width="2"/>
+                        <g transform="translate(190, 50)">
+                            <path d="M0 0 L10 15 L-10 15 Z" fill="#FF9933"/>
+                            <text x="0" y="-8" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-warn">GAP</text>
+                        </g>
+                        <g transform="translate(365, 50)">
+                            <path d="M0 0 L10 15 L-10 15 Z" fill="#FF9933"/>
+                            <text x="0" y="-8" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-warn">MANUAL</text>
+                        </g>
+                        <g transform="translate(535, 50)">
+                            <path d="M0 0 L10 15 L-10 15 Z" fill="#FF9933"/>
+                            <text x="0" y="-8" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-warn">DELAY</text>
+                        </g>
+                        <g transform="translate(710, 50)">
+                            <path d="M0 0 L10 15 L-10 15 Z" fill="#FF3333"/>
+                            <text x="0" y="-8" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-alert">BREAK</text>
+                        </g>
+                    </svg>
+                    <div class="bottlenecks-legend">
+                        <div class="bottlenecks-legend-item">
+                            <div class="bottlenecks-legend-swatch" style="background: #00FFCC;"></div>
+                            <span>Functional</span>
+                        </div>
+                        <div class="bottlenecks-legend-item">
+                            <div class="bottlenecks-legend-swatch" style="background: #FF9933;"></div>
+                            <span>Degraded</span>
+                        </div>
+                        <div class="bottlenecks-legend-item">
+                            <div class="bottlenecks-legend-swatch" style="background: #FF3333;"></div>
+                            <span>Failed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottlenecks-grid">
+                    <article class="bottleneck-card">
+                        <span class="bottleneck-number">BOTTLENECK 01</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(55, 55)">
+                                    <rect x="-35" y="-25" width="70" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1" rx="4"/>
+                                    <text x="0" y="40" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-accent">CARTOSAT</text>
+                                </g>
+                                <g transform="translate(160, 55)">
+                                    <rect x="-35" y="-25" width="70" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1" rx="4"/>
+                                    <text x="0" y="40" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-accent">SENTINEL</text>
+                                </g>
+                                <g transform="translate(265, 55)">
+                                    <rect x="-35" y="-25" width="70" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1" rx="4"/>
+                                    <text x="0" y="40" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-accent">KML/SHP</text>
+                                </g>
+                                <g transform="translate(107, 45)">
+                                    <line x1="-4" y1="-4" x2="4" y2="4" stroke="#FF3333" stroke-width="1.5"/>
+                                    <line x1="4" y1="-4" x2="-4" y2="4" stroke="#FF3333" stroke-width="1.5"/>
+                                </g>
+                                <g transform="translate(212, 45)">
+                                    <line x1="-4" y1="-4" x2="4" y2="4" stroke="#FF3333" stroke-width="1.5"/>
+                                    <line x1="4" y1="-4" x2="-4" y2="4" stroke="#FF3333" stroke-width="1.5"/>
+                                </g>
+                                <g transform="translate(160, 115)">
+                                    <rect x="-60" y="-12" width="120" height="24" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4 2" rx="4"/>
+                                    <text x="0" y="4" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" fill="#555">NO UNIFIED PIPELINE</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Fragmented Data Sources</h2>
+                        <p class="bottleneck-description">
+                            Satellite imagery from multiple sources exists in isolation. Forest boundary data sits in separate files. Each data type requires separate manual handling.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card" data-severity="high">
+                        <span class="bottleneck-number">BOTTLENECK 02</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="30" y1="120" x2="290" y2="120" stroke="#165C45" stroke-width="2"/>
+                                <rect x="30" y="70" width="35" height="45" fill="#00FFCC" opacity="0.2" rx="2"/>
+                                <rect x="110" y="70" width="20" height="45" fill="#00FFCC" opacity="0.2" rx="2"/>
+                                <rect x="200" y="70" width="25" height="45" fill="#00FFCC" opacity="0.2" rx="2"/>
+                                <rect x="265" y="70" width="25" height="45" fill="#00FFCC" opacity="0.2" rx="2"/>
+                                <g>
+                                    <ellipse cx="85" cy="80" rx="25" ry="15" fill="#555" opacity="0.6"/>
+                                    <text x="85" y="60" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-warn">MONSOON</text>
+                                </g>
+                                <g>
+                                    <ellipse cx="160" cy="85" rx="20" ry="12" fill="#555" opacity="0.5"/>
+                                </g>
+                                <g>
+                                    <ellipse cx="240" cy="82" rx="22" ry="14" fill="#555" opacity="0.55"/>
+                                </g>
+                                <g transform="translate(85, 105)">
+                                    <rect x="-15" y="-8" width="30" height="16" fill="#FF9933" opacity="0.2" rx="2"/>
+                                    <text x="0" y="3" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-warn">NO DATA</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Observability Gaps</h2>
+                        <p class="bottleneck-description">
+                            Seasonal cloud cover blocks satellite observation for extended periods. Encroachments occurring during blind windows progress undetected.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card" data-severity="high">
+                        <span class="bottleneck-number">BOTTLENECK 03</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(160, 75)">
+                                    <rect x="-100" y="-55" width="200" height="110" fill="#165C45" opacity="0.3"/>
+                                    <g stroke="#00FFCC" stroke-width="0.5" opacity="0.4">
+                                        <line x1="-100" y1="-27" x2="100" y2="-27"/>
+                                        <line x1="-100" y1="0" x2="100" y2="0"/>
+                                        <line x1="-100" y1="27" x2="100" y2="27"/>
+                                        <line x1="-50" y1="-55" x2="-50" y2="55"/>
+                                        <line x1="0" y1="-55" x2="0" y2="55"/>
+                                        <line x1="50" y1="-55" x2="50" y2="55"/>
+                                    </g>
+                                    <path d="M-80 -40 Q-40 -50 0 -35 Q50 -25 80 -45" stroke="#00FFCC" stroke-width="2" fill="none"/>
+                                    <path d="M-75 -32 Q-35 -42 5 -27 Q55 -17 85 -37" stroke="#FF9933" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+                                    <rect x="-85" y="-48" width="170" height="20" fill="#FF3333" opacity="0.15" rx="2"/>
+                                    <text x="0" y="-32" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-alert">FALSE DETECTION ZONE</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Boundary Misregistration</h2>
+                        <p class="bottleneck-description">
+                            Vector boundary files and raster satellite imagery use different coordinate systems. Spatial misalignment creates false positives along edges.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card" data-severity="high">
+                        <span class="bottleneck-number">BOTTLENECK 04</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 20 L140 20 L100 60 L80 60 Z" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1"/>
+                                <rect x="82" y="60" width="16" height="30" fill="#0F3D2E" stroke="#FF9933" stroke-width="2"/>
+                                <g transform="translate(90, 110)">
+                                    <circle r="10" fill="#0F3D2E" stroke="#FF9933" stroke-width="1.5"/>
+                                    <circle cy="-2" r="4" fill="none" stroke="#E0F2E9" stroke-width="1"/>
+                                    <path d="M0 3 L0 6" stroke="#E0F2E9" stroke-width="1"/>
+                                </g>
+                                <text x="90" y="135" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label">MANUAL REVIEW</text>
+                                <g transform="translate(210, 85)">
+                                    <rect x="-55" y="-55" width="110" height="100" fill="none" stroke="#FF9933" stroke-width="1" stroke-dasharray="3 2" rx="4"/>
+                                    <text x="0" y="-62" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-warn">BACKLOG</text>
+                                    <rect x="-40" y="25" width="80" height="12" fill="#FF9933" opacity="0.25" rx="2"/>
+                                    <rect x="-40" y="10" width="80" height="12" fill="#FF9933" opacity="0.35" rx="2"/>
+                                    <rect x="-40" y="-5" width="80" height="12" fill="#FF9933" opacity="0.45" rx="2"/>
+                                    <rect x="-40" y="-20" width="80" height="12" fill="#FF9933" opacity="0.55" rx="2"/>
+                                    <rect x="-40" y="-35" width="80" height="12" fill="#FF9933" opacity="0.65" rx="2"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Manual Processing Choke Point</h2>
+                        <p class="bottleneck-description">
+                            Change detection depends entirely on human interpretation. Large-scale imagery at high resolution creates a volume that far exceeds manual processing capacity.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card" data-severity="high">
+                        <span class="bottleneck-number">BOTTLENECK 05</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(50, 75)">
+                                    <rect x="-30" y="-45" width="60" height="90" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1" rx="4"/>
+                                    <text x="0" y="-52" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-accent">DETECTIONS</text>
+                                    <circle cx="-10" cy="-25" r="6" fill="#00FFCC" opacity="0.8"/>
+                                    <circle cx="10" cy="-20" r="5" fill="#FF9933" opacity="0.6"/>
+                                    <circle cx="-5" cy="-5" r="7" fill="#FF3333" opacity="0.5"/>
+                                    <circle cx="12" cy="0" r="4" fill="#00FFCC" opacity="0.7"/>
+                                    <circle cx="-12" cy="15" r="5" fill="#FF3333" opacity="0.4"/>
+                                    <circle cx="8" cy="20" r="6" fill="#FF9933" opacity="0.6"/>
+                                </g>
+                                <g transform="translate(130, 75)">
+                                    <rect x="-15" y="-30" width="30" height="60" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="4 2" rx="4"/>
+                                    <text x="0" y="-38" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" fill="#555">NO FILTER</text>
+                                </g>
+                                <g transform="translate(230, 75)">
+                                    <rect x="-45" y="-50" width="90" height="100" fill="#0F3D2E" stroke="#FF9933" stroke-width="1.5" rx="4"/>
+                                    <text x="0" y="-58" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-warn">ALERT QUEUE</text>
+                                    <circle cx="-25" cy="-30" r="5" fill="#00FFCC" opacity="0.6"/>
+                                    <circle cx="-5" cy="-25" r="6" fill="#FF3333" opacity="0.5"/>
+                                    <circle cx="20" cy="-32" r="4" fill="#FF9933" opacity="0.6"/>
+                                    <circle cx="-20" cy="-10" r="5" fill="#FF3333" opacity="0.4"/>
+                                    <circle cx="5" cy="-8" r="6" fill="#00FFCC" opacity="0.7"/>
+                                    <text x="0" y="60" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-alert">ALL EQUAL PRIORITY</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>No Accuracy Gatekeeping</h2>
+                        <p class="bottleneck-description">
+                            Every detection enters the same queue with equal priority. False positives consume the same verification resources as genuine threats.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card">
+                        <span class="bottleneck-number">BOTTLENECK 06</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(160, 15)">
+                                    <rect x="-8" y="-8" width="16" height="8" fill="#00FFCC" rx="1"/>
+                                    <path d="M0 0 L-20 35 M0 0 L20 35" stroke="#00FFCC" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+                                </g>
+                                <g transform="translate(160, 55)">
+                                    <ellipse cx="-60" cy="0" rx="30" ry="18" fill="#165C45"/>
+                                    <ellipse cx="-25" cy="-5" rx="35" ry="20" fill="#1a5c45"/>
+                                    <ellipse cx="15" cy="0" rx="32" ry="18" fill="#165C45"/>
+                                    <ellipse cx="55" cy="-3" rx="28" ry="16" fill="#1a5c45"/>
+                                    <text x="0" y="-25" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-accent">CANOPY LAYER</text>
+                                </g>
+                                <g transform="translate(160, 105)">
+                                    <rect x="-90" y="-15" width="180" height="30" fill="#071F16" stroke="#555" stroke-width="1" stroke-dasharray="3 2"/>
+                                    <rect x="-60" y="-8" width="25" height="18" fill="#FF3333" opacity="0.6" rx="2"/>
+                                    <rect x="-20" y="-5" width="15" height="12" fill="#FF3333" opacity="0.5" rx="2"/>
+                                    <rect x="30" y="-10" width="30" height="20" fill="#FF3333" opacity="0.7" rx="2"/>
+                                    <text x="0" y="25" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-alert">GROUND ACTIVITY (INVISIBLE)</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Hidden Under Canopy</h2>
+                        <p class="bottleneck-description">
+                            Encroachments beneath dense tree cover remain invisible to optical satellite imagery. Gradual clearing that preserves canopy evades detection.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card">
+                        <span class="bottleneck-number">BOTTLENECK 07</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(55, 70)">
+                                    <rect x="-40" y="-45" width="80" height="85" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="4"/>
+                                    <text x="0" y="-28" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="bottlenecks-svg-label-accent">FOREST</text>
+                                    <text x="0" y="-16" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-dim">DEPT</text>
+                                </g>
+                                <g transform="translate(160, 70)">
+                                    <rect x="-40" y="-45" width="80" height="85" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="4"/>
+                                    <text x="0" y="-28" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="bottlenecks-svg-label-accent">REVENUE</text>
+                                    <text x="0" y="-16" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-dim">DEPT</text>
+                                </g>
+                                <g transform="translate(265, 70)">
+                                    <rect x="-40" y="-45" width="80" height="85" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="4"/>
+                                    <text x="0" y="-28" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="bottlenecks-svg-label-accent">POLICE</text>
+                                    <text x="0" y="-16" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-dim">DEPT</text>
+                                </g>
+                                <g transform="translate(107, 45)">
+                                    <line x1="-5" y1="-5" x2="5" y2="5" stroke="#FF3333" stroke-width="2"/>
+                                    <line x1="5" y1="-5" x2="-5" y2="5" stroke="#FF3333" stroke-width="2"/>
+                                </g>
+                                <g transform="translate(212, 45)">
+                                    <line x1="-5" y1="-5" x2="5" y2="5" stroke="#FF3333" stroke-width="2"/>
+                                    <line x1="5" y1="-5" x2="-5" y2="5" stroke="#FF3333" stroke-width="2"/>
+                                </g>
+                                <text x="160" y="140" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="bottlenecks-svg-label-alert">NO SHARED EVIDENCE CHAIN</text>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Inter-Agency Information Walls</h2>
+                        <p class="bottleneck-description">
+                            Encroachment resolution requires coordination between Forest, Revenue, and Law Enforcement. Yet each department maintains separate, incompatible records.
+                        </p>
+                    </article>
+
+                    <article class="bottleneck-card">
+                        <span class="bottleneck-number">BOTTLENECK 08</span>
+                        <div class="bottleneck-visual">
+                            <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <g transform="translate(80, 75)">
+                                    <rect x="-35" y="-40" width="70" height="80" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="4"/>
+                                    <ellipse rx="20" ry="8" cy="-25" fill="none" stroke="#00FFCC" stroke-width="1"/>
+                                    <path d="M-20 -25 L-20 5 Q-20 13 0 13 Q20 13 20 5 L20 -25" fill="none" stroke="#00FFCC" stroke-width="1"/>
+                                    <text x="0" y="30" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-accent">SERVER</text>
+                                </g>
+                                <g transform="translate(160, 75)">
+                                    <line x1="-30" y1="0" x2="30" y2="0" stroke="#555" stroke-width="2" stroke-dasharray="6 4"/>
+                                    <g transform="translate(0, -25)">
+                                        <rect x="-12" y="5" width="4" height="10" fill="#FF3333" opacity="0.5"/>
+                                        <rect x="-4" y="0" width="4" height="15" fill="#FF3333" opacity="0.4"/>
+                                        <rect x="4" y="-5" width="4" height="20" fill="#555" opacity="0.3"/>
+                                        <line x1="-15" y1="-10" x2="15" y2="20" stroke="#FF3333" stroke-width="2"/>
+                                    </g>
+                                    <text x="0" y="25" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-alert">NO SIGNAL</text>
+                                </g>
+                                <g transform="translate(240, 75)">
+                                    <rect x="-25" y="-45" width="50" height="90" fill="#0F3D2E" stroke="#FF9933" stroke-width="1.5" rx="6"/>
+                                    <rect x="-20" y="-38" width="40" height="60" fill="#071F16" rx="2"/>
+                                    <rect x="-15" y="-32" width="30" height="8" fill="#FF9933" opacity="0.4" rx="1"/>
+                                    <rect x="-15" y="-20" width="30" height="8" fill="#FF9933" opacity="0.5" rx="1"/>
+                                    <rect x="-15" y="-8" width="30" height="8" fill="#FF9933" opacity="0.6" rx="1"/>
+                                    <rect x="-15" y="4" width="30" height="8" fill="#FF9933" opacity="0.7" rx="1"/>
+                                    <text x="0" y="55" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="bottlenecks-svg-label-warn">FIELD DEVICE</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <h2 class="bottleneck-title"><span class="bottlenecks-constrict-icon"></span>Last-Mile Sync Failure</h2>
+                        <p class="bottleneck-description">
+                            Field officers in remote forest areas face limited connectivity. Verification data cannot sync in real-time, adding days to already delayed workflows.
+                        </p>
+                    </article>
+                </div>
+
+                <section class="bottlenecks-summary">
+                    <h2 class="bottlenecks-summary-title">The Compounding Effect</h2>
+                    <p class="bottlenecks-summary-text">
+                        These bottlenecks don't operate in isolation—they <span class="bottlenecks-highlight-cyan">reinforce each other</span>. 
+                        Fragmented data feeds manual processing. Manual processing creates latency. Latency breaks inter-agency coordination. 
+                        The system is <span class="bottlenecks-highlight-red">structurally incapable</span> of detecting encroachments 
+                        at the speed and scale required.
+                    </p>
+                </section>
+            </main>
+
+            <footer class="bottlenecks-footer">
+                <span>ResponsibleIndian</span>
+            </footer>
+        </section>
+    </div>
+
+    <!-- Section 4: AI Bridge -->
+    <div class="section section-4">
+        <section class="aibridge-section" id="aibridge">
+            <div class="aibridge-bg-grid" aria-hidden="true"></div>
+            <div class="aibridge-bg-gradient" aria-hidden="true"></div>
+
+            <main id="aibridge-main" class="aibridge-container">
+                <header class="aibridge-header">
+                    <div class="aibridge-dept-badge">FOREST DEPARTMENT, GOVERNMENT OF ANDHRA PRADESH</div>
+                    <p class="aibridge-eyebrow">Section 04 — The Solution</p>
+                    <h1 class="aibridge-title">The Sentinel Awakens</h1>
+                    <p class="aibridge-subtitle">From Fragmented Data to Unified Intelligence</p>
+                    <p class="aibridge-intro">
+                        The pieces exist. Satellites orbit. Boundaries are mapped. Officers patrol. 
+                        What's missing is the <em>intelligence layer</em> that transforms scattered signals into 
+                        actionable insight—an AI system that doesn't just see, but <em>understands</em> 
+                        and <em>adapts</em>.
+                    </p>
+                </header>
+
+                <div class="aibridge-transformation">
+                    <h2 class="aibridge-transformation-title">The Fusion Architecture</h2>
+                    <svg class="aibridge-transformation-svg" viewBox="0 0 1000 280" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#FF3333" stop-opacity="0.5"/>
+                                <stop offset="50%" stop-color="#00FFCC" stop-opacity="1"/>
+                                <stop offset="100%" stop-color="#22C55E" stop-opacity="0.8"/>
+                            </linearGradient>
+                            <linearGradient id="cyanGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#00FFCC" stop-opacity="0.3"/>
+                                <stop offset="100%" stop-color="#00FFCC" stop-opacity="1"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- LEFT SIDE: Fragmented Sources -->
+                        <g transform="translate(50, 40)">
+                            <g transform="translate(0, 0)">
+                                <rect x="0" y="0" width="90" height="55" fill="#0F3D2E" stroke="rgba(255,51,51,0.5)" stroke-width="1" stroke-dasharray="3 2" rx="4" opacity="0.7"/>
+                                <text x="45" y="70" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-alert">CARTOSAT-2</text>
+                            </g>
+                            <g transform="translate(0, 90)">
+                                <rect x="0" y="0" width="90" height="55" fill="#0F3D2E" stroke="rgba(255,51,51,0.5)" stroke-width="1" stroke-dasharray="3 2" rx="4" opacity="0.7"/>
+                                <text x="45" y="70" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-alert">SENTINEL</text>
+                            </g>
+                            <g transform="translate(0, 180)">
+                                <rect x="0" y="0" width="90" height="55" fill="#0F3D2E" stroke="rgba(255,51,51,0.5)" stroke-width="1" stroke-dasharray="3 2" rx="4" opacity="0.7"/>
+                                <text x="45" y="70" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-alert">KML/SHP</text>
+                            </g>
+                        </g>
+
+                        <!-- CENTER: AI Fusion Hub -->
+                        <g transform="translate(500, 140)">
+                            <circle r="85" fill="none" stroke="url(#cyanGradient)" stroke-width="2" opacity="0.3"/>
+                            <circle r="65" fill="rgba(0, 255, 204, 0.05)" stroke="#00FFCC" stroke-width="2"/>
+                            <circle r="40" fill="#0F3D2E" stroke="#00FFCC" stroke-width="2"/>
+                            <g>
+                                <circle r="20" fill="none" stroke="#00FFCC" stroke-width="1.5"/>
+                                <circle r="6" fill="#00FFCC" opacity="0.8"/>
+                            </g>
+                            <text x="0" y="105" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="11" class="aibridge-svg-label-accent" font-weight="bold">AI FUSION LAYER</text>
+                            <text x="0" y="120" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="7" class="aibridge-svg-label-dim">Calibrated Confidence + Temporal Consistency</text>
+                        </g>
+
+                        <!-- Flow lines: Left to Center -->
+                        <path d="M190 67 Q300 67 415 100" stroke="url(#flowGradient)" stroke-width="2" fill="none"/>
+                        <path d="M190 157 Q300 157 415 140" stroke="url(#flowGradient)" stroke-width="2" fill="none"/>
+                        <path d="M190 247 Q300 247 415 180" stroke="url(#flowGradient)" stroke-width="2" fill="none"/>
+
+                        <!-- RIGHT SIDE: Unified Outputs -->
+                        <g transform="translate(750, 40)">
+                            <g transform="translate(0, 0)">
+                                <rect x="0" y="0" width="140" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="6"/>
+                                <text x="70" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">VALIDATED</text>
+                                <text x="70" y="34" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">ALERTS</text>
+                            </g>
+                            <g transform="translate(0, 65)">
+                                <rect x="0" y="0" width="140" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="6"/>
+                                <text x="70" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">CLASSIFIED</text>
+                                <text x="70" y="34" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">BY TYPE</text>
+                            </g>
+                            <g transform="translate(0, 130)">
+                                <rect x="0" y="0" width="140" height="50" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.5" rx="6"/>
+                                <text x="70" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">OFFLINE</text>
+                                <text x="70" y="34" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-accent">READY</text>
+                            </g>
+                            <g transform="translate(0, 195)">
+                                <rect x="0" y="0" width="140" height="50" fill="#0F3D2E" stroke="#22C55E" stroke-width="1.5" rx="6"/>
+                                <text x="70" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-resolved">EVIDENCE</text>
+                                <text x="70" y="34" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="8" class="aibridge-svg-label-resolved">CHAIN</text>
+                            </g>
+                        </g>
+
+                        <!-- Flow lines: Center to Right -->
+                        <path d="M585 105 Q680 65 750 65" stroke="#00FFCC" stroke-width="2" fill="none" opacity="0.7"/>
+                        <path d="M585 125 Q680 90 750 90" stroke="#00FFCC" stroke-width="2" fill="none" opacity="0.7"/>
+                        <path d="M585 155 Q680 155 750 155" stroke="#00FFCC" stroke-width="2" fill="none" opacity="0.7"/>
+                        <path d="M585 175 Q680 215 750 220" stroke="#22C55E" stroke-width="2" fill="none" opacity="0.7"/>
+
+                        <text x="145" y="275" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="aibridge-svg-label-alert">FRAGMENTED</text>
+                        <text x="500" y="275" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="aibridge-svg-label-accent">INTELLIGENT</text>
+                        <text x="820" y="275" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="9" class="aibridge-svg-label-resolved">UNIFIED</text>
+                    </svg>
+
+                    <div class="aibridge-transformation-labels">
+                        <div class="aibridge-label-group">
+                            <div class="aibridge-label-title aibridge-label-before">BEFORE</div>
+                            <div class="aibridge-label-desc">Siloed sources, manual correlation</div>
+                        </div>
+                        <div class="aibridge-label-group">
+                            <div class="aibridge-label-title aibridge-label-ai">AI FUSION</div>
+                            <div class="aibridge-label-desc">Three-model ensemble, calibrated confidence</div>
+                        </div>
+                        <div class="aibridge-label-group">
+                            <div class="aibridge-label-title aibridge-label-after">AFTER</div>
+                            <div class="aibridge-label-desc">Validated alerts, court-ready evidence</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="aibridge-solution-identity">
+                    <h2 class="aibridge-solution-name">VAN RAKSHA</h2>
+                    <p class="aibridge-solution-tagline">Sentinel of the Green</p>
+                    <p class="aibridge-solution-desc">
+                        An AI-powered geospatial defense system that transforms Andhra Pradesh's forest monitoring 
+                        from reactive patrol to proactive protection—detecting encroachments in days, not months.
+                    </p>
+                </div>
+
+                <div class="aibridge-capabilities">
+                    <article class="aibridge-capability">
+                        <div class="aibridge-capability-icon">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="8" cy="8" r="4" stroke="#00FFCC" stroke-width="1.5"/>
+                                <circle cx="24" cy="8" r="4" stroke="#00FFCC" stroke-width="1.5"/>
+                                <circle cx="16" cy="24" r="4" stroke="#00FFCC" stroke-width="1.5"/>
+                                <path d="M10.5 10.5 L14 20 M21.5 10.5 L18 20" stroke="#00FFCC" stroke-width="1.5"/>
+                                <circle cx="16" cy="16" r="3" fill="#00FFCC" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <h3 class="aibridge-capability-name">Multi-Source Fusion</h3>
+                        <p class="aibridge-capability-outcome">
+                            Unifies CARTOSAT-2 optical imagery, Sentinel-1 SAR, and Sentinel-2 data into a single analysis pipeline.
+                        </p>
+                        <p class="aibridge-capability-maps"><span>Maps to:</span> Bottleneck 01</p>
+                    </article>
+
+                    <article class="aibridge-capability">
+                        <div class="aibridge-capability-icon">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 14 Q8 8 16 8 Q24 8 24 14" stroke="#00FFCC" stroke-width="1.5" fill="none"/>
+                                <path d="M10 24 L10 28 M16 22 L16 28 M22 24 L22 28" stroke="#00FFCC" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="16" cy="16" r="3" fill="#00FFCC"/>
+                            </svg>
+                        </div>
+                        <h3 class="aibridge-capability-name">Monsoon Adaptation</h3>
+                        <p class="aibridge-capability-outcome">
+                            Automatically switches from optical to SAR when cloud cover exceeds 70%. Year-round vigilance maintained.
+                        </p>
+                        <p class="aibridge-capability-maps"><span>Maps to:</span> Bottleneck 02</p>
+                    </article>
+
+                    <article class="aibridge-capability">
+                        <div class="aibridge-capability-icon">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="4" width="24" height="24" stroke="#00FFCC" stroke-width="1" stroke-dasharray="2 2" rx="2" opacity="0.4"/>
+                                <path d="M8 20 Q12 8 24 12" stroke="#00FFCC" stroke-width="2" fill="none"/>
+                                <circle cx="8" cy="20" r="2" fill="#00FFCC"/>
+                                <circle cx="24" cy="12" r="2" fill="#00FFCC"/>
+                            </svg>
+                        </div>
+                        <h3 class="aibridge-capability-name">Boundary Alignment</h3>
+                        <p class="aibridge-capability-outcome">
+                            Auto-aligns raster satellite imagery with vector boundary files. Cuts false positives along forest edges.
+                        </p>
+                        <p class="aibridge-capability-maps"><span>Maps to:</span> Bottleneck 03</p>
+                    </article>
+
+                    <article class="aibridge-capability">
+                        <div class="aibridge-capability-icon">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="6" y="6" width="8" height="8" rx="1" stroke="#00FFCC" stroke-width="1.5"/>
+                                <rect x="18" y="6" width="8" height="8" rx="1" stroke="#00FFCC" stroke-width="1.5"/>
+                                <rect x="12" y="18" width="8" height="8" rx="1" stroke="#00FFCC" stroke-width="1.5"/>
+                                <path d="M14 10 L18 10 M10 14 L16 18 M22 14 L16 18" stroke="#00FFCC" stroke-width="1"/>
+                                <circle cx="16" cy="22" r="2" fill="#00FFCC"/>
+                            </svg>
+                        </div>
+                        <h3 class="aibridge-capability-name">Ensemble Intelligence</h3>
+                        <p class="aibridge-capability-outcome">
+                            Three-model ensemble (U-Net, Siamese, Transformer) must agree within 0.15 confidence for reliable detections.
+                        </p>
+                        <p class="aibridge-capability-maps"><span>Maps to:</span> Bottleneck 04</p>
+                    </article>
+                </div>
+
+            </main>
+
+            <footer class="aibridge-footer">
+                <div class="aibridge-footer-brand">ResponsibleIndian</div>
+                <div class="aibridge-footer-contact">contact@responsibleindian.in</div>
+            </footer>
+        </section>
+    </div>
+
+    <!-- Section 5: Technical Architecture -->
+    <div class="section section-5">
+        <section class="hld-section" id="technical-hld">
+            <div class="hld-bg-grid" aria-hidden="true"></div>
+            <div class="hld-bg-gradient" aria-hidden="true"></div>
+
+            <main id="hld-main" class="hld-container">
+                <header class="hld-header">
+                    <div class="hld-dept-badge">FOREST DEPARTMENT, GOVERNMENT OF ANDHRA PRADESH</div>
+                    <p class="hld-eyebrow">Section 05 — System Architecture</p>
+                    <h1 class="hld-title">Technical High-Level Design</h1>
+                    <p class="hld-subtitle">Optical + SAR Fusion • Geospatial Persistence • Event-Driven Workflows • Offline-First Field Ops</p>
+                </header>
+
+                <div class="hld-diagram-wrapper">
+                    <svg class="hld-diagram-svg" viewBox="0 0 1600 620" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <marker id="hldArrow" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 7 2.5, 0 5" class="hld-flow-arrow"/>
+                            </marker>
+                            <marker id="hldArrowSecondary" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 7 2.5, 0 5" class="hld-flow-arrow-secondary"/>
+                            </marker>
+                            <marker id="hldArrowQueue" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 7 2.5, 0 5" class="hld-flow-arrow-queue"/>
+                            </marker>
+                            <marker id="hldArrowFeedback" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 6 2, 0 4" class="hld-flow-arrow-feedback"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Zone Backgrounds -->
+                        <rect x="15" y="50" width="150" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="90" y="70" class="hld-zone-label" text-anchor="middle">DATA SOURCES</text>
+
+                        <rect x="175" y="50" width="200" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="275" y="70" class="hld-zone-label" text-anchor="middle">INGESTION & CATALOG</text>
+
+                        <rect x="385" y="50" width="180" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="475" y="70" class="hld-zone-label" text-anchor="middle">AI ENGINE</text>
+
+                        <rect x="575" y="50" width="200" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="675" y="70" class="hld-zone-label" text-anchor="middle">EVENT BUS & WORKFLOW</text>
+
+                        <rect x="785" y="50" width="220" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="895" y="70" class="hld-zone-label" text-anchor="middle">GEOSPATIAL PLATFORM</text>
+
+                        <rect x="1015" y="50" width="180" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="1105" y="70" class="hld-zone-label" text-anchor="middle">USER INTERFACES</text>
+
+                        <rect x="1205" y="50" width="180" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="1295" y="70" class="hld-zone-label" text-anchor="middle">SUPPORT SERVICES</text>
+
+                        <rect x="1395" y="50" width="190" height="520" rx="6" class="hld-zone-rect"/>
+                        <text x="1490" y="70" class="hld-zone-label" text-anchor="middle">PERSISTENCE</text>
+
+                        <!-- Satellites -->
+                        <g transform="translate(90, 160)">
+                            <circle r="42" class="hld-component-box-external"/>
+                            <g transform="translate(0, -8)">
+                                <rect x="-16" y="-5" width="32" height="10" rx="2" class="hld-icon" stroke-width="1"/>
+                            </g>
+                            <text y="26" class="hld-component-label">SATELLITES</text>
+                            <text y="36" class="hld-component-sublabel">CARTOSAT-2 • SENTINEL-1/2</text>
+                        </g>
+
+                        <!-- Boundaries -->
+                        <g transform="translate(90, 320)">
+                            <circle r="38" class="hld-component-box-external"/>
+                            <text y="24" class="hld-component-label">BOUNDARIES</text>
+                            <text y="34" class="hld-component-sublabel">KML / SHAPEFILE</text>
+                        </g>
+
+                        <!-- Ingestion -->
+                        <g transform="translate(235, 140)">
+                            <rect x="-48" y="-30" width="96" height="60" rx="6" class="hld-component-box"/>
+                            <text y="16" class="hld-component-label">INGESTION</text>
+                            <text y="25" class="hld-component-sublabel">SFTP • BHOONIDHI API</text>
+                        </g>
+
+                        <!-- STAC Catalog -->
+                        <g transform="translate(320, 260)">
+                            <rect x="-42" y="-28" width="84" height="56" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">STAC CATALOG</text>
+                            <text y="23" class="hld-component-sublabel">ASSET METADATA</text>
+                        </g>
+
+                        <!-- Preprocessing -->
+                        <g transform="translate(235, 380)">
+                            <rect x="-48" y="-32" width="96" height="64" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">PREPROCESSING</text>
+                            <text y="24" class="hld-component-sublabel">OPTICAL + SAR FUSION</text>
+                        </g>
+
+                        <!-- AI Detection -->
+                        <g transform="translate(475, 170)">
+                            <polygon points="0,-45 39,-22 39,22 0,45 -39,22 -39,-22" class="hld-component-box-ai"/>
+                            <text y="20" class="hld-component-label">AI DETECTION</text>
+                            <text y="30" class="hld-component-sublabel">U-NET • SIAMESE • SWIN</text>
+                        </g>
+
+                        <!-- Validation -->
+                        <g transform="translate(475, 320)">
+                            <polygon points="0,-40 35,-20 35,20 0,40 -35,20 -35,-20" class="hld-component-box-ai"/>
+                            <text y="18" class="hld-component-label">VALIDATION</text>
+                            <text y="27" class="hld-component-sublabel">CONFIDENCE ROUTING</text>
+                        </g>
+
+                        <!-- Model Registry -->
+                        <g transform="translate(475, 460)">
+                            <rect x="-42" y="-28" width="84" height="56" rx="6" class="hld-component-box"/>
+                            <text y="16" class="hld-component-label">MODEL REGISTRY</text>
+                            <text y="25" class="hld-component-sublabel">MLFLOW • VERSIONING</text>
+                        </g>
+
+                        <!-- Message Queue -->
+                        <g transform="translate(635, 180)">
+                            <rect x="-45" y="-35" width="90" height="70" rx="6" class="hld-component-box-queue"/>
+                            <text y="18" class="hld-component-label" fill="#A78BFA">MESSAGE QUEUE</text>
+                            <text y="28" class="hld-component-sublabel">KAFKA • DLQ • RETRY</text>
+                        </g>
+
+                        <!-- Alert Workflow -->
+                        <g transform="translate(715, 320)">
+                            <rect x="-48" y="-32" width="96" height="64" rx="6" class="hld-component-box"/>
+                            <text y="16" class="hld-component-label">ALERT WORKFLOW</text>
+                            <text y="26" class="hld-component-sublabel">STATE MACHINE • ACK</text>
+                        </g>
+
+                        <!-- API Gateway -->
+                        <g transform="translate(635, 440)">
+                            <rect x="-45" y="-35" width="90" height="70" rx="6" class="hld-component-box" stroke-width="2"/>
+                            <text y="16" class="hld-component-label">API GATEWAY</text>
+                            <text y="26" class="hld-component-sublabel">KONG • RBAC</text>
+                        </g>
+
+                        <!-- PostGIS -->
+                        <g transform="translate(855, 160)">
+                            <ellipse cx="0" cy="-28" rx="42" ry="10" class="hld-component-box-storage"/>
+                            <rect x="-42" y="-28" width="84" height="48" fill="#0F3D2E" stroke="#22C55E" stroke-width="1.5"/>
+                            <ellipse cx="0" cy="20" rx="42" ry="10" class="hld-component-box-storage"/>
+                            <text y="40" class="hld-component-label" fill="#22C55E">POSTGIS</text>
+                            <text y="50" class="hld-component-sublabel">ALERTS • BOUNDARIES</text>
+                        </g>
+
+                        <!-- Tile Server -->
+                        <g transform="translate(940, 290)">
+                            <rect x="-45" y="-30" width="90" height="60" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">TILE SERVER</text>
+                            <text y="24" class="hld-component-sublabel">MVT • COG • TITILER</text>
+                        </g>
+
+                        <!-- GeoServer -->
+                        <g transform="translate(855, 400)">
+                            <rect x="-42" y="-28" width="84" height="56" rx="6" class="hld-component-box"/>
+                            <text y="16" class="hld-component-label">GEOSERVER</text>
+                            <text y="26" class="hld-component-sublabel">WMS • WFS • OGC</text>
+                        </g>
+
+                        <!-- Web Dashboard -->
+                        <g transform="translate(1075, 140)">
+                            <polygon points="-45,-28 55,-28 45,28 -55,28" class="hld-component-box"/>
+                            <text y="16" class="hld-component-label">WEB DASHBOARD</text>
+                            <text y="26" class="hld-component-sublabel">DFO • RANGE OFFICER</text>
+                        </g>
+
+                        <!-- Mobile Sync -->
+                        <g transform="translate(1105, 280)">
+                            <rect x="-40" y="-28" width="80" height="56" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">MOBILE SYNC</text>
+                            <text y="24" class="hld-component-sublabel">TUS • DELTA SYNC</text>
+                        </g>
+
+                        <!-- Field App -->
+                        <g transform="translate(1105, 430)">
+                            <rect x="-38" y="-42" width="76" height="84" rx="8" class="hld-component-box"/>
+                            <rect x="-30" y="-34" width="60" height="58" rx="3" fill="rgba(0,255,204,0.08)"/>
+                            <text y="20" class="hld-component-label">FIELD APP</text>
+                            <text y="30" class="hld-component-sublabel">OFFLINE-FIRST • 7-DAY</text>
+                        </g>
+
+                        <!-- Auth -->
+                        <g transform="translate(1265, 130)">
+                            <rect x="-40" y="-26" width="80" height="52" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">AUTH</text>
+                            <text y="24" class="hld-component-sublabel">KEYCLOAK • MFA</text>
+                        </g>
+
+                        <!-- Notifications -->
+                        <g transform="translate(1265, 240)">
+                            <rect x="-40" y="-26" width="80" height="52" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">NOTIFICATIONS</text>
+                            <text y="24" class="hld-component-sublabel">FCM • SMS</text>
+                        </g>
+
+                        <!-- Audit Log -->
+                        <g transform="translate(1450, 140)">
+                            <ellipse cx="0" cy="-26" rx="38" ry="9" class="hld-component-box-storage"/>
+                            <rect x="-38" y="-26" width="76" height="44" fill="#0F3D2E" stroke="#22C55E" stroke-width="1.5"/>
+                            <ellipse cx="0" cy="18" rx="38" ry="9" class="hld-component-box-storage"/>
+                            <text y="36" class="hld-component-label" fill="#22C55E">AUDIT LOG</text>
+                            <text y="46" class="hld-component-sublabel">IMMUTABLE • WORM</text>
+                        </g>
+
+                        <!-- Object Storage -->
+                        <g transform="translate(1530, 280)">
+                            <ellipse cx="0" cy="-26" rx="38" ry="9" class="hld-component-box-storage"/>
+                            <rect x="-38" y="-26" width="76" height="44" fill="#0F3D2E" stroke="#22C55E" stroke-width="1.5"/>
+                            <ellipse cx="0" cy="18" rx="38" ry="9" class="hld-component-box-storage"/>
+                            <text y="36" class="hld-component-label" fill="#22C55E">OBJECT STORE</text>
+                            <text y="46" class="hld-component-sublabel">MINIO • COG</text>
+                        </g>
+
+                        <!-- Cache/CDN -->
+                        <g transform="translate(1450, 400)">
+                            <rect x="-38" y="-24" width="76" height="48" rx="6" class="hld-component-box"/>
+                            <text y="14" class="hld-component-label">CDN / CACHE</text>
+                            <text y="24" class="hld-component-sublabel">TILE CACHE</text>
+                        </g>
+
+                        <!-- Connection Lines -->
+                        <path d="M132 160 L187 140" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M128 320 L187 380" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M283 140 L295 232" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M283 365 L436 200" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M475 215 L475 280" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M510 320 L590 180" class="hld-flow-line-queue" marker-end="url(#hldArrowQueue)"/>
+                        <path d="M680 180 L700 288" class="hld-flow-line-queue" marker-end="url(#hldArrowQueue)"/>
+                        <path d="M763 310 L813 160" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M897 160 L920 260" class="hld-flow-line-secondary" marker-end="url(#hldArrowSecondary)"/>
+                        <path d="M985 275 L1030 150" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                        <path d="M1105 308 L1105 388" class="hld-flow-line" marker-end="url(#hldArrow)"/>
+                    </svg>
+                </div>
+
+                <div class="hld-legend">
+                    <div class="hld-legend-group">
+                        <span class="hld-legend-title">Components:</span>
+                        <div class="hld-legend-item">
+                            <svg class="hld-legend-shape" viewBox="0 0 14 14">
+                                <circle cx="7" cy="7" r="5" fill="none" stroke="rgba(224,242,233,0.7)" stroke-width="1" stroke-dasharray="2 1"/>
+                            </svg>
+                            <span>External</span>
+                        </div>
+                        <div class="hld-legend-item">
+                            <svg class="hld-legend-shape" viewBox="0 0 14 14">
+                                <rect x="2" y="4" width="10" height="6" rx="1.5" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1"/>
+                            </svg>
+                            <span>Service</span>
+                        </div>
+                        <div class="hld-legend-item">
+                            <svg class="hld-legend-shape" viewBox="0 0 14 14">
+                                <polygon points="7,1 13,4 13,10 7,13 1,10 1,4" fill="#0F3D2E" stroke="#00FFCC" stroke-width="1.2"/>
+                            </svg>
+                            <span>AI/ML</span>
+                        </div>
+                    </div>
+                    <div class="hld-legend-group">
+                        <span class="hld-legend-title">Data Flow:</span>
+                        <div class="hld-legend-item">
+                            <div class="hld-legend-line hld-primary"></div>
+                            <span>Primary</span>
+                        </div>
+                        <div class="hld-legend-item">
+                            <div class="hld-legend-line hld-response"></div>
+                            <span>Response</span>
+                        </div>
+                        <div class="hld-legend-item">
+                            <div class="hld-legend-line hld-queue"></div>
+                            <span>Events</span>
+                        </div>
+                        <div class="hld-legend-item">
+                            <div class="hld-legend-line hld-feedback"></div>
+                            <span>Feedback</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="hld-footer">
+                <div class="hld-footer-brand">ResponsibleIndian</div>
+            </footer>
+        </section>
+    </div>
+
+    <!-- Section 6: Business Process -->
+    <div class="section section-6">
+        <div class="uft-bg-grid" aria-hidden="true"></div>
+        <div class="uft-bg-gradient" aria-hidden="true"></div>
+
+        <div class="uft-container">
+            <section id="user-flows">
+                <header class="uft-section-header">
+                    <p class="uft-section-eyebrow">Section 06 — User Journeys</p>
+                    <h1 class="uft-section-title">User Flows & Technical Deep Dive</h1>
+                    <p class="uft-section-subtitle">From Satellite Pass to Field Verification — Role-Based Workflows</p>
+                </header>
+
+                <div class="uft-actors-grid">
+                    <article class="uft-actor-card">
+                        <div class="uft-actor-header">
+                            <div class="uft-actor-icon">👷</div>
+                            <div class="uft-actor-info">
+                                <h3>Forest Beat Officer</h3>
+                                <span class="uft-actor-role">FIELD VERIFICATION • EVIDENCE CAPTURE</span>
+                            </div>
+                        </div>
+                        <p class="uft-actor-goal"><strong>Goal:</strong> Verify and document detected encroachment alerts with geo-tagged evidence</p>
+                        <div class="uft-journey-steps">
+                            <div class="uft-step">
+                                <div class="uft-step-number">1</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Receives push notification with new alert assigned by Range Officer</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Field Mobile App</span>
+                                        <span class="uft-tech-badge uft-tech-data">JSON + Cached Tiles</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">2</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Navigates to alert location using offline-capable map with GPS guidance</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Field Mobile App</span>
+                                        <span class="uft-tech-badge uft-tech-data">Vector Tiles (.mbtiles)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">3</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Captures verification evidence: guided photos + Telugu voice note</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Field Mobile App</span>
+                                        <span class="uft-tech-badge uft-tech-ai">⚡ Voice Transcription</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">4</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Submits verification via TUS resumable upload when connectivity available</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Mobile Sync Service</span>
+                                        <span class="uft-tech-badge uft-tech-data">TUS Protocol</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="uft-actor-card">
+                        <div class="uft-actor-header">
+                            <div class="uft-actor-icon">📋</div>
+                            <div class="uft-actor-info">
+                                <h3>Range Officer</h3>
+                                <span class="uft-actor-role">OPERATIONAL PLANNING • MISSION ASSIGNMENT</span>
+                            </div></div>
+                        <p class="uft-actor-goal"><strong>Goal:</strong> Review AI detections and assign verification missions to field staff</p>
+                        <div class="uft-journey-steps">
+                            <div class="uft-step">
+                                <div class="uft-step-number">1</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Views "Pending Review" queue showing new AI detections with confidence scores</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Web Dashboard</span>
+                                        <span class="uft-tech-badge uft-tech-ai">⚡ Confidence Calibration</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">2</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Reviews medium-confidence alerts (0.60-0.85) with before/after satellite imagery</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Web Dashboard</span>
+                                        <span class="uft-tech-badge uft-tech-ai">⚡ Change Detection</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">3</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Assigns approved alerts to specific FBOs based on beat jurisdiction</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Alert Management Service</span>
+                                        <span class="uft-tech-badge uft-tech-data">Jurisdiction Routing</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uft-step">
+                                <div class="uft-step-number">4</div>
+                                <div class="uft-step-content">
+                                    <p class="uft-step-action">Monitors FBO verification progress on real-time map with status tracking</p>
+                                    <div class="uft-step-tech">
+                                        <span class="uft-tech-badge uft-tech-component">Web Dashboard</span>
+                                        <span class="uft-tech-badge uft-tech-component">Geospatial Data Service</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="impact" class="uft-impact-section">
+                <header class="uft-section-header">
+                    <p class="uft-section-eyebrow">Outcomes</p>
+                    <h2 class="uft-section-title">Expected Impact</h2>
+                    <p class="uft-section-subtitle">Measurable Benefits Across Stakeholder Groups</p>
+                </header>
+
+                <div class="uft-impact-grid">
+                    <article class="uft-impact-card">
+                        <div class="uft-impact-icon">👷</div>
+                        <h3 class="uft-impact-title">Forest Field Staff</h3>
+                        <p class="uft-impact-desc">Reduced manual monitoring efforts and safer, targeted patrols with AI-guided mission assignments</p>
+                        <div class="uft-impact-metrics">
+                            <div class="uft-metric">
+                                <span>Patrol Reduction</span>
+                                <span class="uft-metric-value">60%</span>
+                            </div>
+                            <div class="uft-metric">
+                                <span>Detection Speed</span>
+                                <span class="uft-metric-value">Days vs Months</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="uft-impact-card">
+                        <div class="uft-impact-icon">⚙️</div>
+                        <h3 class="uft-impact-title">System Impact</h3>
+                        <p class="uft-impact-desc">Strengthened evidence-based enforcement and improved inter-agency coordination</p>
+                        <div class="uft-impact-metrics">
+                            <div class="uft-metric">
+                                <span>Detection Accuracy</span>
+                                <span class="uft-metric-value">≥80%</span>
+                            </div>
+                            <div class="uft-metric">
+                                <span>Evidence Chain</span>
+                                <span class="uft-metric-value">Court-Ready</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="uft-impact-card">
+                        <div class="uft-impact-icon">🌳</div>
+                        <h3 class="uft-impact-title">Environmental Impact</h3>
+                        <p class="uft-impact-desc">Enhanced protection of forest ecosystems through early intervention</p>
+                        <div class="uft-impact-metrics">
+                            <div class="uft-metric">
+                                <span>Coverage</span>
+                                <span class="uft-metric-value">Year-Round</span>
+                            </div>
+                            <div class="uft-metric">
+                                <span>Monsoon Blindness</span>
+                                <span class="uft-metric-value">Eliminated</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="timeline" class="uft-timeline-section">
+                <header class="uft-section-header">
+                    <p class="uft-section-eyebrow">Execution Plan</p>
+                    <h2 class="uft-section-title">DEVELOPMENT TIMELINE</h2>
+                    <p class="uft-section-subtitle">Team ResponsibleIndian's Roadmap to PoC Deployment</p>
+                </header>
+
+                <div class="uft-timeline-wrapper">
+                    <div class="uft-timeline-line" aria-hidden="true"></div>
+                    <div class="uft-timeline-milestones">
+                        <article class="uft-milestone">
+                            <div class="uft-milestone-date">20 OCT 2025</div>
+                            <div class="uft-milestone-icon">🚀</div>
+                            <h4 class="uft-milestone-name">Hackathon Launch</h4>
+                            <p class="uft-milestone-deliverable">Team formation, architecture design</p>
+                        </article>
+
+                        <article class="uft-milestone uft-current">
+                            <div class="uft-milestone-date">08 DEC 2025</div>
+                            <div class="uft-milestone-icon">📦</div>
+                            <h4 class="uft-milestone-name">Submission</h4>
+                            <p class="uft-milestone-deliverable">AI ensemble, mobile MVP complete</p>
+                        </article>
+
+                        <article class="uft-milestone">
+                            <div class="uft-milestone-date">11 DEC 2025</div>
+                            <div class="uft-milestone-icon">✅</div>
+                            <h4 class="uft-milestone-name">Shortlisting</h4>
+                            <p class="uft-milestone-deliverable">Refinements based on feedback</p>
+                        </article>
+
+                        <article class="uft-milestone">
+                            <div class="uft-milestone-date">15 DEC 2025</div>
+                            <div class="uft-milestone-icon">🎤</div>
+                            <h4 class="uft-milestone-name">Presentation</h4>
+                            <p class="uft-milestone-deliverable">Live demo: end-to-end flow</p>
+                        </article>
+
+                        <article class="uft-milestone">
+                            <div class="uft-milestone-date">18 DEC 2025</div>
+                            <div class="uft-milestone-icon">🏆</div>
+                            <h4 class="uft-milestone-name">Winner Announcement</h4>
+                            <p class="uft-milestone-deliverable">PoC scope finalization</p>
+                        </article>
+
+                        <article class="uft-milestone">
+                            <div class="uft-milestone-date">31 DEC 2025</div>
+                            <div class="uft-milestone-icon">🌲</div>
+                            <h4 class="uft-milestone-name">PoC Deployment</h4>
+                            <p class="uft-milestone-deliverable">2-3 pilot divisions, 50+ FBOs</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section id="privacy" class="uft-privacy-section">
+                <header class="uft-section-header">
+                    <p class="uft-section-eyebrow">Governance</p>
+                    <h2 class="uft-section-title">Data Privacy & Compliance</h2>
+                    <p class="uft-section-subtitle">Environmental Data Governance • Security Architecture</p>
+                </header>
+
+                <div class="uft-privacy-grid">
+                    <article class="uft-privacy-card">
+                        <div class="uft-privacy-header">
+                            <span class="uft-privacy-icon">📜</span>
+                            <h3 class="uft-privacy-title">Regulatory Compliance</h3>
+                        </div>
+                        <ul class="uft-privacy-list">
+                            <li>Environmental data governance norms compliance</li>
+                            <li>DPDP Act alignment for government field staff data</li>
+                            <li>ISRO Bhoonidhi usage terms for CARTOSAT-2 imagery</li>
+                            <li>Data used only for official conservation purposes</li>
+                        </ul>
+                    </article>
+
+                    <article class="uft-privacy-card">
+                        <div class="uft-privacy-header">
+                            <span class="uft-privacy-icon">🔒</span>
+                            <h3 class="uft-privacy-title">Security Architecture</h3>
+                        </div>
+                        <ul class="uft-privacy-list">
+                            <li>AES-256 encryption for all data at rest</li>
+                            <li>TLS 1.3 for all API communication</li>
+                            <li>SQLCipher encryption for mobile WatermelonDB</li>
+                            <li>RBAC with jurisdiction enforcement + MFA</li>
+                        </ul>
+                    </article>
+
+                    <article class="uft-privacy-card">
+                        <div class="uft-privacy-header">
+                            <span class="uft-privacy-icon">✅</span>
+                            <h3 class="uft-privacy-title">Consent & Access</h3>
+                        </div>
+                        <ul class="uft-privacy-list">
+                            <li>FBO location tracking only during active duty</li>
+                            <li>Field staff acknowledge data collection</li>
+                            <li>Keycloak SSO integration with AP State Government</li>
+                            <li>Session: 8-hour web / 30-day mobile</li>
+                        </ul>
+                    </article>
+
+                    <article class="uft-privacy-card">
+                        <div class="uft-privacy-header">
+                            <span class="uft-privacy-icon">👁️</span>
+                            <h3 class="uft-privacy-title">Data Rights & Protection</h3>
+                        </div>
+                        <ul class="uft-privacy-list">
+                            <li>Forest boundary data confidentiality with watermarking</li>
+                            <li>Satellite imagery restricted to official government use</li>
+                            <li>10-year immutable audit log with cryptographic chaining</li>
+                            <li>Data subject access/correction mechanisms</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <footer class="uft-footer">
+                <div class="uft-footer-brand">ResponsibleIndian</div>
+                <div class="uft-footer-contact">contact@responsibleindian.in</div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Section 7: Team Contact -->
+    <div class="section section-7">
+        <section class="page-section">
+            <header>
+                <div class="header-title">
+                    <h1>Team Responsible Indian</h1>
+                    <div class="header-subtitle">Building the Future Together</div>
+                </div>
+                <div class="header-meta">
+                    <div>Primary Contact</div>
+                    <a href="mailto:contact@responsibleindian.in">contact@responsibleindian.in</a>
+                </div>
+            </header>
+
+            <div class="team-tagline">
+                <p>
+                    A global team of <strong>IIT & BITS alumni</strong> with experience at
+                    <span class="highlight">Microsoft, Amazon, Intel, Disney+</span> and high-growth startups.
+                    Engineers spanning <strong>India, Taiwan, and the USA</strong> — building cutting-edge AI,
+                    scalable systems, and enterprise solutions.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/jeevan.jpeg" alt="Jeevan Kumar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">JK</div>
+                    </div>
+                    <h3 class="member-name">Jeevan Kumar</h3>
+                    <div class="member-role">AI/ML Lead & Systems Architect</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>5 YoE · Coderabbit, LevelAI, Goldcast</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+917318019339">+91-7318019339</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">GenAI</span>
+                        <span class="badge">LLMs</span>
+                        <span class="badge">Distributed Systems</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/sleep404" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/manoj.png" alt="Manoj Kumar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">MK</div>
+                    </div>
+                    <h3 class="member-name">Manoj Kumar</h3>
+                    <div class="member-role">Senior Data Engineer</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>BITS Pilani</strong>, Hyderabad</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>4 YoE · Funded Startups</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+919515732481">+91-9515732481</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Big Data</span>
+                        <span class="badge">ETL Pipelines</span>
+                        <span class="badge">Data Lakes</span>
+                    </div>
+                    <a href="#" class="linkedin-btn disabled">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/sandeep.png" alt="Sandeep BGS" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">SB</div>
+                    </div>
+                    <h3 class="member-name">Sandeep BGS</h3>
+                    <div class="member-role">Deep Learning Research Engineer</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>4 YoE · KLA</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+919515732481">+91-9515732481</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Neural Networks</span>
+                        <span class="badge">Computer Vision</span>
+                        <span class="badge">NLP</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/sarath.jpeg" alt="Sarath Lavu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">SL</div>
+                    </div>
+                    <h3 class="member-name">Sarath Lavu</h3>
+                    <div class="member-role">Data Scientist & ML Engineer</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>4 YoE · Funded Startups</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+917382607212">+91-7382607212</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Predictive Models</span>
+                        <span class="badge">Analytics</span>
+                        <span class="badge">ML Ops</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/praneeth.jpeg" alt="Praneeth Reddy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">PR</div>
+                    </div>
+                    <h3 class="member-name">Praneeth Reddy</h3>
+                    <div class="member-role">Principal Software Architect</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>5 YoE · EightFold, ClearTax, MoEngage</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+919573337454">+91-9573337454</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">System Design</span>
+                        <span class="badge">Microservices</span>
+                        <span class="badge">Cloud Native</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/vamsi.jpeg" alt="Vamsi Krishna Badri" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">VK</div>
+                    </div>
+                    <h3 class="member-name">Vamsi Krishna Badri</h3>
+                    <div class="member-role">AI Research Engineer</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>4 YoE · KLA</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+917318016050">+91-7318016050</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Deep Learning</span>
+                        <span class="badge">AI Research</span>
+                        <span class="badge">MLOps</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/yashwanth.jpeg" alt="Yashwanth Pathivada" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">YP</div>
+                    </div>
+                    <h3 class="member-name">Yashwanth Pathivada</h3>
+                    <div class="member-role">Senior Fullstack Engineer</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>IIT Kanpur</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>4 YoE · Microsoft, Intel</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+917318018610">+91-7318018610</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Enterprise Apps</span>
+                        <span class="badge">Cloud</span>
+                        <span class="badge">React</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+
+                <article class="member-card">
+                    <div class="profile-pic-container">
+                        <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/nitesh.jpeg" alt="Varanasi Nitesh" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-placeholder" style="display:none;">VN</div>
+                    </div>
+                    <h3 class="member-name">Varanasi Nitesh</h3>
+                    <div class="member-role">Staff Engineer - Streaming</div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span><strong>Univ. of Florida</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            <span>3 YoE · Amazon, Disney+, Cashfree, Fi</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+917318019198">+91-7318019198</a>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span class="badge">Payments</span>
+                        <span class="badge">High Scale</span>
+                        <span class="badge">Security</span>
+                    </div>
+                    <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn Profile
+                    </a>
+                </article>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
