@@ -8028,5 +8028,254 @@
         }
     })();
     </script>
+
+    <!-- ══════════════════════════════════════════════════════════════════════════════
+         TEAM CONTACT SECTION
+         ══════════════════════════════════════════════════════════════════════════════ -->
+    <style>
+        .team-section {
+            padding: 60px 40px;
+            background: linear-gradient(180deg, #0a0d12 0%, #0f1419 100%);
+            position: relative;
+        }
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.5), transparent);
+        }
+        .team-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .team-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #fff 0%, #00D4AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .team-header p {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin: 0;
+        }
+        .team-tagline {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+        .team-tagline p {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .team-tagline strong { color: #e6f1ff; }
+        .team-tagline .highlight { color: #00D4AA; font-weight: 600; }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media (max-width: 1200px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+        .member-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00D4AA, #8B5CF6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+        .member-card:hover::before { opacity: 1; }
+        .profile-pic-container { display: flex; justify-content: center; margin-bottom: 16px; }
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+            background: linear-gradient(rgba(17,24,39,0.8), rgba(17,24,39,0.8)) padding-box,
+                        linear-gradient(135deg, #00D4AA, #8B5CF6) border-box;
+        }
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #8B5CF6, #00D4AA);
+        }
+        .member-name { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 4px 0; text-align: center; }
+        .member-role { font-size: 11px; font-weight: 600; color: #00D4AA; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-align: center; }
+        .member-details { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; flex-grow: 1; }
+        .detail-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 1.4; color: #94a3b8; }
+        .detail-item svg { flex-shrink: 0; width: 14px; height: 14px; stroke: #94a3b8; stroke-width: 2; fill: none; margin-top: 2px; }
+        .detail-item strong { color: #e6f1ff; font-weight: 600; }
+        .detail-item a { color: inherit; text-decoration: none; }
+        .detail-item a:hover { color: #00D4AA; }
+        .badge-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; justify-content: center; }
+        .member-badge { font-size: 10px; font-weight: 600; color: #e6f1ff; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); padding: 4px 10px; border-radius: 20px; }
+        .linkedin-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(0, 119, 181, 0.2), rgba(0, 119, 181, 0.1));
+            border: 1px solid rgba(0, 119, 181, 0.4);
+            color: #e6f1ff; font-size: 12px; font-weight: 500; text-decoration: none;
+            padding: 10px 16px; border-radius: 8px; transition: all 0.3s ease; margin-top: auto;
+        }
+        .linkedin-btn:hover { background: linear-gradient(135deg, rgba(0, 119, 181, 0.4), rgba(0, 119, 181, 0.2)); border-color: rgba(0, 119, 181, 0.7); }
+        .linkedin-btn.disabled { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: #64748b; pointer-events: none; }
+        .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    </style>
+
+    <section class="team-section">
+        <div class="team-header">
+            <h2>Team Responsible Indian</h2>
+            <p>Building the Future Together</p>
+        </div>
+        <div class="team-tagline">
+            <p>A global team of <strong>IIT & BITS alumni</strong> with experience at <span class="highlight">Microsoft, Amazon, Intel, Disney+</span> and high-growth startups. Engineers spanning <strong>India, Taiwan, and the USA</strong> — building cutting-edge AI, scalable systems, and enterprise solutions.</p>
+        </div>
+        <div class="team-grid">
+            <article class="member-card">
+                <div class="profile-pic-container">
+                    <img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/jeevan.jpeg" alt="Jeevan Kumar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">JK</div>
+                </div>
+                <h3 class="member-name">Jeevan Kumar</h3>
+                <div class="member-role">AI/ML Lead & Systems Architect</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>5 YoE · Coderabbit, LevelAI, Goldcast</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+917318019339">+91-7318019339</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:jeevan@responsibleindian.in">jeevan@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">GenAI</span><span class="member-badge">LLMs</span><span class="member-badge">Distributed Systems</span></div>
+                <a href="https://www.linkedin.com/in/sleep404" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/manoj.png" alt="Manoj Kumar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">MK</div></div>
+                <h3 class="member-name">Manoj Kumar</h3>
+                <div class="member-role">Senior Data Engineer</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>BITS Pilani</strong>, Hyderabad</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>4 YoE · Funded Startups</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+919515732481">+91-9515732481</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:manoj@responsibleindian.in">manoj@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Big Data</span><span class="member-badge">ETL Pipelines</span><span class="member-badge">Data Lakes</span></div>
+                <a href="#" class="linkedin-btn disabled"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/sandeep.png" alt="Sandeep BGS" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">SB</div></div>
+                <h3 class="member-name">Sandeep BGS</h3>
+                <div class="member-role">Deep Learning Research Engineer</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>4 YoE · KLA</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+919515732481">+91-9515732481</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:sandeep@responsibleindian.in">sandeep@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Neural Networks</span><span class="member-badge">Computer Vision</span><span class="member-badge">NLP</span></div>
+                <a href="https://www.linkedin.com/in/balla-sandeep-7642b2199/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/sarath.jpeg" alt="Sarath Lavu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">SL</div></div>
+                <h3 class="member-name">Sarath Lavu</h3>
+                <div class="member-role">Data Scientist & ML Engineer</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>4 YoE · Funded Startups</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+917382607212">+91-7382607212</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:sarath@responsibleindian.in">sarath@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Predictive Models</span><span class="member-badge">Analytics</span><span class="member-badge">ML Ops</span></div>
+                <a href="https://www.linkedin.com/in/sarath-lavu/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/praneeth.jpeg" alt="Praneeth Reddy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">PR</div></div>
+                <h3 class="member-name">Praneeth Reddy</h3>
+                <div class="member-role">Principal Software Architect</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>5 YoE · EightFold, ClearTax, MoEngage</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+919573337454">+91-9573337454</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:praneeth@responsibleindian.in">praneeth@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">System Design</span><span class="member-badge">Microservices</span><span class="member-badge">Cloud Native</span></div>
+                <a href="https://www.linkedin.com/in/praneeth-reddy-gopu/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/vamsi.jpeg" alt="Vamsi Krishna Badri" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">VK</div></div>
+                <h3 class="member-name">Vamsi Krishna Badri</h3>
+                <div class="member-role">AI Research Engineer</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>4 YoE · KLA</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+917318016050">+91-7318016050</a></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:badrivamsi@responsibleindian.in">badrivamsi@responsibleindian.in</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Deep Learning</span><span class="member-badge">AI Research</span><span class="member-badge">MLOps</span></div>
+                <a href="https://www.linkedin.com/in/badri-vamsi-krishna/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/yashwanth.jpeg" alt="Yashwanth Pathivada" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">YP</div></div>
+                <h3 class="member-name">Yashwanth Pathivada</h3>
+                <div class="member-role">Senior Fullstack Engineer</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>IIT Kanpur</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>4 YoE · Microsoft, Intel</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+917318018610">+91-7318018610</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Enterprise Apps</span><span class="member-badge">Cloud</span><span class="member-badge">React</span></div>
+                <a href="https://www.linkedin.com/in/yashwanth-pathivada/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+            <article class="member-card">
+                <div class="profile-pic-container"><img class="profile-pic" src="https://raw.githubusercontent.com/Responsible-Indian/RTGS-Hackathon/main/images/nitesh.jpeg" alt="Varanasi Nitesh" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="avatar-placeholder" style="display:none;">VN</div></div>
+                <h3 class="member-name">Varanasi Nitesh</h3>
+                <div class="member-role">Staff Engineer - Streaming</div>
+                <div class="member-details">
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span><strong>Univ. of Florida</strong></span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>3 YoE · Amazon, Disney+, Cashfree, Fi</span></div>
+                    <div class="detail-item"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.84.31 1.66.56 2.44.22.73.05 1.53-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.78.25 1.6.43 2.44.56A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+917318019198">+91-7318019198</a></div>
+                </div>
+                <div class="badge-container"><span class="member-badge">Payments</span><span class="member-badge">High Scale</span><span class="member-badge">Security</span></div>
+                <a href="https://www.linkedin.com/in/varanasi-nitesh/" target="_blank" class="linkedin-btn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn Profile</a>
+            </article>
+        </div>
+    </section>
+
 </body>
 </html>
