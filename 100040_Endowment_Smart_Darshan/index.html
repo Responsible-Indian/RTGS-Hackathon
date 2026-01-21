@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Smart Darshan - AI-Enabled Intelligent Crowd Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Neutral Colors */
+      --neutral-50: #FAFAFA;
+      --neutral-100: #F5F5F5;
+      --neutral-200: #E5E5E5;
+      --neutral-400: #A3A3A3;
+      --neutral-700: #404040;
+      --neutral-900: #1A1A1A;
+      
+      /* Primary - Temple Maroon */
+      --primary-900: #4A0E0E;
+      --primary-700: #7B1818;
+      --primary-500: #9B2C2C;
+      --primary-100: #FEE2E2;
+      
+      /* Accent - Sacred Gold */
+      --accent-600: #B7791F;
+      --accent-400: #D69E2E;
+      --accent-100: #FEFCBF;
+      
+      /* Semantic */
+      --success: #16A34A;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --info: #2563EB;
+      
+      /* Typography */
+      --font-primary: 'Inter', sans-serif;
+      --font-telugu: 'Noto Sans Telugu', sans-serif;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-primary);
+      background: var(--neutral-100);
+      color: var(--neutral-900);
+      overflow: hidden;
+    }
+    
+    /* Presentation Container */
+    .presentation {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--neutral-50);
+      display: flex;
+      flex-direction: column;
+      padding: 60px 80px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Navigation */
+    .nav-controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 1000;
+      background: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--neutral-100);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-btn:hover {
+      background: var(--primary-100);
+      transform: scale(1.05);
+    }
+    
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .slide-counter {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      min-width: 60px;
+      text-align: center;
+    }
+    
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-700), var(--accent-400));
+      transition: width 0.3s ease;
+      z-index: 1000;
+    }
+    
+    /* Common Elements */
+    .section-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--neutral-400);
+      margin-bottom: 12px;
+    }
+    
+    .slide-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--primary-900);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    
+    .slide-title .highlight {
+      color: var(--accent-400);
+    }
+    
+    .slide-subtitle {
+      font-size: 20px;
+      color: var(--neutral-700);
+      margin-bottom: 40px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .icon-circle.primary {
+      background: var(--primary-100);
+      color: var(--primary-700);
+    }
+    
+    .icon-circle.gold {
+      background: var(--accent-100);
+      color: var(--accent-600);
+    }
+    
+    .icon-circle.success {
+      background: #DCFCE7;
+      color: var(--success);
+    }
+    
+    .icon-circle.danger {
+      background: #FEE2E2;
+      color: var(--danger);
+    }
+    
+    /* Animation Classes */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .fade-up.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .fade-in {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .fade-in.animate {
+      opacity: 1;
+    }
+    
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .scale-in.animate {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .slide-right {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .slide-right.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .draw-line {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      transition: stroke-dashoffset 1.5s ease;
+    }
+    
+    .draw-line.animate {
+      stroke-dashoffset: 0;
+    }
+    
+    /* ==================== SLIDE 1: TITLE ==================== */
+    #slide1 {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--neutral-50) 0%, #F0F0F0 100%);
+    }
+    
+    #slide1 .logo-container {
+      margin-bottom: 24px;
+    }
+    
+    #slide1 .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    #slide1 .main-title {
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--primary-900);
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    
+    #slide1 .tagline {
+      font-size: 28px;
+      color: var(--neutral-700);
+      margin-bottom: 8px;
+    }
+    
+    #slide1 .tagline-highlight {
+      font-size: 24px;
+      color: var(--accent-600);
+      font-style: italic;
+      margin-bottom: 48px;
+    }
+    
+    #slide1 .stats-row {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    
+    #slide1 .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    #slide1 .stat-number {
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--primary-700);
+      line-height: 1;
+    }
+    
+    #slide1 .stat-number.gold {
+      color: var(--accent-600);
+    }
+    
+    #slide1 .stat-label {
+      font-size: 14px;
+      color: var(--neutral-400);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    #slide1 .stat-divider {
+      width: 1px;
+      height: 80px;
+      background: var(--neutral-200);
+    }
+    
+    #slide1 .footer-text {
+      font-size: 14px;
+      color: var(--neutral-400);
+    }
+    
+    #slide1 .accent-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-700), var(--accent-400));
+      width: 0;
+      transition: width 1s ease 0.8s;
+    }
+    
+    #slide1.active .accent-line {
+      width: 100%;
+    }
+    
+    /* ==================== SLIDE 2: DATA LANDSCAPE ==================== */
+    #slide2 .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #slide2 .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: 1;
+    }
+    
+    #slide2 .data-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      border-left: 4px solid var(--primary-700);
+    }
+    
+    #slide2 .data-card:nth-child(even) {
+      border-left-color: var(--accent-400);
+    }
+    
+    #slide2 .data-card .card-content h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--neutral-900);
+      margin-bottom: 6px;
+    }
+    
+    #slide2 .data-card .card-content p {
+      font-size: 14px;
+      color: var(--neutral-400);
+      line-height: 1.5;
+    }
+    
+    #slide2 .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--danger);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
+    
+    #slide2 .live-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    
+    #slide2 .footer-note {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--neutral-400);
+    }
+    
+    /* ==================== SLIDE 3: PROBLEM ==================== */
+    #slide3 .content-area {
+      flex: 1;
+      display: flex;
+      gap: 40px;
+    }
+    
+    #slide3 .left-section {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    #slide3 .officer-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    #slide3 .officer-avatar {
+      width: 56px;
+      height: 56px;
+      background: var(--neutral-100);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--neutral-200);
+      color: var(--neutral-400);
+      flex-shrink: 0;
+    }
+    
+    #slide3 .officer-info {
+      flex: 1;
+      background: linear-gradient(90deg, rgba(220, 38, 38, 0.08) 0%, transparent 100%);
+      border-left: 3px solid var(--danger);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    #slide3 .officer-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--neutral-900);
+      margin-bottom: 4px;
+    }
+    
+    #slide3 .officer-info p {
+      font-size: 14px;
+      color: var(--neutral-400);
+    }
+    
+    #slide3 .no-unified {
+      text-align: center;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    
+    #slide3 .no-unified span {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--danger);
+      text-transform: uppercase;
+      animation: flicker 2s infinite;
+    }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    #slide3 .right-section {
+      width: 400px;
+    }
+    
+    #slide3 .result-card {
+      height: 100%;
+      border-left: 4px solid var(--danger);
+    }
+    
+    #slide3 .result-card h3 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--danger);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    
+    #slide3 .result-item {
+      margin-bottom: 20px;
+    }
+    
+    #slide3 .result-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    #slide3 .result-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--neutral-900);
+      margin-bottom: 4px;
+    }
+    
+    #slide3 .result-item p {
+      font-size: 14px;
+      color: var(--neutral-400);
+      line-height: 1.5;
+    }
+    
+    /* Employee float animation */
+    #slide3 .officer-row {
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    #slide3 .officer-row:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+    
+    #slide3 .officer-row:nth-child(3) {
+      animation-delay: 1s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    /* ==================== SLIDE 4: UNIFIED AI ==================== */
+    #slide4 .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    
+    #slide4 .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex: 1;
+    }
+    
+    #slide4 .flow-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    #slide4 .flow-item {
+      background: var(--neutral-100);
+      border: 1px solid var(--neutral-200);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--neutral-700);
+      white-space: nowrap;
+    }
+    
+    #slide4 .flow-item.output {
+      background: #DCFCE7;
+      border-color: var(--success);
+      color: #166534;
+    }
+    
+    #slide4 .flow-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    #slide4 .flow-arrow svg {
+      color: var(--primary-700);
+    }
+    
+    #slide4 .ai-core {
+      background: linear-gradient(135deg, var(--primary-100) 0%, var(--accent-100) 100%);
+      border: 3px solid var(--accent-400);
+      border-radius: 16px;
+      padding: 32px 48px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(214, 158, 46, 0.2);
+      animation: glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 40px rgba(214, 158, 46, 0.2); }
+      50% { box-shadow: 0 0 60px rgba(214, 158, 46, 0.35); }
+    }
+    
+    #slide4 .ai-core .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-600);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    #slide4 .ai-core h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-900);
+      margin-bottom: 4px;
+    }
+    
+    #slide4 .ai-core p {
+      font-size: 13px;
+      color: var(--neutral-400);
+    }
+    
+    #slide4 .pillars-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    #slide4 .pillar-card {
+      text-align: center;
+      border-top: 4px solid var(--primary-700);
+    }
+    
+    #slide4 .pillar-card:nth-child(2) {
+      border-top-color: var(--accent-400);
+    }
+    
+    #slide4 .pillar-card:nth-child(3) {
+      border-top-color: var(--success);
+    }
+    
+    #slide4 .pillar-card .pillar-icon {
+      margin: 0 auto 12px;
+    }
+    
+    #slide4 .pillar-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--primary-700);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    #slide4 .pillar-card:nth-child(2) h4 {
+      color: var(--accent-600);
+    }
+    
+    #slide4 .pillar-card:nth-child(3) h4 {
+      color: var(--success);
+    }
+    
+    #slide4 .pillar-card p {
+      font-size: 14px;
+      color: var(--neutral-400);
+      line-height: 1.5;
+    }
+    
+    /* ==================== SLIDE 5: CHATBOT ==================== */
+    #slide5 .content-area {
+      flex: 1;
+      display: flex;
+      gap: 40px;
+    }
+    
+    #slide5 .chat-section {
+      flex: 1.1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #slide5 .chat-container {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #slide5 .chat-header {
+      background: var(--neutral-100);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+    
+    #slide5 .chat-avatar {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary-700), var(--accent-400));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    #slide5 .chat-header-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--neutral-900);
+    }
+    
+    #slide5 .chat-header-info p {
+      font-size: 12px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    #slide5 .chat-header-info p .online-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+    
+    #slide5 .chat-messages {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    
+    #slide5 .message {
+      max-width: 80%;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.4s ease;
+    }
+    
+    #slide5 .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    #slide5 .message.user {
+      align-self: flex-end;
+    }
+    
+    #slide5 .message.bot {
+      align-self: flex-start;
+    }
+    
+    #slide5 .message-bubble {
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    
+    #slide5 .message.user .message-bubble {
+      background: var(--accent-100);
+      border-bottom-right-radius: 4px;
+      font-family: var(--font-telugu);
+    }
+    
+    #slide5 .message.bot .message-bubble {
+      background: white;
+      border: 1px solid var(--neutral-200);
+      border-left: 3px solid var(--primary-700);
+      border-bottom-left-radius: 4px;
+    }
+    
+    #slide5 .message-bubble .telugu {
+      font-family: var(--font-telugu);
+    }
+    
+    #slide5 .message-bubble .highlight {
+      color: var(--primary-700);
+      font-weight: 600;
+    }
+    
+    #slide5 .message-bubble .highlight-gold {
+      color: var(--accent-600);
+      font-weight: 600;
+    }
+    
+    #slide5 .message-meta {
+      font-size: 11px;
+      color: var(--neutral-400);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--neutral-100);
+    }
+    
+    #slide5 .message-time {
+      font-size: 11px;
+      color: var(--neutral-400);
+      margin-top: 6px;
+      text-align: right;
+    }
+    
+    #slide5 .message.bot .message-time {
+      text-align: left;
+    }
+    
+    #slide5 .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 14px 18px;
+      background: white;
+      border: 1px solid var(--neutral-200);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      opacity: 0;
+    }
+    
+    #slide5 .typing-indicator.show {
+      opacity: 1;
+    }
+    
+    #slide5 .typing-indicator .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--neutral-400);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+    
+    #slide5 .typing-indicator .dot:nth-child(1) { animation-delay: 0s; }
+    #slide5 .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+    #slide5 .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+    }
+    
+    #slide5 .chat-input {
+      padding: 16px 20px;
+      border-top: 1px solid var(--neutral-200);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    #slide5 .chat-input-field {
+      flex: 1;
+      background: var(--neutral-100);
+      border: none;
+      border-radius: 24px;
+      padding: 12px 20px;
+      font-size: 14px;
+      color: var(--neutral-400);
+    }
+    
+    #slide5 .chat-send-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-700);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #slide5 .queries-section {
+      width: 420px;
+    }
+    
+    #slide5 .queries-header {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-600);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    #slide5 .query-card {
+      background: white;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--primary-700);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    #slide5 .query-card:nth-child(odd) {
+      border-left-color: var(--accent-400);
+    }
+    
+    #slide5 .query-card:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    #slide5 .query-card h4 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--neutral-900);
+      margin-bottom: 4px;
+    }
+    
+    #slide5 .query-card p {
+      font-size: 12px;
+      color: var(--neutral-400);
+    }
+    
+    #slide5 .knowledge-badge {
+      background: linear-gradient(135deg, var(--primary-100), var(--accent-100));
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 20px;
+    }
+    
+    #slide5 .knowledge-badge h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--primary-700);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    #slide5 .knowledge-badge p {
+      font-size: 13px;
+      color: var(--neutral-700);
+      line-height: 1.5;
+    }
+    
+    /* ==================== SLIDE 6: CAPABILITIES ==================== */
+    #slide6 .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    
+    #slide6 .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    
+    #slide6 .capability-card {
+      text-align: center;
+      border-top: 4px solid var(--primary-700);
+    }
+    
+    #slide6 .capability-card:nth-child(2) {
+      border-top-color: var(--accent-400);
+    }
+    
+    #slide6 .capability-card:nth-child(3) {
+      border-top-color: var(--danger);
+    }
+    
+    #slide6 .capability-card:nth-child(4) {
+      border-top-color: var(--info);
+    }
+    
+    #slide6 .capability-card .cap-icon {
+      margin: 0 auto 16px;
+    }
+    
+    #slide6 .capability-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary-700);
+      margin-bottom: 8px;
+    }
+    
+    #slide6 .capability-card:nth-child(2) h4 { color: var(--accent-600); }
+    #slide6 .capability-card:nth-child(3) h4 { color: var(--danger); }
+    #slide6 .capability-card:nth-child(4) h4 { color: var(--info); }
+    
+    #slide6 .capability-card .metric {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--neutral-900);
+      margin-bottom: 4px;
+    }
+    
+    #slide6 .capability-card .detail {
+      font-size: 13px;
+      color: var(--neutral-400);
+    }
+    
+    #slide6 .marquee-container {
+      background: var(--neutral-100);
+      border-radius: 12px;
+      padding: 24px 0 20px 0;
+      overflow: hidden;
+    }
+    
+    #slide6 .capability-count-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 32px 20px 32px;
+      border-bottom: 1px solid var(--neutral-200);
+      margin-bottom: 16px;
+    }
+    
+    #slide6 .capability-count-number {
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--primary-700);
+      line-height: 1;
+      min-width: 120px;
+    }
+    
+    #slide6 .capability-count-label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    #slide6 .capability-count-label .label-main {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--neutral-900);
+    }
+    
+    #slide6 .capability-count-label .label-sub {
+      font-size: 14px;
+      color: var(--neutral-400);
+    }
+    
+    #slide6 .marquee-header {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-600);
+      text-transform: uppercase;
+      padding: 0 24px;
+      margin-bottom: 16px;
+    }
+    
+    #slide6 .marquee-track {
+      display: flex;
+      animation: marquee 40s linear infinite;
+    }
+    
+    #slide6 .marquee-track:hover {
+      animation-play-state: paused;
+    }
+    
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    #slide6 .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px;
+      white-space: nowrap;
+      font-size: 14px;
+      color: var(--neutral-700);
+    }
+    
+    #slide6 .marquee-item .bullet {
+      width: 6px;
+      height: 6px;
+      background: var(--primary-700);
+      border-radius: 50%;
+    }
+    
+    #slide6 .marquee-item .bullet.gold {
+      background: var(--accent-400);
+    }
+    
+    #slide6 .marquee-item .bullet.danger {
+      background: var(--danger);
+    }
+    
+    #slide6 .closing-section {
+      text-align: center;
+      padding: 32px;
+      background: linear-gradient(135deg, var(--primary-100) 0%, var(--accent-100) 100%);
+      border-radius: 16px;
+    }
+    
+    #slide6 .closing-main {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary-900);
+      margin-bottom: 12px;
+    }
+    
+    #slide6 .closing-main .highlight {
+      color: var(--accent-600);
+    }
+    
+    #slide6 .closing-sub {
+      font-size: 18px;
+      color: var(--neutral-700);
+      margin-bottom: 8px;
+    }
+    
+    #slide6 .closing-tagline {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--accent-600);
+    }
+    
+    #slide6 .footer-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-700), var(--accent-400), var(--primary-700));
+      background-size: 200% 100%;
+      animation: gradientShift 3s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Replay button for slide 5 */
+    .replay-btn {
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      background: var(--primary-100);
+      border: 1px solid var(--primary-200);
+      color: var(--primary-700);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .replay-btn:hover {
+      background: var(--primary-700);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation">
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- ==================== SLIDE 1: TITLE ==================== -->
+    <div class="slide active" id="slide1">
+      <div class="logo-container fade-up" data-delay="0">
+        <div class="logo">
+          <i data-lucide="temple" style="width: 40px; height: 40px;"></i>
+        </div>
+      </div>
+      
+      <h1 class="main-title fade-up" data-delay="200">Smart Darshan</h1>
+      
+      <p class="tagline fade-up" data-delay="400">AI-Enabled Intelligent Crowd Management</p>
+      
+      <p class="tagline-highlight fade-up" data-delay="500">"Intelligence that Understands. Not Just Monitors."</p>
+      
+      <div class="stats-row fade-up" data-delay="700">
+        <div class="stat-item">
+          <span class="stat-number" data-count="324">0</span>
+          <span class="stat-label">CCTV Cameras</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number gold" data-count="11">0</span>
+          <span class="stat-label">Monitored Zones</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="3">0</span>
+          <span class="stat-label">Languages</span>
+        </div>
+      </div>
+      
+      <p class="footer-text fade-up" data-delay="900">Department of Endowments, Government of Andhra Pradesh</p>
+      
+      <div class="accent-line"></div>
+    </div>
+    
+    <!-- ==================== SLIDE 2: DATA LANDSCAPE ==================== -->
+    <div class="slide" id="slide2">
+      <span class="section-badge fade-up" data-delay="0">Current State</span>
+      <h2 class="slide-title fade-up" data-delay="100">The Data Is Already There</h2>
+      <p class="slide-subtitle fade-up" data-delay="200">Temple infrastructure generates valuable data every day</p>
+      
+      <div class="content-area">
+        <div class="cards-grid">
+          <div class="card data-card fade-up" data-delay="300">
+            <div class="icon-circle primary">
+              <i data-lucide="cctv" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>324 CCTV Cameras <span class="live-badge"><span class="dot"></span> LIVE</span></h3>
+              <p>4MP IP cameras • 90-day storage • HikCentral VMS integration</p>
+            </div>
+          </div>
+          
+          <div class="card data-card fade-up" data-delay="400">
+            <div class="icon-circle gold">
+              <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>5 Years Footfall Data</h3>
+              <p>Daily records • Festival patterns • Weather correlation</p>
+            </div>
+          </div>
+          
+          <div class="card data-card fade-up" data-delay="500">
+            <div class="icon-circle primary">
+              <i data-lucide="mic" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>Audio Feedback</h3>
+              <p>Phone calls • Voice recordings • 1 year of data</p>
+            </div>
+          </div>
+          
+          <div class="card data-card fade-up" data-delay="600">
+            <div class="icon-circle gold">
+              <i data-lucide="video" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>Video Feedback</h3>
+              <p>Devotee interviews • Testimonials • Satisfaction surveys</p>
+            </div>
+          </div>
+          
+          <div class="card data-card fade-up" data-delay="700">
+            <div class="icon-circle primary">
+              <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>Incident Logs</h3>
+              <p>Complaints register • Queue delays • Emergency drills</p>
+            </div>
+          </div>
+          
+          <div class="card data-card fade-up" data-delay="800">
+            <div class="icon-circle gold">
+              <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="card-content">
+              <h3>Events & Weather</h3>
+              <p>Festival calendar • Mukkoti Ekadasi • Dasara • Weather patterns</p>
+            </div>
+          </div>
+        </div>
+        
+        <p class="footer-note fade-up" data-delay="900">Source: Sri Venkateswara Swamy Vari Devasthanam, Dwarakatirumala infrastructure inventory</p>
+      </div>
+    </div>
+    
+    <!-- ==================== SLIDE 3: PROBLEM ==================== -->
+    <div class="slide" id="slide3">
+      <h2 class="slide-title fade-up" data-delay="0">But The Intelligence Is Manual</h2>
+      <p class="slide-subtitle fade-up" data-delay="100">Data exists in silos. No unified picture. Reactive, not proactive.</p>
+      
+      <div class="content-area">
+        <div class="left-section">
+          <div class="officer-row fade-up" data-delay="200">
+            <div class="officer-avatar">
+              <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="officer-info">
+              <h4>Employee A watches 8 cameras</h4>
+              <p>Cannot monitor remaining 316 feeds simultaneously</p>
+            </div>
+          </div>
+          
+          <div class="officer-row fade-up" data-delay="350">
+            <div class="officer-avatar">
+              <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="officer-info">
+              <h4>Employee B reviews complaints</h4>
+              <p>Reads transcripts one by one, misses patterns</p>
+            </div>
+          </div>
+          
+          <div class="officer-row fade-up" data-delay="500">
+            <div class="officer-avatar">
+              <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="officer-info">
+              <h4>Employee C manages queues</h4>
+              <p>Reactive decisions based on what they see in the moment</p>
+            </div>
+          </div>
+          
+          <div class="no-unified fade-up" data-delay="700">
+            <span>⚠ NO UNIFIED INTELLIGENCE LAYER</span>
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <div class="card result-card fade-up" data-delay="600">
+            <h3>The Result</h3>
+            
+            <div class="result-item slide-right" data-delay="750">
+              <h4>Information Silos</h4>
+              <p>Each person knows their piece. Nobody sees the whole picture.</p>
+            </div>
+            
+            <div class="result-item slide-right" data-delay="850">
+              <h4>Reactive Responses</h4>
+              <p>Problems detected only when visible. By then, it's too late.</p>
+            </div>
+            
+            <div class="result-item slide-right" data-delay="950">
+              <h4>Human Limitations</h4>
+              <p>Cannot process 324 feeds. Cannot read thousands of complaints.</p>
+            </div>
+            
+            <div class="result-item slide-right" data-delay="1050">
+              <h4>Lost Insights</h4>
+              <p>Valuable patterns buried in data. No correlation across sources.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ==================== SLIDE 4: UNIFIED AI ==================== -->
+    <div class="slide" id="slide4">
+      <h2 class="slide-title fade-up" data-delay="0">AI That <span class="highlight">Understands</span></h2>
+      <p class="slide-subtitle fade-up" data-delay="100">One unified intelligence layer processing all data in real-time</p>
+      
+      <div class="content-area">
+        <div class="flow-diagram">
+          <div class="flow-column">
+            <div class="flow-item fade-up" data-delay="200">CCTV Feeds</div>
+            <div class="flow-item fade-up" data-delay="250">Footfall Data</div>
+            <div class="flow-item fade-up" data-delay="300">Audio Feedback</div>
+            <div class="flow-item fade-up" data-delay="350">Video Feedback</div>
+            <div class="flow-item fade-up" data-delay="400">Incident Logs</div>
+            <div class="flow-item fade-up" data-delay="450">Events & Weather</div>
+          </div>
+          
+          <div class="flow-arrow fade-in" data-delay="500">
+            <i data-lucide="arrow-right" style="width: 32px; height: 32px;"></i>
+          </div>
+          
+          <div class="ai-core scale-in" data-delay="600">
+            <span class="label">Unified AI</span>
+            <h3>Knowledge Base</h3>
+            <p>Real-time understanding</p>
+          </div>
+          
+          <div class="flow-arrow fade-in" data-delay="700">
+            <i data-lucide="arrow-right" style="width: 32px; height: 32px;"></i>
+          </div>
+          
+          <div class="flow-column">
+            <div class="flow-item output fade-up" data-delay="750">Actionable Insights</div>
+            <div class="flow-item output fade-up" data-delay="800">Predictive Alerts</div>
+            <div class="flow-item output fade-up" data-delay="850">Natural Language Q&A</div>
+            <div class="flow-item output fade-up" data-delay="900">Automated Actions</div>
+            <div class="flow-item output fade-up" data-delay="950">Gate Recommendations</div>
+          </div>
+        </div>
+        
+        <div class="pillars-row">
+          <div class="card pillar-card fade-up" data-delay="1000">
+            <div class="icon-circle primary pillar-icon">
+              <i data-lucide="eye" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Sees</h4>
+            <p>Real-time video understanding across all 324 cameras simultaneously</p>
+          </div>
+          
+          <div class="card pillar-card fade-up" data-delay="1100">
+            <div class="icon-circle gold pillar-icon">
+              <i data-lucide="ear" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Hears</h4>
+            <p>Multilingual feedback analysis in Telugu, Hindi, and English</p>
+          </div>
+          
+          <div class="card pillar-card fade-up" data-delay="1200">
+            <div class="icon-circle success pillar-icon">
+              <i data-lucide="trending-up" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Predicts</h4>
+            <p>5-year pattern learning for crowd forecasting and planning</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ==================== SLIDE 5: CHATBOT ==================== -->
+    <div class="slide" id="slide5">
+      <h2 class="slide-title fade-up" data-delay="0">Ask Anything. In Any Language.</h2>
+      <p class="slide-subtitle fade-up" data-delay="100">Natural language queries via WhatsApp, SMS, or Voice</p>
+      
+      <button class="replay-btn" id="replayChat">
+        <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+        Replay Demo
+      </button>
+      
+      <div class="content-area">
+        <div class="chat-section fade-up" data-delay="200">
+          <div class="chat-container">
+            <div class="chat-header">
+              <div class="chat-avatar">
+                <i data-lucide="bot" style="width: 24px; height: 24px;"></i>
+              </div>
+              <div class="chat-header-info">
+                <h4>Smart Darshan Assistant</h4>
+                <p><span class="online-dot"></span> Online • Updated 2s ago</p>
+              </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+              <!-- Messages will be added dynamically -->
+              <div class="typing-indicator" id="typingIndicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+            
+            <div class="chat-input">
+              <div class="chat-input-field">Type in Telugu, Hindi, or English...</div>
+              <button class="chat-send-btn">
+                <i data-lucide="mic" style="width: 20px; height: 20px;"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="queries-section fade-up" data-delay="300">
+          <h3 class="queries-header">Example Queries</h3>
+          
+          <div class="query-card">
+            <h4>"Which gate has the shortest wait time?"</h4>
+          </div>
+          
+          <div class="query-card">
+            <h4 style="font-family: var(--font-telugu);">"రేపు ఉదయం 10 గంటలకు రద్దీ ఎలా ఉంటుంది?"</h4>
+          </div>
+          
+          <div class="query-card">
+            <h4>"What facilities are available for elderly?"</h4>
+          </div>
+          
+          <div class="query-card">
+            <h4 style="font-family: var(--font-telugu);">"అన్నదానం సమయం ఎప్పుడు?"</h4>
+          </div>
+          
+          <div class="knowledge-badge">
+            <h4>Multilingual Support</h4>
+            <p>Answers in Telugu, Hindi, or English via WhatsApp, SMS, or Voice.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ==================== SLIDE 6: CAPABILITIES ==================== -->
+    <div class="slide" id="slide6">
+      <h2 class="slide-title fade-up" data-delay="0">AI Vision Capabilities</h2>
+      <p class="slide-subtitle fade-up" data-delay="100">Computer vision transforms 324 passive cameras into active intelligence</p>
+      
+      <div class="content-area">
+        <div class="capabilities-grid">
+          <div class="card capability-card fade-up" data-delay="200">
+            <div class="icon-circle primary cap-icon">
+              <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Crowd Density</h4>
+            <div class="metric" data-count="95" data-suffix="%">0%</div>
+            <p class="detail">People counting accuracy</p>
+          </div>
+          
+          <div class="card capability-card fade-up" data-delay="300">
+            <div class="icon-circle gold cap-icon">
+              <i data-lucide="flame" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Congestion Detection</h4>
+            <div class="metric" data-count="88" data-suffix="%">0%</div>
+            <p class="detail">Hotspot identification</p>
+          </div>
+          
+          <div class="card capability-card fade-up" data-delay="400">
+            <div class="icon-circle danger cap-icon">
+              <i data-lucide="alert-triangle" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Anomaly Detection</h4>
+            <div class="metric" data-count="7" data-suffix=" Types">0</div>
+            <p class="detail">Stampede, surge, fire, intrusion</p>
+          </div>
+          
+          <div class="card capability-card fade-up" data-delay="500">
+            <div class="icon-circle" style="background: #DBEAFE; color: var(--info);">
+              <i data-lucide="accessibility" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h4>Accessibility</h4>
+            <div class="metric" data-count="90" data-suffix="%">0%</div>
+            <p class="detail">Wheelchair, elderly, child detection</p>
+          </div>
+        </div>
+        
+        <div class="marquee-container fade-up" data-delay="600">
+          <div class="capability-count-header">
+            <div class="capability-count-number" data-count="42" data-suffix="">0</div>
+            <div class="capability-count-label">
+              <span class="label-main">AI Analytics Capabilities</span>
+              <span class="label-sub">Real-time processing across all data sources</span>
+            </div>
+          </div>
+          <div class="marquee-track">
+            <!-- Crowd Quantification -->
+            <div class="marquee-item"><span class="bullet"></span> Live density estimation</div>
+            <div class="marquee-item"><span class="bullet"></span> People counting</div>
+            <div class="marquee-item"><span class="bullet"></span> Zone occupancy %</div>
+            <div class="marquee-item"><span class="bullet"></span> Gender ratio</div>
+            <div class="marquee-item"><span class="bullet"></span> Age distribution</div>
+            <!-- Movement Analytics -->
+            <div class="marquee-item"><span class="bullet gold"></span> Walking velocity</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Flow rate</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Direction vectors</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Dwell time hotspots</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Counter-flow detection</div>
+            <!-- Congestion -->
+            <div class="marquee-item"><span class="bullet"></span> Congestion heatmap</div>
+            <div class="marquee-item"><span class="bullet"></span> Severity scoring</div>
+            <div class="marquee-item"><span class="bullet"></span> Predicted congestion</div>
+            <div class="marquee-item"><span class="bullet"></span> Bottleneck ID</div>
+            <!-- Anomaly Detection -->
+            <div class="marquee-item"><span class="bullet danger"></span> Stampede detection</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Crowd surge alerts</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Blocked exit</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Restricted area intrusion</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Abandoned object</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Smoke/fire visual</div>
+            <!-- Safety -->
+            <div class="marquee-item"><span class="bullet"></span> Fall detection</div>
+            <div class="marquee-item"><span class="bullet"></span> Distress posture</div>
+            <div class="marquee-item"><span class="bullet"></span> Altercation detection</div>
+            <!-- Accessibility -->
+            <div class="marquee-item"><span class="bullet gold"></span> Wheelchair detection</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Elderly gait</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Child detection</div>
+            <!-- Queue -->
+            <div class="marquee-item"><span class="bullet"></span> Queue length</div>
+            <div class="marquee-item"><span class="bullet"></span> Wait time estimation</div>
+            <div class="marquee-item"><span class="bullet"></span> Queue discipline</div>
+            <!-- Feedback Analytics -->
+            <div class="marquee-item"><span class="bullet gold"></span> Sentiment analysis</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Emotion detection</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Urgency scoring</div>
+            <!-- Predictive -->
+            <div class="marquee-item"><span class="bullet"></span> Peak hour prediction</div>
+            <div class="marquee-item"><span class="bullet"></span> Weather correlation</div>
+            <div class="marquee-item"><span class="bullet"></span> Event impact forecast</div>
+            <!-- Duplicate for seamless loop -->
+            <div class="marquee-item"><span class="bullet"></span> Live density estimation</div>
+            <div class="marquee-item"><span class="bullet"></span> People counting</div>
+            <div class="marquee-item"><span class="bullet"></span> Zone occupancy %</div>
+            <div class="marquee-item"><span class="bullet"></span> Gender ratio</div>
+            <div class="marquee-item"><span class="bullet"></span> Age distribution</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Walking velocity</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Flow rate</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Direction vectors</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Dwell time hotspots</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Counter-flow detection</div>
+            <div class="marquee-item"><span class="bullet"></span> Congestion heatmap</div>
+            <div class="marquee-item"><span class="bullet"></span> Severity scoring</div>
+            <div class="marquee-item"><span class="bullet"></span> Predicted congestion</div>
+            <div class="marquee-item"><span class="bullet"></span> Bottleneck ID</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Stampede detection</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Crowd surge alerts</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Blocked exit</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Restricted area intrusion</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Abandoned object</div>
+            <div class="marquee-item"><span class="bullet danger"></span> Smoke/fire visual</div>
+            <div class="marquee-item"><span class="bullet"></span> Fall detection</div>
+            <div class="marquee-item"><span class="bullet"></span> Distress posture</div>
+            <div class="marquee-item"><span class="bullet"></span> Altercation detection</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Wheelchair detection</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Elderly gait</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Child detection</div>
+            <div class="marquee-item"><span class="bullet"></span> Queue length</div>
+            <div class="marquee-item"><span class="bullet"></span> Wait time estimation</div>
+            <div class="marquee-item"><span class="bullet"></span> Queue discipline</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Sentiment analysis</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Emotion detection</div>
+            <div class="marquee-item"><span class="bullet gold"></span> Urgency scoring</div>
+            <div class="marquee-item"><span class="bullet"></span> Peak hour prediction</div>
+            <div class="marquee-item"><span class="bullet"></span> Weather correlation</div>
+            <div class="marquee-item"><span class="bullet"></span> Event impact forecast</div>
+          </div>
+        </div>
+        
+        <div class="closing-section scale-in" data-delay="800">
+          <h3 class="closing-main">One Unified AI. <span class="highlight">Complete Temple Intelligence.</span></h3>
+          <p class="closing-sub">AI handles monitoring. Humans handle judgment.</p>
+          <p class="closing-tagline">Employees focus on doing, not watching.</p>
+        </div>
+      </div>
+      
+      <div class="footer-bar"></div>
+    </div>
+    
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn">
+        <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
+      </button>
+      <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">6</span></span>
+      <button class="nav-btn" id="nextBtn">
+        <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
+      </button>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Slide Management
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    
+    const progressBar = document.getElementById('progressBar');
+    const currentSlideEl = document.getElementById('currentSlide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    function updateProgress() {
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = progress + '%';
+      currentSlideEl.textContent = currentSlide + 1;
+    }
+    
+    function animateSlideElements(slideEl) {
+      const elements = slideEl.querySelectorAll('.fade-up, .fade-in, .scale-in, .slide-right');
+      elements.forEach(el => {
+        el.classList.remove('animate');
+      });
+      
+      // Trigger animations with delays
+      setTimeout(() => {
+        elements.forEach(el => {
+          const delay = parseInt(el.dataset.delay) || 0;
+          setTimeout(() => {
+            el.classList.add('animate');
+          }, delay);
+        });
+      }, 100);
+      
+      // Count-up animations for numbers
+      const countElements = slideEl.querySelectorAll('[data-count]');
+      countElements.forEach(el => {
+        const target = parseInt(el.dataset.count);
+        const suffix = el.dataset.suffix || '';
+        const delay = parseInt(el.closest('.fade-up, .scale-in')?.dataset.delay) || 0;
+        
+        setTimeout(() => {
+          animateCount(el, target, suffix);
+        }, delay + 300);
+      });
+      
+      // Trigger chat animation for slide 5
+      if (slideEl.id === 'slide5') {
+        setTimeout(() => {
+          runChatAnimation();
+        }, 500);
+      }
+    }
+    
+    function animateCount(element, target, suffix) {
+      const duration = 1500;
+      const start = 0;
+      const startTime = performance.now();
+      
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (target - start) * easeOut);
+        element.textContent = current + suffix;
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+    
+    function goToSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      
+      updateProgress();
+      animateSlideElements(slides[currentSlide]);
+    }
+    
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        goToSlide(currentSlide + 1);
+      }
+    }
+    
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+    
+    // Event Listeners
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+    
+    // Chat Animation for Slide 5
+    const chatMessages = document.getElementById('chatMessages');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const replayBtn = document.getElementById('replayChat');
+    
+    const chatSequence = [
+      {
+        type: 'user',
+        text: 'ఏ గేట్ లో తక్కువ వేచి ఉండే సమయం ఉంది?',
+        isTelugu: true
+      },
+      {
+        type: 'bot',
+        html: '<span class="telugu">ప్రస్తుతం <span class="highlight">పశ్చిమ గోపురం</span> లో తక్కువ వేచి సమయం.</span><br><span class="telugu">వేచి ఉండే సమయం: <span class="highlight-gold">~25 నిమిషాలు</span></span><br><span class="telugu">క్యూలో: <span class="highlight">847</span> మంది</span>'
+      },
+      {
+        type: 'user',
+        text: 'What time will crowd be less tomorrow?',
+        isTelugu: false
+      },
+      {
+        type: 'bot',
+        html: 'Tomorrow\'s <span class="highlight">lowest crowd</span> expected:<br>• <span class="highlight-gold">6:00 - 7:30 AM</span> (Early morning)<br>• <span class="highlight-gold">1:00 - 3:00 PM</span> (Afternoon)'
+      }
+    ];
+    
+    let chatAnimationRunning = false;
+    
+    async function runChatAnimation() {
+      if (chatAnimationRunning) return;
+      chatAnimationRunning = true;
+      
+      // Clear existing messages
+      const existingMessages = chatMessages.querySelectorAll('.message');
+      existingMessages.forEach(m => m.remove());
+      
+      for (let i = 0; i < chatSequence.length; i++) {
+        const msg = chatSequence[i];
+        
+        if (msg.type === 'user') {
+          await typeMessage(msg.text, msg.isTelugu);
+        } else {
+          // Show typing indicator
+          typingIndicator.classList.add('show');
+          await sleep(1200);
+          typingIndicator.classList.remove('show');
+          
+          // Show bot response
+          await showBotMessage(msg.html, msg.meta);
+        }
+        
+        await sleep(800);
+      }
+      
+      chatAnimationRunning = false;
+    }
+    
+    async function typeMessage(text, isTelugu) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message user';
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      if (isTelugu) bubble.style.fontFamily = 'var(--font-telugu)';
+      
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'message-time';
+      timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      msgDiv.appendChild(bubble);
+      msgDiv.appendChild(timeDiv);
+      chatMessages.insertBefore(msgDiv, typingIndicator);
+      
+      // Typing animation
+      for (let i = 0; i <= text.length; i++) {
+        bubble.textContent = text.substring(0, i) + (i < text.length ? '|' : '');
+        await sleep(40);
+      }
+      
+      bubble.textContent = text;
+      msgDiv.classList.add('show');
+    }
+    
+    async function showBotMessage(html, meta) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message bot';
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      bubble.innerHTML = html;
+      
+      if (meta) {
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'message-meta';
+        metaDiv.textContent = meta;
+        bubble.appendChild(metaDiv);
+      }
+      
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'message-time';
+      timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      msgDiv.appendChild(bubble);
+      msgDiv.appendChild(timeDiv);
+      chatMessages.insertBefore(msgDiv, typingIndicator);
+      
+      await sleep(50);
+      msgDiv.classList.add('show');
+      
+      // Animate count for numbers
+      const highlight = bubble.querySelector('.highlight');
+      if (highlight && highlight.textContent.includes(',')) {
+        const target = parseInt(highlight.textContent.replace(',', ''));
+        animateCount(highlight, target, '');
+        highlight.textContent = '2,847';
+      }
+    }
+    
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    replayBtn.addEventListener('click', () => {
+      chatAnimationRunning = false;
+      runChatAnimation();
+    });
+    
+    // Initialize first slide
+    updateProgress();
+    animateSlideElements(slides[0]);
+  </script>
+</body>
+</html>
