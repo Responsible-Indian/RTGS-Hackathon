@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Welfare - Workforce Transparency | Submission</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0A1628;
+            --bg-mid: #132035;
+            --bg-card: #0D1B2E;
+            --coral: #FF7B4F;
+            --green: #00D9A0;
+            --amber: #FFC857;
+            --text-primary: #F0F5F9;
+            --text-secondary: rgba(240, 245, 249, 0.75);
+            --text-muted: rgba(240, 245, 249, 0.5);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+        }
+
+        .submission-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
+            border-bottom: 1px solid var(--border-subtle);
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .tab-navigation::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tab-navigation::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .tab-navigation::-webkit-scrollbar-thumb {
+            background: var(--coral);
+            border-radius: 2px;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: var(--amber);
+            background: rgba(255, 200, 87, 0.1);
+            border-color: rgba(255, 200, 87, 0.3);
+        }
+
+        .tab-btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn .tab-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .tab-btn.active .tab-number {
+            background: var(--amber);
+            color: var(--bg-deep);
+        }
+
+        /* Content Area */
+        .tab-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .tab-panel.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tab-panel iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--bg-deep);
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--coral), var(--amber), var(--green));
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        /* Navigation arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .nav-arrow {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(13, 27, 46, 0.9);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-arrow:hover:not(:disabled) {
+            background: rgba(255, 200, 87, 0.15);
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Team badge */
+        .team-badge {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1rem;
+            background: rgba(13, 27, 46, 0.9);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .team-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .team-badge-text {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .team-badge-name {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Loading state */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-deep);
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--amber);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tab-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.7rem;
+            }
+
+            .tab-btn .tab-label {
+                display: none;
+            }
+
+            .tab-btn .tab-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.75rem;
+            }
+
+            .team-badge {
+                display: none;
+            }
+
+            .nav-arrows {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="submission-container">
+        <nav class="tab-navigation" role="tablist">
+            <button class="tab-btn active" role="tab" data-tab="0" aria-selected="true">
+                <span class="tab-number">1</span>
+                <span class="tab-label">Cover</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="1" aria-selected="false">
+                <span class="tab-number">2</span>
+                <span class="tab-label">Problem Analysis</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="2" aria-selected="false">
+                <span class="tab-number">3</span>
+                <span class="tab-label">Bottlenecks</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="3" aria-selected="false">
+                <span class="tab-number">4</span>
+                <span class="tab-label">AI Bridge</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="4" aria-selected="false">
+                <span class="tab-number">5</span>
+                <span class="tab-label">Tech Architecture</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="5" aria-selected="false">
+                <span class="tab-number">6</span>
+                <span class="tab-label">Stakeholder Journeys</span>
+            </button>
+            <button class="tab-btn" role="tab" data-tab="6" aria-selected="false">
+                <span class="tab-number">7</span>
+                <span class="tab-label">Team</span>
+            </button>
+            <div class="progress-bar" style="width: 14.28%"></div>
+        </nav>
+
+        <main class="tab-content">
+            <div class="tab-panel active" role="tabpanel" data-panel="0">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="cover_page.html" title="Cover Page"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="1">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="problem_analysis.html" title="Problem Analysis"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="2">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="bottlenecks.html" title="Bottlenecks"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="3">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="ai_bridge.html" title="AI Bridge"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="4">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="tech_architecture.html" title="Tech Architecture"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="5">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="stakeholder_journeys.html" title="Stakeholder Journeys"></iframe>
+            </div>
+            <div class="tab-panel" role="tabpanel" data-panel="6">
+                <div class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                </div>
+                <iframe src="team_contact.html" title="Team Contact"></iframe>
+            </div>
+        </main>
+
+        <div class="nav-arrows">
+            <button class="nav-arrow" id="prev-btn" disabled aria-label="Previous section">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="nav-arrow" id="next-btn" aria-label="Next section">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <div class="team-badge">
+            <div class="team-badge-dot"></div>
+            <span class="team-badge-text">Team <span class="team-badge-name">ResponsibleIndian</span></span>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.tab-panel');
+        const progressBar = document.querySelector('.progress-bar');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const totalTabs = tabs.length;
+        let currentTab = 0;
+
+        // Handle iframe load events to hide loading spinners
+        panels.forEach(panel => {
+            const iframe = panel.querySelector('iframe');
+            const loader = panel.querySelector('.loading-overlay');
+
+            if (iframe && loader) {
+                // Hide loader on iframe load event
+                iframe.addEventListener('load', () => {
+                    loader.classList.add('hidden');
+                });
+
+                // Fallback: hide loader after 2 seconds in case load event doesn't fire
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 2000);
+            }
+        });
+
+        function switchTab(index) {
+            if (index < 0 || index >= totalTabs) return;
+
+            // Update tabs
+            tabs.forEach((tab, i) => {
+                const isActive = i === index;
+                tab.classList.toggle('active', isActive);
+                tab.setAttribute('aria-selected', isActive);
+            });
+
+            // Update panels
+            panels.forEach((panel, i) => {
+                panel.classList.toggle('active', i === index);
+            });
+
+            // Update progress bar
+            const progress = ((index + 1) / totalTabs) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === totalTabs - 1;
+
+            currentTab = index;
+        }
+
+        // Tab click handlers
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const index = parseInt(tab.dataset.tab);
+                switchTab(index);
+            });
+        });
+
+        // Navigation button handlers
+        prevBtn.addEventListener('click', () => switchTab(currentTab - 1));
+        nextBtn.addEventListener('click', () => switchTab(currentTab + 1));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                switchTab(currentTab - 1);
+            } else if (e.key === 'ArrowRight') {
+                switchTab(currentTab + 1);
+            } else if (e.key >= '1' && e.key <= '7') {
+                switchTab(parseInt(e.key) - 1);
+            }
+        });
+
+        // Initialize first tab
+        switchTab(0);
+    })();
+    </script>
+</body>
+</html>
