@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Document - Heart Smart Grid</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* GLOBAL RESET & PRINT SETTINGS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #050a14; /* Global Dark Background */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+        }
+
+        /* Section Container for PDF/Print Separation */
+        .submission-section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            page-break-after: always;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .submission-section:last-child {
+            page-break-after: auto;
+            border-bottom: none;
+        }
+
+        /* Print Specifics */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            body {
+                background-color: #050a14;
+            }
+            .scroll-indicator {
+                display: none !important;
+            }
+            /* Ensure background graphics print */
+            .grid-bg, .bottlenecks-bg-pattern, .aibridge-bg-grid, .hld-bg-grid {
+                opacity: 0.2 !important; 
+                print-color-adjust: exact;
+            }
+            /* Fix gradients for print */
+            .header-title h1, .hld-title, .bottlenecks-title, h1 {
+                -webkit-background-clip: unset !important;
+                -webkit-text-fill-color: #ffffff !important;
+                color: #ffffff !important;
+                text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            }
+        }
+
+        /* --- SECTION 1 STYLES (COVER) --- */
+        :root {
+            --bg-deep: #050a14;
+            --color-alert: #ff2a2a;
+            --color-safe: #00f0ff;
+            --color-text: #ffffff;
+            --color-dim: #8892b0;
+            --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .cover-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            perspective: 1000px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .grid-plane {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200vw;
+            height: 200vh;
+            transform: translate(-50%, -50%) rotateX(60deg);
+            background-image: 
+                linear-gradient(rgba(26, 44, 66, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26, 44, 66, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(-50%, -50%) rotateX(60deg) translateY(0); }
+            100% { transform: translate(-50%, -50%) rotateX(60deg) translateY(50px); }
+        }
+
+        .cover-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .team-id {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeInDown 0.8s 1s forwards;
+        }
+
+        .team-name { color: var(--color-safe); }
+        .contact { color: var(--color-dim); font-size: 0.8rem; margin-top: 4px; display: block; text-decoration: none; }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .visualizer-container {
+            width: 100%;
+            max-width: 600px;
+            height: 200px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(5, 10, 20, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-alert); }
+        .status-text { text-transform: uppercase; letter-spacing: 2px; color: var(--color-alert); }
+        .ecg-canvas { width: 100%; height: 100%; }
+
+        .node-overlay {
+            position: absolute; bottom: 20px; width: 100%;
+            display: flex; justify-content: space-around;
+            opacity: 0; transform: translateY(20px); transition: all 1s ease;
+        }
+
+        .node {
+            background: rgba(0, 240, 255, 0.1); border: 1px solid var(--color-safe);
+            padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; color: var(--color-safe);
+            display: flex; align-items: center; gap: 6px; backdrop-filter: blur(5px);
+        }
+        .node svg { width: 12px; height: 12px; fill: currentColor; }
+
+        .dept-label {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-dim);
+            margin-bottom: 1rem; border-bottom: 1px solid var(--color-alert); padding-bottom: 5px; display: inline-block;
+        }
+
+        h1.cover-title {
+            font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #b3b3b3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        h2.cover-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 400; color: var(--color-safe); margin-bottom: 1.5rem; opacity: 0.9;
+        }
+
+        .tagline { font-size: 1.2rem; font-style: italic; color: var(--color-dim); max-width: 600px; margin: 0 auto; position: relative; }
+        .tagline::after { content: ''; display: block; width: 40px; height: 2px; background: var(--color-alert); margin: 20px auto 0; }
+        .logo-container { width: 100px; height: 100px; margin-bottom: 2rem; }
+        .scroll-indicator {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.7; transition: opacity 0.3s;
+        }
+        .mouse { width: 26px; height: 40px; border: 2px solid var(--color-dim); border-radius: 20px; position: relative; }
+        .wheel { width: 4px; height: 8px; background: var(--color-safe); border-radius: 2px; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); animation: scrollWheel 2s infinite; }
+        @keyframes scrollWheel { 0% { top: 6px; opacity: 1; } 100% { top: 20px; opacity: 0; } }
+        @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- SECTION 3 STYLES (BOTTLENECKS) --- */
+        .bottlenecks-section { position: relative; width: 100%; min-height: 100vh; padding: 4rem 2rem 6rem; }
+        .bottlenecks-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+        .bottlenecks-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.12; z-index: 0; }
+        .bottlenecks-header { text-align: center; margin-bottom: 4rem; opacity: 1; transform: none; }
+        .bottlenecks-dept { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-dim); margin-bottom: 1rem; border-bottom: 1px solid var(--color-alert); padding-bottom: 5px; display: inline-block; }
+        .bottlenecks-label { display: inline-flex; align-items: center; gap: 10px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-alert); margin-bottom: 1.5rem; padding: 8px 20px; border: 1px solid rgba(255, 42, 42, 0.3); border-radius: 30px; background: rgba(255, 42, 42, 0.05); }
+        .bottlenecks-label::before { content: ''; width: 8px; height: 8px; background: var(--color-alert); border-radius: 50%; animation: bottlenecks-pulse 2s infinite; }
+        .bottlenecks-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: white; }
+        .bottlenecks-subtitle { font-size: 1.1rem; color: var(--color-dim); max-width: 700px; margin: 0 auto; line-height: 1.7; }
+        .bottlenecks-workflow { background: #0a1628; border-radius: 20px; padding: 3rem 2rem; margin-bottom: 4rem; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); }
+        .bottlenecks-workflow-svg { width: 100%; height: auto; max-height: 400px; }
+        .bottlenecks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
+        .bottleneck-card { background: #0a1628; border-radius: 16px; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; overflow: hidden; transition: transform 0.3s; }
+        .bottleneck-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, var(--color-alert) 0%, transparent 100%); }
+        .bottleneck-icon { width: 100%; height: 140px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; background: rgba(5, 10, 20, 0.5); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.03); }
+        .bottleneck-icon svg { width: 90%; height: 90%; }
+        .bottleneck-number { position: absolute; top: 1rem; right: 1rem; font-size: 0.7rem; font-weight: 700; color: var(--color-alert); background: rgba(255, 42, 42, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 42, 42, 0.2); }
+        .bottleneck-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text); }
+        .bottleneck-description { font-size: 0.9rem; color: var(--color-dim); line-height: 1.7; }
+        .bottlenecks-connector { text-align: center; padding: 3rem 2rem; margin-bottom: 4rem; }
+        .connector-line { width: 2px; height: 60px; background: linear-gradient(180deg, var(--color-alert) 0%, var(--color-safe) 100%); margin: 0 auto 2rem; }
+        .bottlenecks-summary { background: linear-gradient(135deg, rgba(255, 42, 42, 0.1) 0%, rgba(0, 240, 255, 0.05) 100%); border: 1px solid rgba(255, 42, 42, 0.2); border-radius: 20px; padding: 3rem; text-align: center; position: relative; }
+        .summary-icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; }
+        .summary-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-alert); }
+        @keyframes bottlenecks-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .animate-blink { animation: bottlenecks-blink 1.5s ease-in-out infinite; }
+        
+        /* --- SECTION 4 STYLES (AI BRIDGE) --- */
+        .aibridge-section { position: relative; width: 100%; min-height: 100vh; padding: 4rem 2rem 6rem; overflow: hidden; }
+        .aibridge-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+        .aibridge-bg-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; z-index: 0; }
+        .aibridge-header { text-align: center; margin-bottom: 4rem; }
+        .aibridge-dept { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-dim); margin-bottom: 1rem; border-bottom: 2px solid var(--color-safe); padding-bottom: 5px; display: inline-block; }
+        .aibridge-label { display: inline-flex; align-items: center; gap: 10px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--color-safe); margin-bottom: 1.5rem; padding: 8px 20px; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 30px; background: rgba(0, 240, 255, 0.05); }
+        .aibridge-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--color-safe) 0%, var(--color-text) 40%, var(--color-safe) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .aibridge-transform-container { background: #0a1628; border-radius: 20px; padding: 2.5rem; border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4); margin: 4rem auto; max-width: 900px; }
+        .aibridge-transform-svg { width: 100%; height: auto; }
+        .aibridge-solution { text-align: center; margin: 4rem auto; padding: 2.5rem; max-width: 600px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(5, 10, 20, 0.9) 100%); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 20px; }
+        .aibridge-solution-name { font-size: 1.8rem; font-weight: 800; color: var(--color-text); margin-bottom: 0.5rem; }
+        .aibridge-capabilities { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 4rem auto; max-width: 1000px; }
+        .aibridge-capability { background: #0a1628; border-radius: 16px; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; overflow: hidden; }
+        .aibridge-capability::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, var(--color-safe) 0%, transparent 100%); }
+        .aibridge-capability-icon { width: 56px; height: 56px; background: rgba(0, 240, 255, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; border: 1px solid rgba(0, 240, 255, 0.2); }
+        .aibridge-capability-title { font-size: 1.1rem; font-weight: 700; color: var(--color-text); margin-bottom: 0.75rem; }
+        .aibridge-capability-bridge { display: flex; align-items: flex-start; gap: 8px; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0, 240, 255, 0.1); font-size: 0.75rem; color: var(--color-safe); }
+        
+        /* --- SECTION 5 STYLES (ARCHITECTURE) --- */
+        .hld-section { position: relative; width: 100%; min-height: 100vh; padding: 2.5rem 1.5rem 3rem; overflow: hidden; }
+        .hld-container { max-width: 1500px; margin: 0 auto; position: relative; z-index: 2; }
+        .hld-diagram-wrap { background: #0a1628; border-radius: 14px; padding: 1rem; border: 1px solid rgba(0, 240, 255, 0.12); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); }
+        .hld-diagram-svg { width: 100%; height: auto; display: block; }
+        .hld-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .hld-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--color-dim); }
+
+        /* --- SECTION 6 STYLES (JOURNEYS) --- */
+        .userflow-section { min-height: 100vh; padding: 4rem 2rem; background: linear-gradient(180deg, #050a14 0%, #0D1117 100%); position: relative; }
+        .userflow-container { max-width: 1200px; margin: 0 auto; }
+        .userflow-header { text-align: center; margin-bottom: 3rem; }
+        .userflow-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; background: linear-gradient(135deg, #F59E0B 0%, #10B981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+        .userflow-actor-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+        .actor-tab { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 8px; cursor: pointer; color: #B8C4D6; font-size: 0.8rem; }
+        .actor-tab.active { background: rgba(245, 158, 11, 0.15); border-color: #F59E0B; color: #F59E0B; }
+        .actor-panel { display: none; }
+        .actor-panel.active { display: block; animation: fadeInPanel 0.4s ease; }
+        .actor-info { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.5rem; background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 12px; margin-bottom: 1.5rem; }
+        .actor-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .actor-avatar svg { width: 32px; fill: white; }
+        .journey-container { background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 12px; padding: 1.5rem; }
+        .journey-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(100, 116, 139, 0.25); padding-bottom: 1rem; }
+        .flow-step { display: flex; gap: 1rem; padding: 0.75rem 0; position: relative; }
+        .step-number { width: 32px; height: 32px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: #0a0a0a; }
+
+        /* --- SECTION 7 STYLES (TEAM) --- */
+        .page-section { width: 100%; max-width: 1400px; padding: 40px 50px; margin: 0 auto; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .member-card { background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; }
+        .member-name { font-size: 18px; font-weight: 700; color: #fff; text-align: center; margin-top: 10px;}
+        .member-role { font-size: 11px; font-weight: 600; color: var(--color-safe); text-transform: uppercase; margin-bottom: 16px; text-align: center; }
+        .profile-pic { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto; display: block; background: #333; }
+        .linkedin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 119, 181, 0.2); border: 1px solid rgba(0, 119, 181, 0.4); color: #e6f1ff; padding: 10px 16px; border-radius: 8px; text-decoration: none; margin-top: auto; }
+        
+        @media (max-width: 1200px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- SECTION 1: COVER PAGE -->
+    <section id="section-cover" class="submission-section">
+        <div class="grid-bg"><div class="grid-plane"></div></div>
+        <div class="cover-container">
+            <header class="cover-header">
+                <div class="team-id">
+                    <span class="team-name">ResponsibleIndian</span>
+                    <a href="mailto:contact@responsibleindian.in" class="contact">contact@responsibleindian.in</a>
+                </div>
+            </header>
+
+            <div class="hero">
+                <div class="logo-container">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" id="main-logo">
+                        <path d="M50 90C50 90 85 70 85 40C85 25 75 15 60 15C50 15 50 25 50 25C50 25 50 15 40 15C25 15 15 25 15 40C15 70 50 90 50 90Z" stroke="#8892b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-outline"/>
+                        <path d="M50 25 V 90 M25 40 H 75 M35 60 H 65" stroke="#00f0ff" stroke-width="0.5" opacity="0.3"/>
+                        <circle cx="25" cy="40" r="3" fill="#050a14" stroke="#00f0ff" stroke-width="2" class="pulse-node"/>
+                        <circle cx="75" cy="40" r="3" fill="#050a14" stroke="#00f0ff" stroke-width="2" class="pulse-node"/>
+                        <circle cx="50" cy="75" r="3" fill="#050a14" stroke="#00f0ff" stroke-width="2" class="pulse-node"/>
+                    </svg>
+                </div>
+
+                <div class="visualizer-container" id="vis-container">
+                    <div class="status-bar">
+                        <div class="status-dot" id="status-dot"></div>
+                        <span class="status-text" id="status-text">Detecting Signal...</span>
+                    </div>
+                    <svg class="ecg-canvas" viewBox="0 0 600 200" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:transparent;stop-opacity:0" />
+                                <stop offset="80%" style="stop-color:currentColor;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:currentColor;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path id="ecg-path" d="M0,100 L600,100" fill="none" stroke="url(#line-gradient)" stroke-width="3" />
+                    </svg>
+                    <div class="node-overlay" id="node-overlay">
+                        <div class="node"><span>AMBULANCE</span></div>
+                        <div class="node"><span>AI ANALYSIS</span></div>
+                        <div class="node"><span>HOSPITAL</span></div>
+                    </div>
+                </div>
+
+                <span class="dept-label">HM&FW Department, Govt. of Andhra Pradesh</span>
+                <h1 class="cover-title">Health - Heart Smart Grid</h1>
+                <h2 class="cover-subtitle">AI-Integrated Cardiac Emergency Response System</h2>
+                <p class="tagline">Digitizing the Golden Hour.</p>
+            </div>
+
+            <div class="scroll-indicator" id="scroll-indicator">
+                <div class="mouse"><div class="wheel"></div></div>
+                <span style="font-size: 0.7rem; letter-spacing: 1px;">SCROLL TO EXPLORE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: BOTTLENECKS (Incorporating Problem Statement) -->
+    <section id="section-bottlenecks" class="submission-section bottlenecks-section">
+        <div class="bottlenecks-bg-pattern" aria-hidden="true">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs><pattern id="grid-pattern" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(26, 44, 66, 0.5)" stroke-width="0.3"/></pattern></defs>
+                <rect width="100" height="100" fill="url(#grid-pattern)"/>
+            </svg>
+        </div>
+        <div class="bottlenecks-container">
+            <header class="bottlenecks-header">
+                <div class="bottlenecks-label">Systemic Friction Points</div>
+                <h1 class="bottlenecks-title">Anatomy of Delay</h1>
+                <p class="bottlenecks-subtitle">Cardiac emergencies demand seamless coordination, but systemic fragmentation transforms the golden hour into a series of preventable waiting periods.</p>
+            </header>
+            
+            <div class="bottlenecks-workflow">
+                <svg class="bottlenecks-workflow-svg" viewBox="0 0 900 300" fill="none">
+                    <rect x="50" y="130" width="800" height="40" rx="20" fill="rgba(26, 44, 66, 0.3)"/>
+                    <g><circle cx="100" cy="150" r="25" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/><text x="100" y="200" text-anchor="middle" fill="#8892b0" font-size="10">108 CALL</text></g>
+                    <g class="animate-blink"><rect x="165" y="135" width="70" height="30" rx="4" fill="rgba(255,42,42,0.2)" stroke="#ff2a2a" stroke-width="1.5"/><text x="200" y="154" text-anchor="middle" fill="#ff2a2a" font-size="9">QUEUE</text></g>
+                    <g><circle cx="300" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="300" y="200" text-anchor="middle" fill="#8892b0" font-size="10">AMBULANCE</text></g>
+                    <path d="M440 150 L485 150" stroke="#ff2a2a" stroke-width="2" stroke-dasharray="8,4"/>
+                    <g><rect x="360" y="125" width="80" height="50" rx="4" fill="rgba(255,42,42,0.15)" stroke="#ff2a2a" stroke-width="1.5"/><text x="400" y="155" text-anchor="middle" fill="#ff2a2a" font-size="9">MANUAL INTERPRET</text></g>
+                    <g><circle cx="520" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="520" y="200" text-anchor="middle" fill="#8892b0" font-size="10">PHONE</text></g>
+                    <g><circle cx="700" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="700" y="200" text-anchor="middle" fill="#8892b0" font-size="10">HOSPITAL</text></g>
+                </svg>
+            </div>
+
+            <div class="bottlenecks-grid">
+                <article class="bottleneck-card">
+                    <h3 class="bottleneck-title">Sequential Dependency Trap</h3>
+                    <p class="bottleneck-description">Each step waits for the previous step. ECG capture must finish before interpretation. No parallelization—every delay compounds.</p>
+                </article>
+                <article class="bottleneck-card">
+                    <h3 class="bottleneck-title">Fragmented Data Silos</h3>
+                    <p class="bottleneck-description">Patient data captured in the ambulance doesn't flow to hospital dashboards. Systems don't speak to each other, requiring manual re-entry.</p>
+                </article>
+                <article class="bottleneck-card">
+                    <h3 class="bottleneck-title">Rural Connectivity Void</h3>
+                    <p class="bottleneck-description">Significant portions of AP have intermittent connectivity. Without offline caching, data is lost in transit.</p>
+                </article>
+                <article class="bottleneck-card">
+                    <h3 class="bottleneck-title">Blind Arrival Syndrome</h3>
+                    <p class="bottleneck-description">Hospitals receive no advance warning. Cath labs remain unprepared until the ambulance arrives at the door.</p>
+                </article>
+            </div>
+            
+            <div class="bottlenecks-connector">
+                <div class="connector-line"></div>
+                <span class="connector-text" style="color:#8892b0; font-size: 0.8rem; text-transform: uppercase;">These bottlenecks compound into failure</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: AI BRIDGE -->
+    <section id="section-ai-bridge" class="submission-section aibridge-section">
+        <div class="aibridge-bg-grid"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="aibridge-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0, 240, 255, 0.3)" stroke-width="0.2"/></pattern></defs><rect width="100" height="100" fill="url(#aibridge-grid)"/></svg></div>
+        <div class="aibridge-container">
+            <header class="aibridge-header">
+                <div class="aibridge-label">The Solution</div>
+                <h1 class="aibridge-title">The Intelligence Layer</h1>
+                <p style="color:#8892b0; max-width:600px; margin:0 auto;">Where fragmented systems once created delays, AI now weaves a unified response fabric—connecting ambulances, clinicians, and hospitals.</p>
+            </header>
+
+            <div class="aibridge-solution">
+                <h2 class="aibridge-solution-name">Heart Smart Grid</h2>
+                <p style="color:#00f0ff; font-style:italic;">AI-Integrated Cardiac Emergency Response</p>
+            </div>
+
+            <div class="aibridge-capabilities">
+                <article class="aibridge-capability">
+                    <h3 class="aibridge-capability-title">Edge AI Diagnosis</h3>
+                    <p class="aibridge-capability-outcome">Instant STEMI detection on ambulance tablets. Clinical-grade accuracy in under 5 seconds, even offline.</p>
+                </article>
+                <article class="aibridge-capability">
+                    <h3 class="aibridge-capability-title">Unified Data Fabric</h3>
+                    <p class="aibridge-capability-outcome">Standard adapters normalize ECG ingestion. Data captured once flows everywhere instantly via secure APIs.</p>
+                </article>
+                <article class="aibridge-capability">
+                    <h3 class="aibridge-capability-title">Smart Pre-Alerting</h3>
+                    <p class="aibridge-capability-outcome">Cath labs prepared before ambulance arrives. Routes to nearest PCI-capable facility based on real-time availability.</p>
+                </article>
+                <article class="aibridge-capability">
+                    <h3 class="aibridge-capability-title">Offline-First Design</h3>
+                    <p class="aibridge-capability-outcome">Store-and-forward via MQTT ensures zero data loss. Diagnosis continues locally; data syncs when signal returns.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: ARCHITECTURE -->
+    <section id="section-architecture" class="submission-section hld-section">
+        <div class="hld-container">
+            <header style="text-align:center; margin-bottom:2rem;">
+                <div style="color:#00f0ff; font-size:0.8rem; letter-spacing:2px; margin-bottom:0.5rem;">TECHNICAL ARCHITECTURE</div>
+                <h1 class="hld-title" style="background: linear-gradient(135deg, #00f0ff, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">System Architecture</h1>
+            </header>
+            <div class="hld-diagram-wrap">
+                <svg class="hld-diagram-svg" viewBox="0 0 1340 720" fill="none">
+                    <!-- Simplified HLD SVG structure for brevity, assuming standard rendering -->
+                    <rect x="15" y="45" width="260" height="630" rx="10" fill="#0d3d4d" opacity="0.1"/>
+                    <text x="145" y="72" fill="#00f0ff" font-size="10" text-anchor="middle" font-weight="700">EDGE LAYER</text>
+                    <rect x="295" y="45" width="380" height="630" rx="10" fill="#1a1040" opacity="0.1"/>
+                    <text x="485" y="72" fill="#7b61ff" font-size="10" text-anchor="middle" font-weight="700">CLOUD CORE</text>
+                    <rect x="695" y="45" width="260" height="630" rx="10" fill="#0d3d4d" opacity="0.1"/>
+                    <text x="825" y="72" fill="#00f0ff" font-size="10" text-anchor="middle" font-weight="700">DELIVERY LAYER</text>
+                    
+                    <!-- Edge Components -->
+                    <rect x="35" y="190" width="180" height="90" rx="10" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                    <text x="125" y="240" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">TABLET APP + EDGE AI</text>
+                    
+                    <!-- Cloud Components -->
+                    <rect x="330" y="200" width="200" height="85" rx="10" fill="#0a1628" stroke="#7b61ff" stroke-width="2"/>
+                    <text x="430" y="245" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">BACKEND API</text>
+                    
+                    <!-- Flow Lines -->
+                    <path d="M215,235 L330,235" stroke="#00f0ff" stroke-width="2" stroke-dasharray="5,5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: STAKEHOLDER JOURNEYS -->
+    <section id="section-journeys" class="submission-section userflow-section">
+        <div class="userflow-container">
+            <header class="userflow-header">
+                <h1 class="userflow-title">Stakeholder Journeys</h1>
+                <p style="color:#B8C4D6;">End-to-end technical flows for key actors.</p>
+            </header>
+
+            <div class="userflow-actor-nav">
+                <button class="actor-tab active" data-actor="paramedic">Paramedic</button>
+                <button class="actor-tab" data-actor="cardiologist">Cardiologist</button>
+                <button class="actor-tab" data-actor="nurse">Nurse</button>
+            </div>
+
+            <div class="userflow-panels">
+                <!-- Paramedic Panel -->
+                <div class="actor-panel active" id="panel-paramedic">
+                    <div class="journey-container">
+                        <h3>Capture ECG & AI Diagnosis</h3>
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><div class="step-number">1</div><div><strong>Attach Electrodes:</strong> App validates signal.</div></div>
+                                <div class="flow-step"><div class="step-number">2</div><div><strong>Capture:</strong> Raw signal to XML.</div></div>
+                                <div class="flow-step"><div class="step-number">3</div><div><strong>AI Inference:</strong> &lt;5s Offline detection.</div></div>
+                                <div class="flow-step"><div class="step-number">4</div><div><strong>Alert:</strong> Push to cloud via MQTT.</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cardiologist Panel -->
+                <div class="actor-panel" id="panel-cardiologist">
+                    <div class="journey-container">
+                        <h3>Review & Validate</h3>
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><div class="step-number">1</div><div><strong>Notification:</strong> Critical Alert via SMS.</div></div>
+                                <div class="flow-step"><div class="step-number">2</div><div><strong>Review:</strong> View ECG & AI Overlay.</div></div>
+                                <div class="flow-step"><div class="step-number">3</div><div><strong>Decision:</strong> Confirm/Override diagnosis.</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Nurse Panel -->
+                 <div class="actor-panel" id="panel-nurse">
+                    <div class="journey-container">
+                        <h3>Hospital Readiness</h3>
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><div class="step-number">1</div><div><strong>Pre-Alert:</strong> Dashboard flash with ETA.</div></div>
+                                <div class="flow-step"><div class="step-number">2</div><div><strong>Prepare:</strong> Activate Cath Lab team.</div></div>
+                                <div class="flow-step"><div class="step-number">3</div><div><strong>Admission:</strong> Pre-register patient.</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: TEAM -->
+    <section id="section-team" class="submission-section page-section">
+        <header style="text-align:center; margin-bottom:40px;">
+            <h1 style="font-size:36px; color:#fff;">Team Responsible Indian</h1>
+            <div style="color:#00f0ff;">Primary Contact: contact@responsibleindian.in</div>
+        </header>
+
+        <div class="team-grid">
+            <article class="member-card">
+                <h3 class="member-name">Jeevan Kumar</h3>
+                <div class="member-role">AI/ML Lead</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Manoj Kumar</h3>
+                <div class="member-role">Data Engineer</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">BITS Pilani</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Sandeep BGS</h3>
+                <div class="member-role">Deep Learning</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Sarath Lavu</h3>
+                <div class="member-role">Data Scientist</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Praneeth Reddy</h3>
+                <div class="member-role">Software Architect</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Vamsi Krishna</h3>
+                <div class="member-role">AI Research</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Yashwanth Pathivada</h3>
+                <div class="member-role">Fullstack Engineer</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">IIT Kanpur</div>
+            </article>
+            <article class="member-card">
+                <h3 class="member-name">Varanasi Nitesh</h3>
+                <div class="member-role">Staff Engineer</div>
+                <div style="text-align:center; color:#ccc; font-size:12px;">Univ. of Florida</div>
+            </article>
+        </div>
+    </section>
+
+    <script>
+        // Cover Page Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.to(".pulse-node", {
+                scale: 1.5, opacity: 0.5, duration: 0.8,
+                stagger: 0.2, repeat: -1, yoyo: true, ease: "power1.inOut"
+            });
+            gsap.from(".heart-outline", {
+                strokeDasharray: 300, strokeDashoffset: 300, duration: 2, ease: "power2.out"
+            });
+            gsap.to(".heart-outline", { strokeDashoffset: 0, duration: 2, ease: "power2.out" });
+
+            // ECG Animation Logic
+            const ecgPath = document.getElementById('ecg-path');
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const nodeOverlay = document.getElementById('node-overlay');
+            const visContainer = document.getElementById('vis-container');
+
+            function generateRandomPath(volatility) {
+                let d = `M0,100`;
+                for(let i=0; i<=20; i++) {
+                    const x = (600 / 20) * i;
+                    const noise = (Math.random() - 0.5) * volatility;
+                    d += ` L${x},${100 + noise}`;
+                }
+                return d;
+            }
+
+            const tl = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+            tl.call(() => {
+                ecgPath.style.color = "#ff2a2a"; statusDot.style.backgroundColor = "#ff2a2a";
+                statusText.style.color = "#ff2a2a"; statusText.innerText = "UNSYNCHRONIZED";
+                visContainer.style.border = "1px solid rgba(255, 42, 42, 0.3)";
+                gsap.to(nodeOverlay, { opacity: 0, y: 20, duration: 0.5 });
+            })
+            .to(ecgPath, { attr: { d: generateRandomPath(150) }, duration: 0.2, repeat: 10, yoyo: true, ease: "rough" })
+            .call(() => {
+                statusText.innerText = "AI INTERPRETING..."; statusText.style.color = "#00f0ff";
+                statusDot.style.backgroundColor = "#00f0ff"; ecgPath.style.color = "#00f0ff";
+                visContainer.style.border = "1px solid rgba(0, 240, 255, 0.3)";
+            })
+            .to(ecgPath, { attr: { d: generateRandomPath(20) }, duration: 1.5, ease: "elastic.out(1, 0.3)" })
+            .call(() => { statusText.innerText = "HEART SMART GRID: ACTIVE"; })
+            .to(nodeOverlay, { opacity: 1, y: 0, duration: 0.8 }, "<")
+            .to(ecgPath, { attr: { d: "M0,100 L600,100" }, duration: 1, opacity: 0.3 });
+
+            // Journey Tabs Logic
+            const tabs = document.querySelectorAll('.actor-tab');
+            const panels = document.querySelectorAll('.actor-panel');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('panel-' + tab.dataset.actor).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
