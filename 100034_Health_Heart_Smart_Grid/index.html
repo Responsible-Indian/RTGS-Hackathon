@@ -3,77 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Document | Health - Heart Smart Grid</title>
+    <title>Submission Document</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- GSAP for Animations -->
+    <!-- External Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
 
     <style>
         /* =========================================
-           GLOBAL RESET & PRINT STYLES
+           GLOBAL & PRINT STYLES
            ========================================= */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
             --global-bg: #030812;
             --global-text: #F1F5F9;
         }
 
-        body { 
-            background: var(--global-bg); 
-            color: var(--global-text); 
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
-        .section-container {
-            position: relative;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--global-bg);
+            color: var(--global-text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .submission-section {
             width: 100%;
             min-height: 100vh;
+            position: relative;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Print Optimization for A4 Landscape */
         @media print {
-            @page { 
-                size: A4 landscape; 
-                margin: 0; 
+            @page {
+                size: A4 landscape;
+                margin: 0;
             }
-            body { 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
-                background: #030812 !important; /* Force dark background */
+            body {
+                background-color: #030812 !important;
+                -webkit-print-color-adjust: exact;
             }
-            .section-container {
+            .submission-section {
                 page-break-after: always;
-                min-height: 100vh;
-                height: 100vh; /* Force full height per page */
+                height: 100vh;
+                overflow: hidden; /* Prevent spillover in print */
+            }
+            /* Hide scroll indicators and interactive elements in print */
+            .cover-scroll-indicator, 
+            .userflow-actor-nav {
+                display: none !important;
+            }
+            /* Ensure panels are visible in print */
+            .actor-panel {
+                display: block !important;
+                margin-bottom: 2rem;
                 break-inside: avoid;
             }
-            /* Ensure animations are "done" for print */
-            .cover-label, .cover-title, .cover-subtitle, .cover-tagline-box,
-            .bottlenecks-header, .bottlenecks-workflow, .bottleneck-card,
-            .aibridge-header, .aibridge-transform, .aibridge-solution, .aibridge-capability,
-            .hld-header, .hld-diagram-wrap, .hld-legend {
-                opacity: 1 !important;
-                transform: none !important;
-                animation: none !important;
-                transition: none !important;
+            .actor-panel:not(.active) {
+                opacity: 0.5; /* Show inactive panels dimmed in print or hide them based on preference. Here showing active mostly. */
+                display: none !important; /* Actually, let's only print the active one to keep it clean, or modify JS to print all. For now, mimicking screen state. */
             }
-            /* Hide scroll indicators and interactive warnings on print */
-            .cover-scroll-indicator, .cover-footer { display: none; }
         }
 
         /* =========================================
@@ -85,19 +89,20 @@
             --cover-muted: #94A3B8;
             --cover-red: #FF3333;
             --cover-cyan: #00F0FF;
+            --cover-grid: rgba(30, 41, 59, 0.5);
             --cover-font-main: 'Plus Jakarta Sans', sans-serif;
             --cover-font-mono: 'JetBrains Mono', monospace;
         }
 
-        .cover-section {
+        .cover-section-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            z-index: 1;
             padding: 2rem;
-            background: var(--cover-bg);
         }
 
         #cover-canvas {
@@ -118,7 +123,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         .cover-header {
@@ -147,7 +152,7 @@
 
         .cover-main {
             text-align: left;
-            margin-top: 5vh;
+            margin-top: 10vh;
             pointer-events: auto;
             position: relative;
         }
@@ -165,7 +170,7 @@
         .cover-title {
             font-family: var(--cover-font-main);
             font-weight: 800;
-            font-size: clamp(3rem, 7vw, 5rem);
+            font-size: clamp(3rem, 8vw, 6rem);
             line-height: 1.1;
             margin-bottom: 0.5rem;
             background: linear-gradient(90deg, #fff, #94A3B8);
@@ -245,17 +250,80 @@
             pointer-events: auto;
         }
 
-        .cover-team-block { text-align: left; }
-        .cover-team-name { font-family: var(--cover-font-main); font-weight: 700; font-size: 1.1rem; color: var(--cover-text); }
-        .cover-team-contact { font-family: var(--cover-font-mono); font-size: 0.85rem; color: var(--cover-cyan); opacity: 0.8; }
-        
-        .cover-scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: cover-fade-in 1s ease forwards 2s; }
-        .cover-scroll-text { font-family: var(--cover-font-mono); font-size: 0.7rem; color: var(--cover-muted); letter-spacing: 0.1em; text-transform: uppercase; }
-        .cover-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--cover-cyan), transparent); position: relative; overflow: hidden; }
-        .cover-scroll-line::after { content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 100%; background: #fff; animation: cover-scroll-drop 2s cubic-bezier(0.77, 0, 0.175, 1) infinite; }
+        .cover-team-block {
+            text-align: left;
+        }
 
-        .cover-logo-heart { stroke: var(--cover-red); filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5)); animation: cover-heartbeat 3s ease-in-out infinite; transform-origin: center; }
-        .cover-logo-circuit { stroke: var(--cover-cyan); stroke-dasharray: 100; stroke-dashoffset: 100; animation: cover-draw-circuit 4s ease-out forwards 1s, cover-pulse-circuit 4s ease-in-out infinite 5s; }
+        .cover-team-name {
+            font-family: var(--cover-font-main);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--cover-text);
+        }
+
+        .cover-team-contact {
+            font-family: var(--cover-font-mono);
+            font-size: 0.85rem;
+            color: var(--cover-cyan);
+            opacity: 0.8;
+        }
+
+        .cover-scroll-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: cover-fade-in 1s ease forwards 2s;
+        }
+
+        .cover-scroll-text {
+            font-family: var(--cover-font-mono);
+            font-size: 0.7rem;
+            color: var(--cover-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .cover-scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--cover-cyan), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            animation: cover-scroll-drop 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+        }
+
+        .cover-logo-path {
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .cover-logo-heart {
+            stroke: var(--cover-red);
+            filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5));
+            animation: cover-heartbeat 3s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        .cover-logo-circuit {
+            stroke: var(--cover-cyan);
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: cover-draw-circuit 4s ease-out forwards 1s, cover-pulse-circuit 4s ease-in-out infinite 5s;
+        }
 
         @keyframes cover-fade-in { to { opacity: 1; } }
         @keyframes cover-slide-up { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -271,526 +339,1068 @@
             .cover-visual-container { display: block; position: relative; transform: none; top: auto; right: auto; width: 100%; height: 400px; }
         }
 
+        @media (max-width: 768px) {
+            .cover-section-wrap { padding: 1.5rem; }
+            .cover-header { top: 1.5rem; left: 1.5rem; right: 1.5rem; flex-direction: column; gap: 1rem; }
+            .cover-footer { bottom: 1.5rem; left: 1.5rem; right: 1.5rem; flex-direction: column-reverse; align-items: flex-start; gap: 1.5rem; }
+            .cover-scroll-indicator { align-self: center; margin-bottom: 1rem; }
+            .cover-tagline-box { width: 100%; }
+        }
+
+        /* =========================================
+           SECTION 2: PROBLEM STATEMENT STYLES
+           ========================================= */
+        :root {
+            --ps-bg-color: #030812;
+            --ps-text-main: #F1F5F9;
+            --ps-text-muted: #94A3B8;
+            --ps-accent-danger: #FF3333;
+            --ps-grid-line: rgba(30, 41, 59, 0.5);
+            --ps-card-bg: rgba(15, 23, 42, 0.4);
+            --ps-card-border: rgba(255, 51, 51, 0.2);
+        }
+
+        .ps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+        }
+
+        .ambient-noise {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 51, 51, 0.05) 0%, transparent 50%);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--ps-grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--ps-grid-line) 1px, transparent 1px);
+            background-size: 100px 100px;
+            background-position: center top;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            font-family: var(--cover-font-mono);
+            color: var(--ps-accent-danger);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
+            border: 1px solid rgba(255, 51, 51, 0.3);
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 51, 51, 0.05);
+            border-radius: 4px;
+        }
+
+        .ps-hero h1 {
+            font-weight: 800;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--ps-text-main);
+            max-width: 900px;
+        }
+
+        .ps-hero h1 span {
+            color: var(--ps-accent-danger);
+            display: inline-block;
+        }
+
+        .lead-text {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--ps-text-muted);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+            margin-top: 4rem;
+        }
+
+        .problem-card {
+            background: var(--ps-card-bg);
+            border: 1px solid var(--ps-card-border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--ps-accent-danger);
+            box-shadow: 0 10px 30px rgba(255, 51, 51, 0.1);
+        }
+
+        .card-visual {
+            height: 180px;
+            width: 100%;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .card-title {
+            font-family: var(--cover-font-main);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--ps-text-main);
+        }
+
+        .card-desc {
+            color: var(--ps-text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-meta {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            font-family: var(--cover-font-mono);
+            font-size: 0.75rem;
+            color: var(--ps-accent-danger);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .svg-icon { width: 100%; height: 100%; }
+        
+        .blink-hazard { animation: blink 0.2s steps(1) infinite paused; }
+        .problem-card:hover .blink-hazard { animation-play-state: running; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .rotate-wait { transform-origin: center; animation: rotate 3s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .conn-break { stroke: var(--ps-text-muted); stroke-width: 1; stroke-dasharray: 4, 4; opacity: 0.3; }
+        .node-pulse { fill: var(--ps-accent-danger); animation: pulse-red 2s infinite; }
+        @keyframes pulse-red { 0% { opacity: 0.4; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.4; transform: scale(0.95); } }
+
         /* =========================================
            SECTION 3: BOTTLENECKS STYLES
            ========================================= */
-        /* Note: Colors adapted to global vars where possible, but kept specific to section for integrity */
-        .bottlenecks-section {
-            background-color: #050a14;
-            color: #ffffff;
-            padding: 4rem 2rem 6rem;
-            position: relative;
+        :root {
+            --bn-bg-deep: #050a14;
+            --bn-bg-card: #0a1628;
+            --bn-color-alert: #ff2a2a;
+            --bn-color-safe: #00f0ff;
+            --bn-color-text: #ffffff;
+            --bn-color-dim: #8892b0;
         }
+
+        .bottlenecks-section {
+            padding: 4rem 2rem 6rem;
+            background-color: var(--bn-bg-deep);
+        }
+
+        .bottlenecks-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bottlenecks-header { text-align: center; margin-bottom: 4rem; }
         
-        .bottlenecks-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.12; pointer-events: none; z-index: 0; }
-        .bottlenecks-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
-        
-        .bottlenecks-header { text-align: center; margin-bottom: 4rem; opacity: 0; transform: translateY(30px); }
-        .bottlenecks-header.visible { opacity: 1; transform: translateY(0); transition: all 0.8s ease; }
+        .bottlenecks-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--bn-color-alert);
+            margin-bottom: 1.5rem;
+            padding: 8px 20px;
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            border-radius: 30px;
+            background: rgba(255, 42, 42, 0.05);
+        }
 
-        .bottlenecks-dept { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: #8892b0; margin-bottom: 1rem; border-bottom: 1px solid #ff2a2a; display: inline-block; }
-        .bottlenecks-label { display: inline-flex; align-items: center; gap: 10px; font-size: 0.75rem; text-transform: uppercase; color: #ff2a2a; border: 1px solid rgba(255, 42, 42, 0.3); border-radius: 30px; padding: 8px 20px; background: rgba(255, 42, 42, 0.05); letter-spacing: 3px; margin-bottom: 1.5rem; }
-        .bottlenecks-label::before { content: ''; width: 8px; height: 8px; background: #ff2a2a; border-radius: 50%; animation: bottlenecks-pulse 2s infinite; }
-        
-        .bottlenecks-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(135deg, #fff 0%, #8892b0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .bottlenecks-subtitle { font-size: 1.1rem; color: #8892b0; max-width: 700px; margin: 0 auto; line-height: 1.7; }
-
-        .bottlenecks-workflow { background: #0a1628; border-radius: 20px; padding: 3rem 2rem; margin-bottom: 4rem; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); opacity: 0; transform: translateY(40px); }
-        .bottlenecks-workflow.visible { opacity: 1; transform: translateY(0); transition: all 0.8s ease; }
-        .bottlenecks-workflow-svg { width: 100%; height: auto; max-height: 400px; }
-
-        .bottlenecks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
-        
-        .bottleneck-card { background: #0a1628; border-radius: 16px; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; opacity: 0; transform: translateY(40px); overflow: hidden; }
-        .bottleneck-card.visible { opacity: 1; transform: translateY(0); transition: all 0.6s ease; }
-        .bottleneck-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #ff2a2a 0%, transparent 100%); }
-        .bottleneck-icon { width: 100%; height: 140px; margin-bottom: 1.5rem; background: rgba(5, 10, 20, 0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .bottleneck-number { position: absolute; top: 1rem; right: 1rem; font-size: 0.7rem; font-weight: 700; color: #ff2a2a; background: rgba(255, 42, 42, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 42, 42, 0.2); }
-        .bottleneck-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: #fff; }
-        .bottleneck-description { font-size: 0.9rem; color: #8892b0; line-height: 1.7; }
-
-        .bottlenecks-connector { text-align: center; margin-bottom: 4rem; opacity: 0; }
-        .bottlenecks-connector.visible { opacity: 1; transition: opacity 1s ease; }
-        .connector-line { width: 2px; height: 60px; background: linear-gradient(180deg, #ff2a2a 0%, #00f0ff 100%); margin: 0 auto 2rem; }
-        .connector-text { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: #8892b0; }
-
-        .bottlenecks-summary { background: linear-gradient(135deg, rgba(255, 42, 42, 0.1) 0%, rgba(0, 240, 255, 0.05) 100%); border: 1px solid rgba(255, 42, 42, 0.2); border-radius: 20px; padding: 3rem; text-align: center; opacity: 0; transform: scale(0.95); }
-        .bottlenecks-summary.visible { opacity: 1; transform: scale(1); transition: all 0.8s ease; }
-        .summary-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #ff2a2a; }
-        .summary-text { font-size: 1rem; color: #8892b0; max-width: 650px; margin: 0 auto; line-height: 1.8; }
-
+        .bottlenecks-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--bn-color-alert);
+            border-radius: 50%;
+            animation: bottlenecks-pulse 2s infinite;
+        }
         @keyframes bottlenecks-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+        .bottlenecks-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--bn-color-text) 0%, var(--bn-color-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bottlenecks-workflow {
+            background: var(--bn-bg-card);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+        }
+
+        .bottlenecks-workflow-svg { width: 100%; min-width: 700px; height: auto; max-height: 400px; }
+
+        .bottlenecks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .bottleneck-card {
+            background: var(--bn-bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .bottleneck-card:hover {
+            border-color: rgba(255, 42, 42, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .bottleneck-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--bn-color-alert) 0%, transparent 100%);
+        }
+
+        .bottleneck-icon {
+            width: 100%;
+            height: 140px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 10, 20, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .bottleneck-icon svg { width: 90%; height: 90%; }
+
+        .bottleneck-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--bn-color-text); }
+        .bottleneck-description { font-size: 0.9rem; color: var(--bn-color-dim); line-height: 1.7; }
+
+        .bottlenecks-summary {
+            background: linear-gradient(135deg, rgba(255, 42, 42, 0.1) 0%, rgba(0, 240, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 42, 42, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        /* Animations */
         .animate-blink { animation: bottlenecks-blink 1.5s ease-in-out infinite; }
-        @keyframes bottlenecks-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .animate-constrict { animation: bottlenecks-constrict 2s ease-in-out infinite; }
         .animate-disconnect { animation: bottlenecks-disconnect 2s ease-in-out infinite; }
+        .animate-wait { animation: bottlenecks-wait 1s ease-in-out infinite; }
+
+        @keyframes bottlenecks-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes bottlenecks-constrict { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.6); } }
         @keyframes bottlenecks-disconnect { 0%, 100% { opacity: 1; stroke-dasharray: 8, 4; } 50% { opacity: 0.3; stroke-dasharray: 4, 8; } }
+        @keyframes bottlenecks-wait { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
 
         /* =========================================
            SECTION 4: AI BRIDGE STYLES
            ========================================= */
-        .aibridge-section { background-color: #050a14; color: #ffffff; padding: 4rem 2rem 6rem; position: relative; overflow: hidden; }
-        .aibridge-bg-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; pointer-events: none; }
-        .aibridge-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%); pointer-events: none; }
-        .aibridge-glow-1 { top: 10%; right: -20%; }
-        .aibridge-glow-2 { bottom: 10%; left: -15%; }
+        :root {
+            --ai-color-safe: #00f0ff;
+        }
 
-        .aibridge-header { text-align: center; margin-bottom: 4rem; opacity: 0; transform: translateY(30px); }
-        .aibridge-header.visible { opacity: 1; transform: translateY(0); transition: all 0.8s ease; }
-        
-        .aibridge-dept { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: #8892b0; margin-bottom: 1rem; border-bottom: 2px solid #00f0ff; display: inline-block; padding-bottom: 5px; }
-        .aibridge-label { display: inline-flex; align-items: center; gap: 10px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: #00f0ff; margin-bottom: 1.5rem; padding: 8px 20px; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 30px; background: rgba(0, 240, 255, 0.05); }
-        .aibridge-label::before { content: ''; width: 8px; height: 8px; background: #00f0ff; border-radius: 50%; animation: aibridge-pulse 2s infinite; }
-        
-        .aibridge-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(135deg, #00f0ff 0%, #fff 40%, #00f0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .aibridge-subtitle { font-size: 1.15rem; color: #8892b0; max-width: 650px; margin: 0 auto; line-height: 1.8; }
+        .aibridge-section { padding: 4rem 2rem 6rem; background-color: var(--bn-bg-deep); }
+        .aibridge-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+        .aibridge-header { text-align: center; margin-bottom: 4rem; }
 
-        .aibridge-transform { margin: 4rem auto; max-width: 900px; opacity: 0; transform: scale(0.95); }
-        .aibridge-transform.visible { opacity: 1; transform: scale(1); transition: all 1s ease; }
-        .aibridge-transform-container { position: relative; background: #0a1628; border-radius: 20px; padding: 2.5rem; border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4); }
-        .aibridge-transform-svg { width: 100%; height: auto; }
+        .aibridge-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--ai-color-safe);
+            margin-bottom: 1.5rem;
+            padding: 8px 20px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 30px;
+            background: rgba(0, 240, 255, 0.05);
+        }
 
-        .aibridge-solution { text-align: center; margin: 4rem auto; padding: 2.5rem; max-width: 600px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(5, 10, 20, 0.9) 100%); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 20px; opacity: 0; transform: translateY(30px); }
-        .aibridge-solution.visible { opacity: 1; transform: translateY(0); transition: all 0.8s ease; }
-        .aibridge-solution-logo { width: 80px; height: 80px; margin: 0 auto 1.5rem; }
-        .aibridge-solution-name { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
-        .aibridge-solution-tagline { font-size: 1rem; color: #00f0ff; font-style: italic; }
+        .aibridge-title {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--ai-color-safe) 0%, #ffffff 40%, var(--ai-color-safe) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        .aibridge-capabilities { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 4rem auto; max-width: 1000px; }
-        .aibridge-capability { background: #0a1628; border-radius: 16px; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; opacity: 0; transform: translateY(40px); }
-        .aibridge-capability.visible { opacity: 1; transform: translateY(0); transition: all 0.6s ease; }
-        .aibridge-capability::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #00f0ff 0%, transparent 100%); }
-        .aibridge-capability-icon { width: 56px; height: 56px; background: rgba(0, 240, 255, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; border: 1px solid rgba(0, 240, 255, 0.2); }
-        .aibridge-capability-icon svg { width: 28px; height: 28px; stroke: #00f0ff; fill: none; }
-        .aibridge-capability-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem; }
-        .aibridge-capability-outcome { font-size: 0.9rem; color: #8892b0; line-height: 1.7; }
+        .aibridge-transform-container {
+            background: var(--bn-bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+            margin-bottom: 4rem;
+        }
+        .aibridge-transform-svg { width: 100%; min-width: 700px; height: auto; max-height: 380px; }
 
-        @keyframes aibridge-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.2); } }
-        .aibridge-ai-core { animation: aibridge-core-pulse 2s ease-in-out infinite; }
-        @keyframes aibridge-core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        
+        .aibridge-solution {
+            text-align: center;
+            margin: 4rem auto;
+            padding: 2.5rem;
+            max-width: 600px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(5, 10, 20, 0.9) 100%);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        .aibridge-capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 4rem auto;
+        }
+
+        .aibridge-capability {
+            background: var(--bn-bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .aibridge-capability::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--ai-color-safe) 0%, transparent 100%);
+        }
+
+        .aibridge-capability-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+        .aibridge-capability-icon svg { width: 28px; height: 28px; stroke: var(--ai-color-safe); }
+
+        .aibridge-capability-bridge {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 240, 255, 0.1);
+            font-size: 0.75rem;
+            color: var(--ai-color-safe);
+        }
+
         /* =========================================
            SECTION 5: ARCHITECTURE STYLES
            ========================================= */
-        .hld-section { background: #050a14; padding: 2.5rem 1.5rem 3rem; position: relative; }
-        .hld-bg-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.06; pointer-events: none; }
-        .hld-container { max-width: 1500px; margin: 0 auto; position: relative; z-index: 2; }
+        .hld-section { padding: 4rem 1.5rem; background-color: #050a14; }
+        .hld-container { max-width: 1500px; margin: 0 auto; }
         
-        .hld-header { text-align: center; margin-bottom: 1.5rem; opacity: 0; transform: translateY(20px); animation: hld-fadeIn 0.8s ease forwards; }
-        @keyframes hld-fadeIn { to { opacity: 1; transform: translateY(0); } }
-        
-        .hld-dept { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #a8b2c8; margin-bottom: 0.5rem; border-bottom: 2px solid #00f0ff; display: inline-block; padding-bottom: 4px; }
-        .hld-label { display: inline-flex; align-items: center; gap: 10px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #00f0ff; margin-bottom: 0.75rem; padding: 5px 14px; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 20px; background: rgba(0, 240, 255, 0.05); }
-        .hld-label::before { content: ''; width: 6px; height: 6px; background: #00f0ff; border-radius: 50%; animation: hld-pulse 2s infinite; }
-        @keyframes hld-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
-        
-        .hld-title { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; background: linear-gradient(135deg, #00f0ff 0%, #fff 50%, #00f0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hld-subtitle { font-size: 0.9rem; color: #a8b2c8; max-width: 750px; margin: 0 auto; }
-        
-        .hld-diagram-wrap { background: #0a1628; border-radius: 14px; padding: 1rem; border: 1px solid rgba(0, 240, 255, 0.12); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); position: relative; opacity: 0; transform: scale(0.98); animation: hld-scaleIn 1s ease 0.3s forwards; }
-        @keyframes hld-scaleIn { to { opacity: 1; transform: scale(1); } }
-        .hld-diagram-svg { width: 100%; height: auto; display: block; }
+        .hld-diagram-wrap {
+            background: #0a1628;
+            border-radius: 14px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 240, 255, 0.12);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+        }
+        .hld-diagram-svg { width: 100%; min-width: 1100px; height: auto; }
 
-        .hld-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); opacity: 0; animation: hld-fadeIn 0.8s ease 0.6s forwards; }
-        .hld-legend-group { display: flex; align-items: center; gap: 0.5rem; }
-        .hld-legend-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #a8b2c8; }
-        .hld-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: #a8b2c8; }
-        .hld-legend-line { width: 28px; height: 2px; border-radius: 1px; }
+        .hld-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
         .hld-flow-line { stroke-dasharray: 6 4; animation: hld-flowAnim 1.2s linear infinite; }
         @keyframes hld-flowAnim { to { stroke-dashoffset: -10; } }
-        .hld-flow-line-slow { stroke-dasharray: 8 5; animation: hld-flowAnimSlow 2s linear infinite; }
-        @keyframes hld-flowAnimSlow { to { stroke-dashoffset: -13; } }
-        .hld-flow-line-fast { stroke-dasharray: 4 3; animation: hld-flowAnimFast 0.8s linear infinite; }
-        @keyframes hld-flowAnimFast { to { stroke-dashoffset: -7; } }
 
         /* =========================================
-           SECTION 6: JOURNEYS STYLES
+           SECTION 6: STAKEHOLDER JOURNEYS STYLES
            ========================================= */
-        .userflow-section { background: #0A0E17; color: #F8FAFC; padding: 4rem 2rem; min-height: 100vh; }
+        :root {
+            --hld-accent-amber: #F59E0B;
+            --hld-accent-emerald: #10B981;
+            --hld-accent-blue: #3B82F6;
+            --hld-bg-primary: #0A0E17;
+        }
+
+        .userflow-section { padding: 4rem 2rem; background-color: var(--hld-bg-primary); }
         .userflow-container { max-width: 1200px; margin: 0 auto; }
         
-        .userflow-header { text-align: center; margin-bottom: 3rem; }
-        .userflow-section-indicator { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #10B981; margin-bottom: 0.75rem; }
-        .userflow-section-indicator svg { width: 14px; height: 14px; fill: currentColor; }
-        .userflow-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; background: linear-gradient(135deg, #F59E0B 0%, #10B981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
-        .userflow-subtitle { font-size: 0.9rem; color: #B8C4D6; max-width: 700px; margin: 0 auto; }
+        .userflow-actor-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
 
-        .userflow-actor-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-        .actor-tab { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 8px; cursor: pointer; color: #B8C4D6; transition: all 0.3s ease; }
-        .actor-tab:hover { border-color: #F59E0B; color: #F8FAFC; background: rgba(245, 158, 11, 0.05); }
-        .actor-tab.active { background: rgba(245, 158, 11, 0.15); border-color: #F59E0B; color: #F59E0B; }
+        .actor-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: rgba(18, 22, 31, 1);
+            border: 1px solid rgba(100, 116, 139, 0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            color: #94A3B8;
+        }
+        .actor-tab.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--hld-accent-amber);
+            color: var(--hld-accent-amber);
+        }
         .actor-tab svg { width: 18px; height: 18px; fill: currentColor; }
-        
+
         .actor-panel { display: none; animation: fadeInPanel 0.4s ease; }
         .actor-panel.active { display: block; }
         @keyframes fadeInPanel { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .actor-info { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.5rem; background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 12px; margin-bottom: 1.5rem; }
-        .actor-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .actor-avatar svg { width: 32px; height: 32px; fill: white; }
-        
-        .actor-avatar--depot { background: linear-gradient(135deg, #F59E0B, #D97706); }
-        .actor-avatar--shop { background: linear-gradient(135deg, #10B981, #059669); }
-        .actor-avatar--district { background: linear-gradient(135deg, #3B82F6, #2563EB); }
-        .actor-avatar--analytics { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
-        .actor-avatar--commissioner { background: linear-gradient(135deg, #EC4899, #DB2777); }
+        .journey-container {
+            background: #12161F;
+            border: 1px solid rgba(100, 116, 139, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
 
-        .actor-name { font-size: 1.25rem; font-weight: 600; color: #F8FAFC; margin-bottom: 0.5rem; }
-        .actor-description { font-size: 0.85rem; color: #B8C4D6; line-height: 1.5; }
-
-        .journey-container { background: #12161F; border: 1px solid rgba(100, 116, 139, 0.25); border-radius: 12px; padding: 1.5rem; }
-        .journey-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(100, 116, 139, 0.25); padding-bottom: 1rem; }
-        .journey-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #06B6D4, #0891B2); }
-        .journey-icon svg { width: 24px; height: 24px; fill: white; }
-        
-        .journey-title { font-size: 1.1rem; font-weight: 600; color: #F8FAFC; }
-        .journey-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; background: rgba(245, 158, 11, 0.15); color: #F59E0B; }
-        
         .journey-body { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
         @media (max-width: 900px) { .journey-body { grid-template-columns: 1fr; } }
-        
+
         .flow-step { display: flex; gap: 1rem; padding: 0.75rem 0; position: relative; }
-        .step-number { width: 32px; height: 32px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: #0a0a0a; }
-        .step-action { font-size: 0.85rem; font-weight: 600; color: #F8FAFC; }
-        .step-detail { font-size: 0.75rem; color: #8594A8; }
-        .component-name { font-size: 0.65rem; color: #06B6D4; background: rgba(6, 182, 212, 0.1); padding: 0.15rem 0.5rem; border-radius: 4px; font-family: monospace; }
-        
-        .journey-hld-column { background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 100%); border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.15); overflow: hidden; }
-        .hld-mini-title { font-size: 0.75rem; font-weight: 600; color: #F59E0B; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(245, 158, 11, 0.15); }
-        .hld-mini-diagram { width: 100%; height: 280px; background: #0A0E17; }
-        .data-flow-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; padding: 0.75rem; }
-        .data-flow-item { display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.02); padding: 0.4rem; border-radius: 6px; }
-        .data-flow-num { width: 20px; height: 20px; background: #10B981; color: black; font-size: 0.65rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; }
-        .data-flow-text { font-size: 0.65rem; color: #ccc; }
+        .step-number {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--hld-accent-amber) 0%, #D97706 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #0a0a0a; font-weight: 800;
+        }
+
+        .hld-mini-diagram {
+            width: 100%; height: 280px;
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(10, 14, 23, 0.95) 100%);
+            border-radius: 8px;
+        }
 
         /* =========================================
            SECTION 7: TEAM STYLES
            ========================================= */
-        .team-section-container {
-            width: 100%;
+        .team-section-wrap {
+            padding: 4rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 4rem 2rem;
-            background: #0a0d12;
-            background-image: radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 50%);
         }
         
-        .team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; }
-        .team-header h1 { font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #00f7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        @media (max-width: 1200px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 3rem;
+        }
+        @media (max-width: 1200px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+
+        .member-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+        .member-card:hover { transform: translateY(-4px); border-color: rgba(0, 247, 255, 0.3); }
+
+        .profile-pic {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            border: 2px solid transparent;
+            background: linear-gradient(#111827, #111827) padding-box, linear-gradient(135deg, #00f7ff, #7c3aed) border-box;
+            display: block; margin: 0 auto 16px;
+        }
         
-        .member-card { background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: transform 0.3s; }
-        .member-card:hover { transform: translateY(-4px); border-color: #00f7ff; }
+        .member-name { font-size: 18px; font-weight: 700; color: #fff; text-align: center; margin: 0 0 4px 0; }
+        .member-role { font-size: 11px; font-weight: 600; color: #00f7ff; text-align: center; margin-bottom: 16px; text-transform: uppercase; }
         
-        .profile-pic { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #00f7ff; margin: 0 auto 16px; display: block; object-fit: cover; }
-        .member-name { font-size: 18px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 4px; }
-        .member-role { font-size: 11px; font-weight: 600; color: #00f7ff; text-align: center; text-transform: uppercase; margin-bottom: 16px; }
+        .detail-item { font-size: 12px; color: #95a3b8; margin-bottom: 6px; display: flex; gap: 8px; }
+        .detail-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
         
-        .details { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; font-size: 12px; color: #95a3b8; }
-        .detail-item { display: flex; align-items: center; gap: 8px; }
-        .detail-item svg { width: 14px; height: 14px; stroke: currentColor; }
-        .detail-item a { color: inherit; text-decoration: none; }
-        
-        .badge-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 16px; }
-        .badge { font-size: 10px; background: rgba(124, 58, 237, 0.2); color: #e6f1ff; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(124, 58, 237, 0.4); }
-        
-        .linkedin-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 119, 181, 0.2); border: 1px solid rgba(0, 119, 181, 0.4); color: #e6f1ff; font-size: 12px; padding: 10px; border-radius: 8px; text-decoration: none; margin-top: auto; }
+        .linkedin-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: rgba(0, 119, 181, 0.1); border: 1px solid rgba(0, 119, 181, 0.4);
+            color: #e6f1ff; font-size: 12px; padding: 10px; border-radius: 8px;
+            text-decoration: none; margin-top: auto;
+        }
         .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; }
-        .team-tagline { text-align: center; margin-bottom: 40px; color: #95a3b8; font-size: 16px; line-height: 1.6; max-width: 800px; margin: 0 auto 40px; }
-        .team-tagline .highlight { color: #00f7ff; font-weight: 600; }
+
+        .team-tagline { text-align: center; max-width: 800px; margin: 0 auto; color: #95a3b8; line-height: 1.7; }
+        .team-tagline strong { color: #fff; }
+        .team-tagline .highlight { color: #00f7ff; }
+
     </style>
 </head>
 <body>
 
-<!-- SECTION 1: Cover Page -->
-<div class="section-container">
-    <section id="cover-page" class="cover-section">
-        <canvas id="cover-canvas"></canvas>
-        <header class="cover-header">
-            <div class="cover-dept-badge">Government of Andhra Pradesh</div>
-            <div class="cover-dept-badge" style="border-color: rgba(255, 255, 255, 0.2); color: var(--cover-text);">HM&FW Department</div>
-        </header>
-        <div class="cover-wrapper">
-            <div class="cover-main">
-                <span class="cover-label">CHALLENGE: HEALTH - HEART SMART GRID</span>
-                <h1 class="cover-title">AI-Integrated Cardiac Emergency Response</h1>
-                <h2 class="cover-subtitle">Bridging the critical gap between symptom and survival using real-time IoT telemetry.</h2>
-                <div class="cover-tagline-box">
-                    <span class="cover-tagline-text">Synchronizing Seconds to Save Hearts</span>
+    <!-- SECTION 1: COVER PAGE -->
+    <div class="submission-section" id="cover-page">
+        <div class="cover-section-wrap">
+            <canvas id="cover-canvas"></canvas>
+            <header class="cover-header">
+                <div class="cover-dept-badge">Government of Andhra Pradesh</div>
+                <div class="cover-dept-badge" style="border-color: rgba(255, 255, 255, 0.2); color: var(--cover-text);">HM&FW Department</div>
+            </header>
+            <div class="cover-wrapper">
+                <div class="cover-main">
+                    <span class="cover-label">CHALLENGE: HEALTH - HEART SMART GRID</span>
+                    <h1 class="cover-title">AI-Integrated Cardiac Emergency Response</h1>
+                    <h2 class="cover-subtitle">Bridging the critical gap between symptom and survival using real-time IoT telemetry.</h2>
+                    <div class="cover-tagline-box">
+                        <span class="cover-tagline-text">Synchronizing Seconds to Save Hearts</span>
+                    </div>
+                </div>
+                <div class="cover-visual-container">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="cover-grid-pat" width="40" height="34.6" patternUnits="userSpaceOnUse">
+                                <path d="M20 0 L40 10 L40 30 L20 40 L0 30 L0 10 Z" fill="none" stroke="#1E293B" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="200" fill="url(#cover-grid-pat)" opacity="0.3"/>
+                        <g class="cover-logo-circuit" fill="none">
+                            <path class="cover-logo-path" d="M20 100 L60 100" />
+                            <path class="cover-logo-path" d="M180 100 L140 100" />
+                            <path class="cover-logo-path" d="M100 20 L100 60" />
+                            <path class="cover-logo-path" d="M100 180 L100 140" />
+                            <circle cx="20" cy="100" r="3" fill="#00F0FF" />
+                            <circle cx="180" cy="100" r="3" fill="#00F0FF" />
+                            <circle cx="100" cy="20" r="3" fill="#00F0FF" />
+                            <circle cx="100" cy="180" r="3" fill="#00F0FF" />
+                        </g>
+                        <path class="cover-logo-path cover-logo-heart" d="M100,135 C100,135 70,105 70,85 C70,65 90,55 100,75 C110,55 130,65 130,85 C130,105 100,135 100,135 Z" stroke-width="3" fill="rgba(255, 51, 51, 0.1)"/>
+                        <path d="M75 85 L85 85 L90 75 L95 95 L105 70 L110 90 L115 85 L125 85" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;">
+                              <animate attributeName="stroke-dasharray" from="0, 100" to="100, 0" dur="2s" repeatCount="indefinite" />
+                        </path>
+                    </svg>
                 </div>
             </div>
-            <div class="cover-visual-container">
-                <svg viewBox="0 0 200 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <defs><pattern id="cover-grid-pat" width="40" height="34.6" patternUnits="userSpaceOnUse"><path d="M20 0 L40 10 L40 30 L20 40 L0 30 L0 10 Z" fill="none" stroke="#1E293B" stroke-width="0.5"/></pattern></defs>
-                    <rect width="200" height="200" fill="url(#cover-grid-pat)" opacity="0.3"/>
-                    <g class="cover-logo-circuit" fill="none">
-                        <path class="cover-logo-path" d="M20 100 L60 100" /><path class="cover-logo-path" d="M180 100 L140 100" /><path class="cover-logo-path" d="M100 20 L100 60" /><path class="cover-logo-path" d="M100 180 L100 140" />
-                        <circle cx="20" cy="100" r="3" fill="#00F0FF" /><circle cx="180" cy="100" r="3" fill="#00F0FF" /><circle cx="100" cy="20" r="3" fill="#00F0FF" /><circle cx="100" cy="180" r="3" fill="#00F0FF" />
-                    </g>
-                    <path class="cover-logo-path cover-logo-heart" d="M100,135 C100,135 70,105 70,85 C70,65 90,55 100,75 C110,55 130,65 130,85 C130,105 100,135 100,135 Z" stroke-width="3" fill="rgba(255, 51, 51, 0.1)"/>
-                    <path d="M75 85 L85 85 L90 75 L95 95 L105 70 L110 90 L115 85 L125 85" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><animate attributeName="stroke-dasharray" from="0, 100" to="100, 0" dur="2s" repeatCount="indefinite" /></path>
-                </svg>
-            </div>
+            <footer class="cover-footer">
+                <div class="cover-team-block">
+                    <div class="cover-team-name">ResponsibleIndian</div>
+                    <div class="cover-team-contact">contact@responsibleindian.in</div>
+                </div>
+                <div class="cover-scroll-indicator">
+                    <div class="cover-scroll-line"></div>
+                    <span class="cover-scroll-text">Scroll to Explore</span>
+                </div>
+            </footer>
         </div>
-        <footer class="cover-footer">
-            <div class="cover-team-block">
-                <div class="cover-team-name">ResponsibleIndian</div>
-                <div class="cover-team-contact">contact@responsibleindian.in</div>
-            </div>
-            <div class="cover-scroll-indicator">
-                <div class="cover-scroll-line"></div>
-                <span class="cover-scroll-text">Scroll to Explore</span>
-            </div>
-        </footer>
-    </section>
-</div>
+    </div>
 
-<!-- SECTION 3: Bottlenecks (Serves as Problem Statement) -->
-<div class="section-container">
-    <section class="bottlenecks-section" id="bottlenecks">
-        <div class="bottlenecks-bg-pattern" aria-hidden="true">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="grid-pattern" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(26, 44, 66, 0.5)" stroke-width="0.3"/></pattern></defs><rect width="100" height="100" fill="url(#grid-pattern)"/></svg>
+    <!-- SECTION 2: PROBLEM STATEMENT -->
+    <div class="submission-section" id="problem-statement">
+        <div class="grid-overlay"></div>
+        <div class="ambient-noise"></div>
+        <div class="ps-container">
+            <section class="ps-hero">
+                <div>
+                    <span class="eyebrow">The Critical Gap</span>
+                    <h1>When Early Warnings<br><span>Come Too Late</span></h1>
+                    <p class="lead-text">
+                        Cardiovascular mortality in Andhra Pradesh isn't just a medical failure—it's an information failure. 
+                        Current emergency workflows rely on fragmented, manual processes that consume the "Golden Hour" 
+                        before treatment even begins.
+                    </p>
+                </div>
+                <div style="margin-top: 2rem; width: 100%; height: 4px; background: rgba(255,255,255,0.1); position: relative; border-radius: 2px;">
+                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: 20%; background: #94A3B8; border-radius: 2px;"></div>
+                    <div style="position: absolute; left: 20%; top: 0; height: 100%; width: 60%; background: var(--ps-accent-danger); box-shadow: 0 0 10px var(--ps-accent-danger); border-radius: 2px;"></div>
+                    <div style="position: absolute; top: 15px; left: 0; font-family: var(--cover-font-mono); font-size: 0.7rem; color: var(--ps-text-muted);">SYMPTOM</div>
+                    <div style="position: absolute; top: 15px; left: 20%; font-family: var(--cover-font-mono); font-size: 0.7rem; color: var(--ps-accent-danger);">DETECTION DELAY (MANUAL)</div>
+                    <div style="position: absolute; top: 15px; left: 80%; font-family: var(--cover-font-mono); font-size: 0.7rem; color: var(--ps-text-muted);">TREATMENT</div>
+                </div>
+            </section>
+
+            <section class="problem-grid">
+                <!-- Problem 1 -->
+                <article class="problem-card">
+                    <div class="card-visual">
+                        <svg class="svg-icon" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 60 H200" stroke="#1E293B" stroke-width="1"/>
+                            <path d="M100 0 V120" stroke="#1E293B" stroke-width="1"/>
+                            <rect x="80" y="35" width="40" height="50" rx="2" fill="#030812" stroke="#94A3B8" stroke-width="2"/>
+                            <line x1="88" y1="45" x2="112" y2="45" stroke="#94A3B8" stroke-width="1"/>
+                            <circle cx="145" cy="60" r="15" stroke="var(--ps-accent-danger)" stroke-width="2" stroke-dasharray="70" stroke-dashoffset="20" fill="none" class="rotate-wait"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">The Analog Bottleneck</h3>
+                    <p class="card-desc">ECG readings are trapped in a manual relay. Interpretation relies on human availability, creating a critical latency gap.</p>
+                    <div class="card-meta"><span class="blink-hazard">●</span> SYSTEM: HIGH LATENCY</div>
+                </article>
+
+                <!-- Problem 2 -->
+                <article class="problem-card">
+                    <div class="card-visual">
+                        <svg class="svg-icon" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="40" cy="90" r="6" fill="#1E293B" stroke="#94A3B8" stroke-width="2"/>
+                            <text x="30" y="110" fill="#94A3B8" font-family="monospace" font-size="10">AMB</text>
+                            <circle cx="160" cy="30" r="6" fill="#1E293B" stroke="#94A3B8" stroke-width="2"/>
+                            <text x="150" y="20" fill="#94A3B8" font-family="monospace" font-size="10">HOSP</text>
+                            <path d="M46 84 L154 36" stroke="var(--ps-accent-danger)" stroke-width="1" stroke-dasharray="4,4" class="conn-break"/>
+                            <text x="75" y="70" fill="var(--ps-accent-danger)" font-family="monospace" font-size="12">×</text>
+                            <line x1="100" y1="20" x2="100" y2="100" stroke="#1E293B" stroke-width="4"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Information Silos</h3>
+                    <p class="card-desc">Ambulances and hospitals operate as disconnected entities. Facilities remain "blind" to incoming patients until arrival.</p>
+                    <div class="card-meta"><span class="blink-hazard">●</span> STATUS: DISCONNECTED</div>
+                </article>
+
+                <!-- Problem 3 -->
+                <article class="problem-card">
+                    <div class="card-visual">
+                        <svg class="svg-icon" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="60" r="40" stroke="var(--ps-accent-danger)" stroke-width="1" fill="none" opacity="0.5">
+                                <animate attributeName="r" values="10;50" dur="3s" repeatCount="indefinite"/>
+                                <animate attributeName="opacity" values="0.8;0" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                            <text x="90" y="50" fill="#555" font-family="monospace" font-size="14">?</text>
+                            <text x="130" y="80" fill="#555" font-family="monospace" font-size="14">?</text>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">The Blind Spot</h3>
+                    <p class="card-desc">Coordination lacks a unified view. Doctors cannot monitor patients in transit, and responders lack visibility into bed availability.</p>
+                    <div class="card-meta"><span class="blink-hazard">●</span> VISIBILITY: ZERO</div>
+                </article>
+            </section>
         </div>
+    </div>
+
+    <!-- SECTION 3: BOTTLENECKS -->
+    <div class="submission-section bottlenecks-section" id="bottlenecks">
         <div class="bottlenecks-container">
             <header class="bottlenecks-header">
-                <span class="bottlenecks-dept">HM&FW Department, Govt. of Andhra Pradesh</span>
+                <span class="cover-dept-badge" style="color: #8892b0; border: none; padding: 0;">HM&FW Department</span>
                 <div class="bottlenecks-label">Systemic Friction Points</div>
                 <h1 class="bottlenecks-title">Anatomy of Delay</h1>
-                <p class="bottlenecks-subtitle">Cardiac emergencies demand seamless coordination, but systemic fragmentation transforms the golden hour into a series of preventable waiting periods.</p>
+                <p class="cover-subtitle" style="margin: 0 auto;">Cardiac emergencies demand seamless coordination, but systemic fragmentation transforms the golden hour into waiting periods.</p>
             </header>
+
             <div class="bottlenecks-workflow">
                 <svg class="bottlenecks-workflow-svg" viewBox="0 0 900 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="50" y="130" width="800" height="40" rx="20" fill="rgba(26, 44, 66, 0.3)"/>
-                    <!-- 108 -->
-                    <circle cx="100" cy="150" r="25" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/><text x="100" y="155" text-anchor="middle" fill="#00f0ff" font-size="11">108</text>
-                    <!-- Queue -->
-                    <rect x="165" y="135" width="70" height="30" rx="4" fill="rgba(255, 42, 42, 0.2)" stroke="#ff2a2a" stroke-width="1.5" stroke-dasharray="4,2"/><text x="200" y="154" text-anchor="middle" fill="#ff2a2a" font-size="9">QUEUE</text>
-                    <!-- Ambulance -->
-                    <circle cx="300" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="300" y="200" text-anchor="middle" fill="#8892b0" font-size="10">AMBULANCE</text>
-                    <!-- Manual Interpret -->
-                    <rect x="360" y="125" width="80" height="50" rx="4" fill="rgba(255, 42, 42, 0.15)" stroke="#ff2a2a" stroke-width="1.5"/><text x="400" y="155" text-anchor="middle" fill="#ff2a2a" font-size="9">MANUAL INT</text>
-                    <!-- Broken Link -->
+                    <circle cx="100" cy="150" r="25" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/><text x="100" y="155" text-anchor="middle" fill="#00f0ff" font-size="11" font-weight="600">108</text>
+                    <rect x="165" y="135" width="70" height="30" rx="4" fill="rgba(255, 42, 42, 0.2)" stroke="#ff2a2a" stroke-width="1.5" stroke-dasharray="4,2" class="animate-constrict" style="transform-origin: 200px 150px;"/>
+                    <circle cx="300" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="300" y="200" text-anchor="middle" fill="#8892b0" font-size="10">AMB</text>
+                    <rect x="360" y="125" width="80" height="50" rx="4" fill="rgba(255, 42, 42, 0.15)" stroke="#ff2a2a" stroke-width="1.5"/>
+                    <text x="400" y="145" text-anchor="middle" fill="#ff2a2a" font-size="9" font-weight="600">MANUAL</text>
                     <path d="M440 150 L485 150" stroke="#ff2a2a" stroke-width="2" stroke-dasharray="8,4" class="animate-disconnect"/>
-                    <!-- Specialist -->
                     <circle cx="520" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="520" y="200" text-anchor="middle" fill="#8892b0" font-size="10">PHONE</text>
-                    <!-- Wait -->
-                    <rect x="565" y="135" width="60" height="30" rx="4" fill="rgba(255, 42, 42, 0.2)" stroke="#ff2a2a" stroke-width="1.5"/><text x="595" y="154" text-anchor="middle" fill="#ff2a2a" font-size="9">WAIT...</text>
-                    <!-- Hospital -->
-                    <circle cx="700" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="700" y="200" text-anchor="middle" fill="#8892b0" font-size="10">HOSPITAL</text>
-                    <!-- Scramble -->
-                    <rect x="755" y="125" width="80" height="50" rx="4" fill="rgba(255, 42, 42, 0.15)" stroke="#ff2a2a" stroke-width="1.5"/><text x="795" y="155" text-anchor="middle" fill="#ff2a2a" font-size="9">SCRAMBLE</text>
+                    <rect x="565" y="135" width="60" height="30" rx="4" fill="rgba(255, 42, 42, 0.2)" stroke="#ff2a2a" stroke-width="1.5" class="animate-wait"/>
+                    <text x="595" y="154" text-anchor="middle" fill="#ff2a2a" font-size="9" font-weight="600">WAIT...</text>
+                    <circle cx="700" cy="150" r="25" fill="#0a1628" stroke="#8892b0" stroke-width="2"/><text x="700" y="200" text-anchor="middle" fill="#8892b0" font-size="10">HOSP</text>
                 </svg>
             </div>
+
             <div class="bottlenecks-grid">
                 <article class="bottleneck-card">
-                    <span class="bottleneck-number">01</span>
+                    <span style="position:absolute;top:1rem;right:1rem;font-size:0.7rem;color:#ff2a2a;background:rgba(255,42,42,0.1);padding:4px 10px;border-radius:20px;">01</span>
+                    <div class="bottleneck-icon"><svg viewBox="0 0 200 100" fill="none"><rect x="10" y="35" width="35" height="30" rx="5" fill="rgba(0,240,255,0.1)" stroke="#00f0ff"/><path d="M50 50 L60 50" stroke="#8892b0" stroke-dasharray="3,2"/><circle cx="68" cy="50" r="8" stroke="#ff2a2a" class="animate-blink"/></svg></div>
                     <h3 class="bottleneck-title">Sequential Dependency Trap</h3>
-                    <p class="bottleneck-description">Each step waits for the previous one. ECG capture must finish before interpretation; interpretation before call. No parallelization.</p>
+                    <p class="bottleneck-description">Each step waits for the previous. No parallelization—every delay compounds into the next.</p>
                 </article>
                 <article class="bottleneck-card">
-                    <span class="bottleneck-number">02</span>
+                    <span style="position:absolute;top:1rem;right:1rem;font-size:0.7rem;color:#ff2a2a;background:rgba(255,42,42,0.1);padding:4px 10px;border-radius:20px;">02</span>
+                    <div class="bottleneck-icon"><svg viewBox="0 0 200 100" fill="none"><circle cx="35" cy="35" r="18" stroke="#00f0ff"/><circle cx="165" cy="35" r="18" stroke="#8892b0"/><path d="M53 35 L82 32" stroke="#ff2a2a" stroke-dasharray="4,3" class="animate-disconnect"/><text x="67" y="36" fill="#ff2a2a">✕</text></svg></div>
                     <h3 class="bottleneck-title">Fragmented Data Silos</h3>
-                    <p class="bottleneck-description">Ambulances, PHCs, and hospitals operate as isolated islands. Patient data doesn't flow to hospital dashboards automatically.</p>
+                    <p class="bottleneck-description">Systems don't speak to each other. Patient data in ambulance doesn't flow to hospital dashboards.</p>
                 </article>
                 <article class="bottleneck-card">
-                    <span class="bottleneck-number">03</span>
+                    <span style="position:absolute;top:1rem;right:1rem;font-size:0.7rem;color:#ff2a2a;background:rgba(255,42,42,0.1);padding:4px 10px;border-radius:20px;">03</span>
+                    <div class="bottleneck-icon"><svg viewBox="0 0 200 100" fill="none"><path d="M50 55 l3 -3 l2 5 l3 -8 l2 12" stroke="#ff2a2a" opacity="0.8"/><text x="100" y="88" fill="#ff2a2a" font-size="7">RE-CAPTURE</text></svg></div>
                     <h3 class="bottleneck-title">Signal Integrity</h3>
-                    <p class="bottleneck-description">Patient motion and poor connectivity degrade ECG quality. Without AI filtering, paramedics must re-capture signals frequently.</p>
+                    <p class="bottleneck-description">Motion artifacts and lead placement errors in moving ambulances force manual re-capture delays.</p>
                 </article>
             </div>
+            
+            <div class="bottlenecks-summary">
+                <h3 style="color:#ff2a2a;font-size:1.5rem;margin-bottom:1rem;">The Compounding Effect</h3>
+                <p style="color:#8892b0;max-width:650px;margin:0 auto;">No single bottleneck operates in isolation. Together, they transform what should be a streamlined response into a fragmented series of waiting periods.</p>
+            </div>
         </div>
-    </section>
-</div>
+    </div>
 
-<!-- SECTION 4: AI Bridge -->
-<div class="section-container">
-    <section class="aibridge-section" id="aibridge">
-        <div class="aibridge-bg-grid" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="aibridge-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0, 240, 255, 0.3)" stroke-width="0.2"/></pattern></defs><rect width="100" height="100" fill="url(#aibridge-grid)"/></svg></div>
+    <!-- SECTION 4: AI BRIDGE -->
+    <div class="submission-section aibridge-section" id="ai-bridge">
         <div class="aibridge-container">
             <header class="aibridge-header">
                 <div class="aibridge-label">The Solution</div>
                 <h1 class="aibridge-title">The Intelligence Layer</h1>
-                <p class="aibridge-subtitle">AI weaves a unified response fabric—connecting ambulances, clinicians, and hospitals into a single, synchronized network.</p>
+                <p style="color:#8892b0;max-width:650px;margin:0 auto;line-height:1.8;">Where fragmented systems once created delays, AI now weaves a unified response fabric—connecting ambulances, clinicians, and hospitals.</p>
             </header>
-            
+
+            <div class="aibridge-transform-container">
+                <svg class="aibridge-transform-svg" viewBox="0 0 800 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <text x="130" y="30" fill="#8892b0" font-size="11" text-anchor="middle" letter-spacing="2">BEFORE</text>
+                    <text x="670" y="30" fill="#00f0ff" font-size="11" text-anchor="middle" letter-spacing="2">AFTER</text>
+                    <line x1="400" y1="45" x2="400" y2="310" stroke="#1a2c42" stroke-width="1" stroke-dasharray="4 4"/>
+                    
+                    <!-- Left (Broken) -->
+                    <circle cx="70" cy="100" r="28" fill="#0a1628" stroke="#ff2a2a" stroke-dasharray="4 3" opacity="0.5"/>
+                    <circle cx="250" cy="220" r="28" fill="#0a1628" stroke="#8892b0" stroke-dasharray="4 3" opacity="0.5"/>
+                    <path d="M98 100 L166 85" stroke="#ff2a2a" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    
+                    <!-- Center (AI) -->
+                    <g transform="translate(400, 170)">
+                        <circle cx="0" cy="0" r="55" fill="rgba(0,240,255,0.1)"/>
+                        <polygon points="0,-40 35,-20 35,20 0,40 -35,20 -35,-20" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                        <text x="0" y="5" fill="#00f0ff" font-size="11" text-anchor="middle" font-weight="600">AI CORE</text>
+                    </g>
+                    
+                    <!-- Right (Unified) -->
+                    <circle cx="530" cy="90" r="28" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                    <circle cx="730" cy="170" r="32" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                    <path d="M455 170 Q560 170 698 170" stroke="#00f0ff" stroke-width="2" fill="none"/>
+                    <path d="M502 90 Q470 120 455 170" stroke="#00f0ff" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+
             <div class="aibridge-solution">
-                <h2 class="aibridge-solution-name">Heart Smart Grid</h2>
-                <p class="aibridge-solution-tagline">AI-Integrated Cardiac Emergency Response</p>
+                <h2 style="font-size:1.8rem;color:#fff;margin-bottom:0.5rem;">Heart Smart Grid</h2>
+                <p style="color:#00f0ff;font-style:italic;">AI-Integrated Cardiac Emergency Response</p>
             </div>
 
             <div class="aibridge-capabilities">
                 <article class="aibridge-capability">
-                    <h3 class="aibridge-capability-title">Edge AI Diagnosis</h3>
-                    <p class="aibridge-capability-outcome">Instant STEMI detection on ambulance tablets (<5s) via lightweight MobileNetV3 models, working even offline.</p>
+                    <div class="aibridge-capability-icon"><svg viewBox="0 0 24 24"><path d="M9 9h6M9 13h6M9 17h4"/><circle cx="17" cy="7" r="4" fill="#0a1628" stroke="currentColor"/></svg></div>
+                    <h3 style="color:#fff;margin-bottom:0.75rem;">Edge AI Diagnosis</h3>
+                    <p style="color:#8892b0;font-size:0.9rem;">Instant STEMI detection on ambulance tablets. Clinical-grade accuracy in under 5 seconds.</p>
+                    <div class="aibridge-capability-bridge"><span>Heals Bottleneck 01 & 04</span></div>
                 </article>
                 <article class="aibridge-capability">
-                    <h3 class="aibridge-capability-title">Unified Data Fabric</h3>
-                    <p class="aibridge-capability-outcome">Standard adapters for HL7/FHIR normalize ECG ingestion from any device manufacturer.</p>
+                    <div class="aibridge-capability-icon"><svg viewBox="0 0 24 24"><path d="M7 12h3M14 12h3M12 7v3M12 14v3"/><circle cx="12" cy="12" r="3"/></svg></div>
+                    <h3 style="color:#fff;margin-bottom:0.75rem;">Unified Data Fabric</h3>
+                    <p style="color:#8892b0;font-size:0.9rem;">Standard adapters normalize ECG ingestion. Data captured once flows everywhere instantly.</p>
+                    <div class="aibridge-capability-bridge"><span>Heals Bottleneck 02</span></div>
                 </article>
                 <article class="aibridge-capability">
-                    <h3 class="aibridge-capability-title">Hospital Pre-Alert</h3>
-                    <p class="aibridge-capability-outcome">Cath labs notified before ambulance arrival. Routes to nearest available PCI facility based on real capacity.</p>
+                    <div class="aibridge-capability-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M20 5h-4"/></svg></div>
+                    <h3 style="color:#fff;margin-bottom:0.75rem;">Smart Pre-Alerting</h3>
+                    <p style="color:#8892b0;font-size:0.9rem;">Cath labs prepared before ambulance arrives. Routes to nearest capable facility based on readiness.</p>
+                    <div class="aibridge-capability-bridge"><span>Heals Bottleneck 07</span></div>
                 </article>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 
-<!-- SECTION 5: Architecture -->
-<div class="section-container">
-    <section class="hld-section" id="architecture">
-        <div class="hld-bg-grid" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><pattern id="hld-grid" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M 6 0 L 0 0 0 6" fill="none" stroke="rgba(0, 240, 255, 0.5)" stroke-width="0.12"/></pattern></defs><rect width="100" height="100" fill="url(#hld-grid)"/></svg></div>
+    <!-- SECTION 5: TECHNICAL ARCHITECTURE -->
+    <div class="submission-section hld-section" id="architecture">
         <div class="hld-container">
-            <header class="hld-header">
-                <div class="hld-label">Architecture</div>
-                <h1 class="hld-title">System Design</h1>
-                <p class="hld-subtitle">Edge-first intelligence with cloud validation—offline resilience and bidirectional coordination.</p>
+            <header class="aibridge-header" style="margin-bottom: 2rem;">
+                <div class="aibridge-label">Architecture</div>
+                <h1 class="aibridge-title">System Architecture</h1>
+                <p style="color:#8892b0;max-width:750px;margin:0 auto;">Edge-first intelligence with cloud validation, offline resilience, and bidirectional coordination.</p>
             </header>
-            <div class="hld-diagram-wrap">
-                <!-- Simplified Architecture SVG for stability -->
-                <svg class="hld-diagram-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Edge Layer -->
-                    <rect x="20" y="50" width="150" height="300" rx="10" fill="#0d3d4d" opacity="0.5"/>
-                    <text x="95" y="80" fill="#00f0ff" font-size="12" text-anchor="middle" font-weight="bold">EDGE</text>
-                    <rect x="40" y="100" width="110" height="60" rx="5" stroke="#00f0ff" fill="#0a1628"/>
-                    <text x="95" y="135" fill="white" font-size="10" text-anchor="middle">Tablet + AI</text>
-                    
-                    <!-- Cloud Layer -->
-                    <rect x="250" y="50" width="250" height="300" rx="10" fill="#1a1040" opacity="0.5"/>
-                    <text x="375" y="80" fill="#7b61ff" font-size="12" text-anchor="middle" font-weight="bold">CLOUD CORE</text>
-                    <rect x="280" y="120" width="190" height="80" rx="5" stroke="#7b61ff" fill="#0a1628"/>
-                    <text x="375" y="165" fill="white" font-size="10" text-anchor="middle">Backend API + Inference</text>
-                    
-                    <!-- Hospital Layer -->
-                    <rect x="580" y="50" width="150" height="300" rx="10" fill="#0d3d4d" opacity="0.5"/>
-                    <text x="655" y="80" fill="#00f0ff" font-size="12" text-anchor="middle" font-weight="bold">HOSPITAL</text>
-                    <rect x="600" y="100" width="110" height="60" rx="5" stroke="#00f0ff" fill="#0a1628"/>
-                    <text x="655" y="135" fill="white" font-size="10" text-anchor="middle">Dashboard</text>
 
-                    <!-- Connections -->
-                    <path d="M150 130 L280 160" stroke="#00f0ff" stroke-width="2" stroke-dasharray="5,5"/>
-                    <path d="M470 160 L600 130" stroke="#00f0ff" stroke-width="2"/>
+            <div class="hld-diagram-wrap">
+                <svg class="hld-diagram-svg" viewBox="0 0 1340 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="15" y="45" width="260" height="630" rx="10" fill="#0d3d4d" opacity="0.1"/>
+                    <text x="145" y="72" fill="#00f0ff" font-size="10" text-anchor="middle" font-weight="700">EDGE LAYER</text>
+                    <rect x="295" y="45" width="380" height="630" rx="10" fill="#1a1040" opacity="0.1"/>
+                    <text x="485" y="72" fill="#7b61ff" font-size="10" text-anchor="middle" font-weight="700">CLOUD CORE</text>
+                    
+                    <!-- Components -->
+                    <g transform="translate(35, 190)">
+                        <rect width="180" height="90" rx="10" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                        <text x="90" y="58" fill="#fff" font-size="10" text-anchor="middle" font-weight="700">TABLET APP</text>
+                        <text x="90" y="72" fill="#7b61ff" font-size="8" text-anchor="middle">+ Edge AI Inference</text>
+                    </g>
+                    
+                    <g transform="translate(480, 100)">
+                        <polygon points="55,0 110,28 110,82 55,110 0,82 0,28" fill="#0a1628" stroke="#7b61ff" stroke-width="2"/>
+                        <text x="55" y="72" fill="#fff" font-size="9" text-anchor="middle" font-weight="700">AI ENGINE</text>
+                    </g>
+
+                    <g transform="translate(710, 210)">
+                        <path d="M20,0 L180,0 L160,90 L0,90 Z" fill="#0a1628" stroke="#00f0ff" stroke-width="2"/>
+                        <text x="90" y="52" fill="#fff" font-size="10" text-anchor="middle" font-weight="700">HOSPITAL DASHBOARD</text>
+                    </g>
+
+                    <!-- Flows -->
+                    <path d="M215,260 L260,260 L260,517 L205,517" stroke="#00f0ff" stroke-width="2" class="hld-flow-line" fill="none"/>
+                    <path d="M480,200 L520,155 L520,130 L535,130" stroke="#7b61ff" stroke-width="2" class="hld-flow-line" fill="none"/>
+                    <path d="M800,175 L800,210" stroke="#00f0ff" stroke-width="1.8" class="hld-flow-line" fill="none"/>
                 </svg>
             </div>
+            
+            <div class="hld-legend">
+                <div style="color:#8892b0;font-size:0.7rem;display:flex;gap:10px;">
+                    <span><span style="color:#00f0ff">●</span> MQTT/WebSocket</span>
+                    <span><span style="color:#ff2a2a">●</span> HL7 FHIR</span>
+                </div>
+            </div>
         </div>
-    </section>
-</div>
+    </div>
 
-<!-- SECTION 6: Journeys -->
-<div class="section-container">
-    <section id="stakeholder-journeys" class="userflow-section">
+    <!-- SECTION 6: STAKEHOLDER JOURNEYS -->
+    <div class="submission-section userflow-section" id="journeys">
         <div class="userflow-container">
             <header class="userflow-header">
-                <div class="userflow-section-indicator">System Flows</div>
+                <div style="color:#10B981;font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.5rem;">System Flows</div>
                 <h1 class="userflow-title">Stakeholder Journeys</h1>
+                <p class="userflow-subtitle">End-to-end technical flows for key actors in the system.</p>
             </header>
 
             <nav class="userflow-actor-nav">
-                <button class="actor-tab active" data-actor="paramedic"><span>Paramedic</span></button>
-                <button class="actor-tab" data-actor="cardiologist"><span>Cardiologist</span></button>
+                <button class="actor-tab active" data-actor="paramedic"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg><span>Paramedic</span></button>
+                <button class="actor-tab" data-actor="cardiologist"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span>Cardiologist</span></button>
+                <button class="actor-tab" data-actor="nurse"><svg viewBox="0 0 24 24"><path d="M18.36 9l.6 3H5.04l.6-3h12.72M20 4H4v2h16V4zm0 3H4l-1 5v2h1v6h10v-6h4v6h2v-6h1v-2l-1-5zM6 18v-4h6v4H6z"/></svg><span>Nurse</span></button>
             </nav>
 
             <div class="userflow-panels">
-                <!-- PARAMEDIC PANEL -->
+                <!-- Paramedic Panel -->
                 <div class="actor-panel active" id="panel-paramedic">
-                    <div class="actor-info">
-                        <div class="actor-avatar actor-avatar--depot"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div>
-                        <div><h2 class="actor-name">Paramedic</h2><p class="actor-description">108 Ambulance Crew</p></div>
-                    </div>
                     <div class="journey-container">
-                        <div class="flow-step"><div class="step-number">1</div><div class="step-content"><h4 class="step-action">Dispatch</h4><p class="step-detail">Receive location via API</p></div></div>
-                        <div class="flow-step"><div class="step-number">2</div><div class="step-content"><h4 class="step-action">Capture</h4><p class="step-detail">12-lead ECG recording</p></div></div>
-                        <div class="flow-step"><div class="step-number">3</div><div class="step-content"><h4 class="step-action">AI Diagnosis</h4><p class="step-detail">Edge inference &lt;5s</p></div></div>
-                        <div class="flow-step"><div class="step-number">4</div><div class="step-content"><h4 class="step-action">Transport</h4><p class="step-detail">Auto-alert to hospital</p></div></div>
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><span class="step-number">1</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Capture ECG</h4><p style="color:#8594A8;font-size:0.75rem;">Device captures raw signal via USB</p></div></div>
+                                <div class="flow-step"><span class="step-number">2</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">AI Diagnosis</h4><p style="color:#8594A8;font-size:0.75rem;">Edge inference &lt;5s latency</p></div></div>
+                                <div class="flow-step"><span class="step-number">3</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Alert Dispatch</h4><p style="color:#8594A8;font-size:0.75rem;">Payload pushed via MQTT to cloud</p></div></div>
+                            </div>
+                            <div class="hld-mini-diagram">
+                                <!-- Mini Visual representation -->
+                                <svg viewBox="0 0 450 260" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="20" y="30" width="160" height="200" rx="12" fill="#0f1419" stroke="#F59E0B" stroke-width="2"/>
+                                    <text x="100" y="55" text-anchor="middle" fill="#F59E0B" style="font-size:10px;font-weight:700">Ambulance Tablet</text>
+                                    <path d="M180 110 L230 110" stroke="#10B981" stroke-width="2" stroke-dasharray="6 3"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- CARDIOLOGIST PANEL -->
+
+                <!-- Cardiologist Panel -->
                 <div class="actor-panel" id="panel-cardiologist">
-                    <div class="actor-info">
-                        <div class="actor-avatar actor-avatar--shop"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg></div>
-                        <div><h2 class="actor-name">Cardiologist</h2><p class="actor-description">On-Call Specialist</p></div>
-                    </div>
                     <div class="journey-container">
-                        <div class="flow-step"><div class="step-number">1</div><div class="step-content"><h4 class="step-action">Notification</h4><p class="step-detail">Receive priority STEMI alert</p></div></div>
-                        <div class="flow-step"><div class="step-number">2</div><div class="step-content"><h4 class="step-action">Review</h4><p class="step-detail">Verify ECG on dashboard</p></div></div>
-                        <div class="flow-step"><div class="step-number">3</div><div class="step-content"><h4 class="step-action">Action</h4><p class="step-detail">Confirm diagnosis & prep Cath Lab</p></div></div>
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><span class="step-number">1</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Notification</h4><p style="color:#8594A8;font-size:0.75rem;">Priority Push/SMS alert</p></div></div>
+                                <div class="flow-step"><span class="step-number">2</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Review Dashboard</h4><p style="color:#8594A8;font-size:0.75rem;">Visualizes ST-elevation overlay</p></div></div>
+                                <div class="flow-step"><span class="step-number">3</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Confirm/Override</h4><p style="color:#8594A8;font-size:0.75rem;">Logs decision for model retraining</p></div></div>
+                            </div>
+                            <div class="hld-mini-diagram">
+                                <svg viewBox="0 0 450 260" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="20" y="30" width="180" height="200" rx="12" fill="#0f1419" stroke="#EF4444" stroke-width="2"/>
+                                    <text x="110" y="55" text-anchor="middle" fill="#EF4444" style="font-size:10px;font-weight:700">Cardiologist View</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nurse Panel -->
+                <div class="actor-panel" id="panel-nurse">
+                    <div class="journey-container">
+                        <div class="journey-body">
+                            <div class="flow-timeline">
+                                <div class="flow-step"><span class="step-number">1</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Real-time Alert</h4><p style="color:#8594A8;font-size:0.75rem;">WebSocket update with ETA</p></div></div>
+                                <div class="flow-step"><span class="step-number">2</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Ack & Prep</h4><p style="color:#8594A8;font-size:0.75rem;">Activates Cath Lab team</p></div></div>
+                                <div class="flow-step"><span class="step-number">3</span><div><h4 style="color:#fff;margin:0 0 0.25rem;">Registration</h4><p style="color:#8594A8;font-size:0.75rem;">Syncs with e-Hospital (FHIR)</p></div></div>
+                            </div>
+                            <div class="hld-mini-diagram">
+                                <svg viewBox="0 0 450 260" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="20" y="30" width="180" height="200" rx="12" fill="#0f1419" stroke="#10B981" stroke-width="2"/>
+                                    <text x="110" y="55" text-anchor="middle" fill="#10B981" style="font-size:10px;font-weight:700">ER Dashboard</text>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 
-<!-- SECTION 7: Team -->
-<div class="section-container">
-    <section class="team-section-container">
-        <header class="team-header">
-            <h1>Team Responsible Indian</h1>
-            <div style="text-align:right; color:#95a3b8;">contact@responsibleindian.in</div>
-        </header>
-        <div class="team-tagline">
-            <p>A global team of <strong>IIT &amp; BITS alumni</strong> with experience at <span class="highlight">Microsoft, Amazon, Intel</span>. Building scalable AI systems for healthcare.</p>
-        </div>
-        <div class="team-grid">
-            <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/jeevan.jpeg" alt="Jeevan">
-                <h3 class="member-name">Jeevan Kumar</h3>
-                <div class="member-role">AI/ML Lead</div>
-            </article>
-            <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/manoj.png" alt="Manoj">
-                <h3 class="member-name">Manoj Kumar</h3>
-                <div class="member-role">Data Engineer</div>
-            </article>
-            <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/sandeep.png" alt="Sandeep">
-                <h3 class="member-name">Sandeep BGS</h3>
-                <div class="member-role">DL Engineer</div>
-            </article>
-            <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/sarath.jpeg" alt="Sarath">
-                <h3 class="member-name">Sarath Lavu</h3>
-                <div class="member-role">Data Scientist</div>
-            </article>
-            <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/praneeth.jpeg" alt="Praneeth">
-                <h3 class="member-name">Praneeth Reddy</h3>
-                <div class="member-role">Software Architect</div>
-            </article>
-             <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/vamsi.jpeg" alt="Vamsi">
-                <h3 class="member-name">Vamsi Badri</h3>
-                <div class="member-role">AI Researcher</div>
-            </article>
-             <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/yashwanth.jpeg" alt="Yashwanth">
-                <h3 class="member-name">Yashwanth P</h3>
-                <div class="member-role">Fullstack Eng</div>
-            </article>
-             <article class="member-card">
-                <img class="profile-pic" src="https://responsibleindian.in/RTGS-Hackathon/images/nitesh.jpeg" alt="Nitesh">
-                <h3 class="member-name">Varanasi Nitesh</h3>
-                <div class="member-role">Staff Engineer</div>
-            </article>
-        </div>
-    </section>
-</div>
+    <!-- SECTION 7: TEAM & CONTACT -->
+    <div class="submission-section" id="team">
+        <div class="team-section-wrap">
+            <header style="text-align: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;">
+                <h1 style="font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #00f7ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Team Responsible Indian</h1>
+                <div style="font-size: 14px; color: #95a3b8; margin-top: 8px; letter-spacing: 2px; text-transform: uppercase;">Building the Future Together</div>
+                <div style="margin-top: 1rem;"><a href="mailto:contact@responsibleindian.in" style="color: #00f7ff; text-decoration: none;">contact@responsibleindian.in</a></div>
+            </header>
 
-<!-- Scripts -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        
+            <div class="team-tagline">
+                <p>
+                    A global team of <strong>IIT &amp; BITS alumni</strong> with experience at
+                    <span class="highlight">Microsoft, Amazon, Intel, Disney+</span>.
+                    Engineers spanning <strong>India, Taiwan, and the USA</strong>.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Member 1 -->
+                <article class="member-card">
+                    <h3 class="member-name">Jeevan Kumar</h3>
+                    <div class="member-role">AI/ML Lead</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>LevelAI, Goldcast</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 2 -->
+                <article class="member-card">
+                    <h3 class="member-name">Manoj Kumar</h3>
+                    <div class="member-role">Data Engineer</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>BITS Pilani</strong></span></div>
+                        <div class="detail-item"><span>Funded Startups</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 3 -->
+                <article class="member-card">
+                    <h3 class="member-name">Sandeep BGS</h3>
+                    <div class="member-role">DL Research</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>KLA</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 4 -->
+                <article class="member-card">
+                    <h3 class="member-name">Sarath Lavu</h3>
+                    <div class="member-role">ML Engineer</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>Funded Startups</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 5 -->
+                <article class="member-card">
+                    <h3 class="member-name">Praneeth Reddy</h3>
+                    <div class="member-role">Architect</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>Microsoft</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 6 -->
+                <article class="member-card">
+                    <h3 class="member-name">Vamsi Krishna</h3>
+                    <div class="member-role">AI Research</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>KLA</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 7 -->
+                <article class="member-card">
+                    <h3 class="member-name">Yashwanth P.</h3>
+                    <div class="member-role">Fullstack</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>IIT Kanpur</strong></span></div>
+                        <div class="detail-item"><span>Microsoft, Intel</span></div>
+                    </div>
+                </article>
+
+                <!-- Member 8 -->
+                <article class="member-card">
+                    <h3 class="member-name">Varanasi Nitesh</h3>
+                    <div class="member-role">Staff Engineer</div>
+                    <div class="details">
+                        <div class="detail-item"><span><strong>Univ. of Florida</strong></span></div>
+                        <div class="detail-item"><span>Amazon, Disney+</span></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SCRIPTS -->
+    <script>
+    (function() {
         // --- Cover Page Logic ---
-        (function() {
-            const canvas = document.getElementById('cover-canvas');
-            if(!canvas) return;
+        const canvas = document.getElementById('cover-canvas');
+        if (canvas) {
             const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-            let time = 0;
+            let width, height, particles = [], time = 0;
             
             function resize() {
                 width = window.innerWidth;
@@ -798,6 +1408,7 @@
                 canvas.width = width;
                 canvas.height = height;
             }
+
             class Packet {
                 constructor() { this.reset(); }
                 reset() {
@@ -814,7 +1425,7 @@
                     this.y += this.speedY;
                     this.life -= 0.005;
                     this.color = this.x < width/2 ? 'rgba(255, 51, 51,' : 'rgba(0, 240, 255,';
-                    if (this.life <= 0 || this.x < 0 || this.x > width) this.reset();
+                    if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
                 }
                 draw() {
                     ctx.beginPath();
@@ -823,73 +1434,82 @@
                     ctx.fill();
                 }
             }
-            for(let i=0; i<30; i++) particles.push(new Packet());
-            
+
+            for(let i=0; i<50; i++) particles.push(new Packet());
+
             function animate() {
                 ctx.clearRect(0, 0, width, height);
                 particles.forEach(p => { p.update(); p.draw(); });
-                // Simple ECG line effect
+                // Simplified ECG line for performance in consolidated view
+                time += 0.05;
                 ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.lineWidth = 1;
                 ctx.moveTo(0, height/2);
-                time += 0.1;
-                for(let x=0; x<width; x+=5) {
-                    let y = height/2;
-                    if(x < width*0.45) y += Math.random()*10 - 5; // Chaos
-                    else if(x > width*0.55) { // Order
-                        let phase = (x - width*0.55)*0.02 - time;
-                        let beat = Math.sin(phase);
-                        if(Math.sin(phase)>0.9) y -= 40; 
-                    }
-                    ctx.lineTo(x, y);
-                }
-                const gradient = ctx.createLinearGradient(0, 0, width, 0);
-                gradient.addColorStop(0, '#FF3333');
-                gradient.addColorStop(0.5, '#FFFFFF');
-                gradient.addColorStop(1, '#00F0FF');
-                ctx.strokeStyle = gradient;
+                ctx.lineTo(width, height/2);
                 ctx.stroke();
                 requestAnimationFrame(animate);
             }
+
             window.addEventListener('resize', resize);
             resize();
             animate();
-        })();
-
-        // --- Animations with GSAP ---
-        if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // Bottlenecks
-            ScrollTrigger.create({ trigger: '.bottlenecks-header', start: 'top 80%', onEnter: () => document.querySelector('.bottlenecks-header').classList.add('visible') });
-            ScrollTrigger.create({ trigger: '.bottlenecks-workflow', start: 'top 80%', onEnter: () => document.querySelector('.bottlenecks-workflow').classList.add('visible') });
-            document.querySelectorAll('.bottleneck-card').forEach((el, i) => {
-                ScrollTrigger.create({ trigger: el, start: 'top 85%', onEnter: () => setTimeout(()=>el.classList.add('visible'), i*100) });
-            });
-
-            // AI Bridge
-            ScrollTrigger.create({ trigger: '.aibridge-header', start: 'top 80%', onEnter: () => document.querySelector('.aibridge-header').classList.add('visible') });
-            document.querySelectorAll('.aibridge-capability').forEach((el, i) => {
-                ScrollTrigger.create({ trigger: el, start: 'top 90%', onEnter: () => setTimeout(()=>el.classList.add('visible'), i*100) });
-            });
         }
 
-        // --- Journey Tabs ---
-        const actorTabs = document.querySelectorAll('.actor-tab');
-        const actorPanels = document.querySelectorAll('.actor-panel');
-        if(actorTabs.length > 0) {
-            actorTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const actor = this.dataset.actor;
-                    actorTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    actorPanels.forEach(p => p.classList.remove('active'));
-                    const panel = document.getElementById('panel-' + actor);
-                    if(panel) panel.classList.add('active');
+        // --- Intersection Observers for Scroll Animations ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .bottleneck-card, .aibridge-header, .aibridge-transform-container, .aibridge-solution').forEach(el => observer.observe(el));
+
+        // --- GSAP Setup for Bottlenecks/AI Bridge (if loaded) ---
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            gsap.utils.toArray('.bottleneck-card').forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 90%" },
+                    y: 50, opacity: 0, duration: 0.6, delay: i * 0.1
+                });
+            });
+
+            gsap.utils.toArray('.aibridge-capability').forEach((cap, i) => {
+                gsap.from(cap, {
+                    scrollTrigger: { trigger: cap, start: "top 90%" },
+                    y: 50, opacity: 0, duration: 0.6, delay: i * 0.1
                 });
             });
         }
-    });
-</script>
 
+        // --- Tab Switching Logic (Stakeholder Journeys) ---
+        const actorTabs = document.querySelectorAll('.actor-tab');
+        const actorPanels = document.querySelectorAll('.actor-panel');
+        
+        const actorMap = {
+            'paramedic': 'panel-paramedic',
+            'cardiologist': 'panel-cardiologist',
+            'nurse': 'panel-nurse'
+        };
+        
+        actorTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const actor = this.dataset.actor;
+                actorTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                actorPanels.forEach(p => p.classList.remove('active'));
+                const panel = document.getElementById(actorMap[actor]);
+                if (panel) panel.classList.add('active');
+            });
+        });
+
+    })();
+    </script>
 </body>
 </html>
