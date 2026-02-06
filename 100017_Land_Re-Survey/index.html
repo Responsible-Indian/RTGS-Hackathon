@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Re-Survey | AI Challenge Submission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0A0F0D;
+            --bg-mid: #1A2820;
+            --bg-card: #0F1A14;
+            --accent-gold: #D4A855;
+            --accent-green: #4ADE80;
+            --accent-cyan: #22D3EE;
+            --text-primary: #F0F7F4;
+            --text-secondary: rgba(240, 247, 244, 0.7);
+            --text-muted: rgba(240, 247, 244, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --conflict-red: #EF4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+        }
+
+        /* ═══════════════════════════════════
+           SLIDE DECK
+           ═══════════════════════════════════ */
+        .deck {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease, visibility 0.45s ease;
+            padding-bottom: 56px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* iframe slides */
+        .slide-iframe { padding-bottom: 0; }
+
+        .slide-iframe iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--bg-deep);
+        }
+
+        .slide-iframe .loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: var(--bg-deep);
+            z-index: 10;
+            transition: opacity 0.4s ease;
+        }
+
+        .slide-iframe .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-ring {
+            width: 36px;
+            height: 36px;
+            border: 2.5px solid rgba(255,255,255,0.06);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .loader-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ═══════════════════════════════════
+           INLINE SLIDE CONTENT
+           ═══════════════════════════════════ */
+        .slide-content {
+            width: 100%;
+            max-width: 1100px;
+            padding: 2rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .slide-label {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .slide-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title .highlight {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            max-width: 700px;
+        }
+
+        /* Card grids */
+        .card-grid {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: rgba(212,168,85,0.25);
+        }
+
+        .card-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .card-icon.gold { background: rgba(212,168,85,0.15); color: var(--accent-gold); }
+        .card-icon.green { background: rgba(74,222,128,0.15); color: var(--accent-green); }
+        .card-icon.cyan { background: rgba(34,211,238,0.15); color: var(--accent-cyan); }
+        .card-icon.red { background: rgba(239,68,68,0.15); color: var(--conflict-red); }
+
+        .card-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-desc {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Stat rows */
+        .stat-row {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value.gold { color: var(--accent-gold); }
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.cyan { color: var(--accent-cyan); }
+        .stat-value.red { color: var(--conflict-red); }
+
+        .stat-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* Pipeline visual */
+        .pipeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            width: 100%;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            text-align: center;
+        }
+
+        .pipeline-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .pipeline-icon.step1 { background: rgba(212,168,85,0.15); border: 1px solid rgba(212,168,85,0.3); }
+        .pipeline-icon.step2 { background: rgba(34,211,238,0.15); border: 1px solid rgba(34,211,238,0.3); }
+        .pipeline-icon.step3 { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); }
+        .pipeline-icon.step4 { background: rgba(212,168,85,0.15); border: 1px solid rgba(212,168,85,0.3); }
+
+        .pipeline-arrow {
+            flex: 0 0 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            padding-top: 18px;
+        }
+
+        .pipeline-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .pipeline-desc {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+            max-width: 150px;
+            line-height: 1.4;
+        }
+
+        /* Before/after comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .comparison-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .comparison-col-header {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .comparison-col-header.before { color: var(--text-muted); }
+        .comparison-col-header.after { color: var(--accent-green); }
+
+        .comparison-divider {
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--accent-gold), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comparison-divider span {
+            background: var(--bg-deep);
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            padding: 0.3rem 0;
+        }
+
+        .comparison-item.muted { color: var(--text-muted); }
+        .comparison-item.bright { color: var(--text-primary); font-weight: 500; }
+
+        /* Integration chips */
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.85rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .chip-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .chip-dot.gold { background: var(--accent-gold); }
+        .chip-dot.cyan { background: var(--accent-cyan); }
+        .chip-dot.green { background: var(--accent-green); }
+
+        /* Model tags */
+        .model-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .model-tag {
+            padding: 0.3rem 0.65rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+        }
+
+        /* ═══════════════════════════════════
+           BOTTOM BAR
+           ═══════════════════════════════════ */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            background: rgba(10,15,13,0.92);
+            border-top: 1px solid var(--border-subtle);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+        }
+
+        .bottom-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .team-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .team-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .team-label strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .bottom-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dot-nav {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--accent-gold);
+            width: 22px;
+            border-radius: 3px;
+        }
+
+        .dot.visited {
+            background: rgba(74,222,128,0.4);
+        }
+
+        .bottom-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(212,168,85,0.15);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .nav-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .page-indicator {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .page-indicator .current {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .kb-hint {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-left: 0.75rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid var(--border-subtle);
+        }
+
+        .kb-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 16px;
+            padding: 0 3px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 3px;
+            font-size: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════ */
+        @media (max-width: 900px) {
+            .slide-content {
+                padding: 1.25rem 1.5rem;
+                gap: 1rem;
+            }
+            .slide-title { font-size: 1.7rem; }
+            .card-grid-3 { grid-template-columns: 1fr 1fr; }
+            .pipeline { flex-direction: column; gap: 0.4rem; }
+            .pipeline-arrow { transform: rotate(90deg); padding-top: 0; }
+            .comparison { grid-template-columns: 1fr; gap: 1rem; }
+            .comparison-divider { display: none; }
+            .bottom-left { display: none; }
+            .kb-hint { display: none; }
+            .dot { width: 5px; height: 5px; }
+            .dot.active { width: 16px; }
+            .stat-value { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 600px) {
+            .slide-content { padding: 1rem; }
+            .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+            .stat-row { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck">
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 1 — COVER (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe active" data-slide="0">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Cover</span></div>
+        <iframe data-src="cover_page.html" title="Cover Page"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 2 — THE OPPORTUNITY (inline pitch)
+         Why this matters: scale, cost, and urgency
+         ════════════════════════════════════════════ -->
+    <div class="slide" data-slide="1">
+        <div class="slide-content">
+            <span class="slide-label">The Opportunity</span>
+            <h2 class="slide-title">13,000+ villages.<br><span class="highlight">One manual bottleneck.</span></h2>
+            <p class="slide-subtitle">AP's resurvey relies on outsourced polygon annotation at ₹2,000–5,000 per village — slow, vendor-dependent, and inconsistent. Across 13,000+ villages under Swamitva and the state resurvey programme, that's crores spent on manual tracing that AI can do overnight.</p>
+            <div class="stat-row">
+                <div class="stat">
+                    <div class="stat-value red">₹2-5K</div>
+                    <div class="stat-label">Manual cost per village</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value gold">13K+</div>
+                    <div class="stat-label">Villages to process</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value cyan">Vendor</div>
+                    <div class="stat-label">Dependent on outsourcing</div>
+                </div>
+            </div>
+            <div class="card-grid card-grid-3">
+                <div class="card">
+                    <div class="card-icon red">✏️</div>
+                    <div class="card-title">Manual Delineation</div>
+                    <div class="card-desc">Boundaries traced by hand from drone imagery. Non-repeatable across inspector units, producing inconsistent outputs.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon red">👁️</div>
+                    <div class="card-title">Invisible Conflicts</div>
+                    <div class="card-desc">Discrepancies between WebLand 1.0 records and actual parcel shapes go undetected until citizens dispute during objection phase.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon red">⏳</div>
+                    <div class="card-title">No Prioritisation</div>
+                    <div class="card-desc">Every parcel gets equal field verification effort — high-risk and routine parcels treated the same, wasting inspector time.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 3 — PROBLEM ANALYSIS (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="2">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Problem Analysis</span></div>
+        <iframe data-src="problem_analysis.html" title="Problem Analysis"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 4 — BOTTLENECKS (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="3">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Bottlenecks</span></div>
+        <iframe data-src="bottlenecks.html" title="Bottlenecks"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 5 — OUR APPROACH (inline pitch)
+         SAM, batch overnight, QA loop
+         ════════════════════════════════════════════ -->
+    <div class="slide" data-slide="4">
+        <div class="slide-content">
+            <span class="slide-label">Our Approach</span>
+            <h2 class="slide-title">SAM segments overnight.<br><span class="highlight">Officers validate by morning.</span></h2>
+            <p class="slide-subtitle">We use Meta's Segment Anything Model (SAM) with multiple checkpoints — fast, medium, and high-precision. Batch-process an entire village's drone imagery overnight; inspectors open pre-segmented parcels on their devices at the start of their shift and just validate.</p>
+
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-icon step1">🛩️</div>
+                    <div class="pipeline-label">Drone Imagery</div>
+                    <div class="pipeline-desc">GNSS-tagged aerial capture + rover vertex coordinates</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon step2">🧠</div>
+                    <div class="pipeline-label">SAM Overnight</div>
+                    <div class="pipeline-desc">Batch segmentation — parcels, land use, irregular polygons, buildings</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon step3">👤</div>
+                    <div class="pipeline-label">Morning Validation</div>
+                    <div class="pipeline-desc">Officers review pre-drawn boundaries on mobile, accept or correct</div>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="pipeline-icon step4">🔄</div>
+                    <div class="pipeline-label">Learning Loop</div>
+                    <div class="pipeline-desc">Corrections retrain the model — accuracy compounds each cycle</div>
+                </div>
+            </div>
+
+            <div class="card-grid card-grid-3" style="margin-top:0.25rem;">
+                <div class="card">
+                    <div class="card-icon cyan">⚡</div>
+                    <div class="card-title">3 SAM Checkpoints</div>
+                    <div class="card-desc">Fast for triage, medium for standard, high-precision for contested parcels. Trade off speed vs accuracy as needed.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon green">🌙</div>
+                    <div class="card-title">Batch, Not Real-Time</div>
+                    <div class="card-desc">No need for real-time inference. Run overnight on village imagery — results ready before the field team's shift starts.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon gold">📊</div>
+                    <div class="card-title">AI vs Ground Truth</div>
+                    <div class="card-desc">Side-by-side comparison against human-annotated reference data to benchmark and iteratively improve precision.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 6 — AI BRIDGE (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="5">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading AI Bridge</span></div>
+        <iframe data-src="ai_bridge.html" title="AI Bridge"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 7 — TECH ARCHITECTURE (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="6">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Tech Architecture</span></div>
+        <iframe data-src="tech_architecture.html" title="Tech Architecture"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 8 — STAKEHOLDER JOURNEYS (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="7">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Stakeholder Journeys</span></div>
+        <iframe data-src="stakeholder_journeys.html" title="Stakeholder Journeys"></iframe>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 9 — IMPACT (inline pitch)
+         Before/after, PoC scope, integration, accuracy
+         ════════════════════════════════════════════ -->
+    <div class="slide" data-slide="8">
+        <div class="slide-content">
+            <span class="slide-label">Impact &amp; Proof of Concept</span>
+            <h2 class="slide-title">What changes when<br><span class="highlight">AI enters the pipeline</span></h2>
+
+            <div class="comparison">
+                <div class="comparison-col">
+                    <div class="comparison-col-header before">Today (Manual + Vendors)</div>
+                    <div class="comparison-item muted">⏱️ ₹2-5K per village, outsourced tracing</div>
+                    <div class="comparison-item muted">🔴 Conflicts found at objection phase</div>
+                    <div class="comparison-item muted">📊 Static accuracy — no improvement loop</div>
+                    <div class="comparison-item muted">🗺️ Inconsistent outputs across teams</div>
+                </div>
+                <div class="comparison-divider"><span>→</span></div>
+                <div class="comparison-col">
+                    <div class="comparison-col-header after">With SAM + Validation Loop</div>
+                    <div class="comparison-item bright">⚡ Batch overnight — near-zero marginal cost</div>
+                    <div class="comparison-item bright">🟢 Conflicts flagged before publication</div>
+                    <div class="comparison-item bright">📈 Accuracy compounds via feedback loop</div>
+                    <div class="comparison-item bright">🎯 Standardised, repeatable boundary output</div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+                <div>
+                    <div style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; color:var(--accent-gold); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.75rem;">PoC Scope</div>
+                    <div class="stat-row">
+                        <div class="stat">
+                            <div class="stat-value gold">1</div>
+                            <div class="stat-label">Mandal, active resurvey</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value cyan">3</div>
+                            <div class="stat-label">Inspector units</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value green">10</div>
+                            <div class="stat-label">Field teams</div>
+                        </div>
+                    </div>
+                    <div class="stat-row" style="margin-top:1rem;">
+                        <div class="stat">
+                            <div class="stat-value gold">&gt;80%</div>
+                            <div class="stat-label">Precision vs expert references</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value green">&gt;70%</div>
+                            <div class="stat-label">Field team satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; color:var(--accent-gold); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.75rem;">Integrations</div>
+                    <div class="chip-row" style="margin-bottom:0.75rem;">
+                        <div class="chip"><span class="chip-dot gold"></span>WebLand 1.0</div>
+                        <div class="chip"><span class="chip-dot cyan"></span>70 CORS Stations</div>
+                        <div class="chip"><span class="chip-dot green"></span>GNSS Rovers</div>
+                        <div class="chip"><span class="chip-dot gold"></span>Meebhoomi</div>
+                        <div class="chip"><span class="chip-dot cyan"></span>Swamitva</div>
+                    </div>
+                    <div style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; color:var(--accent-gold); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.5rem;">AI Stack</div>
+                    <div class="model-tags">
+                        <span class="model-tag">SAM (Meta)</span>
+                        <span class="model-tag">U-Net</span>
+                        <span class="model-tag">Mask R-CNN</span>
+                        <span class="model-tag">SegFormer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SLIDE 10 — TEAM (iframe)
+         ════════════════════════════════════════════ -->
+    <div class="slide slide-iframe" data-slide="9">
+        <div class="loader"><div class="loader-ring"></div><span class="loader-text">Loading Team</span></div>
+        <iframe data-src="team_contact.html" title="Team Contact"></iframe>
+    </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     BOTTOM BAR
+     ════════════════════════════════════════════ -->
+<div class="bottom-bar">
+    <div class="bottom-left">
+        <div class="team-dot"></div>
+        <span class="team-label">Team <strong>Responsible Indian</strong></span>
+    </div>
+
+    <div class="bottom-center">
+        <div class="dot-nav" id="dot-nav">
+            <div class="dot active" data-dot="0"></div>
+            <div class="dot" data-dot="1"></div>
+            <div class="dot" data-dot="2"></div>
+            <div class="dot" data-dot="3"></div>
+            <div class="dot" data-dot="4"></div>
+            <div class="dot" data-dot="5"></div>
+            <div class="dot" data-dot="6"></div>
+            <div class="dot" data-dot="7"></div>
+            <div class="dot" data-dot="8"></div>
+            <div class="dot" data-dot="9"></div>
+        </div>
+    </div>
+
+    <div class="bottom-right">
+        <button class="nav-btn" id="prev-btn" disabled aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="page-indicator"><span class="current" id="page-cur">1</span> / 10</span>
+        <button class="nav-btn" id="next-btn" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="kb-hint">
+            <span class="kb-key">&larr;</span>
+            <span class="kb-key">&rarr;</span>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const TOTAL = 10;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot[data-dot]');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const pageCur = document.getElementById('page-cur');
+
+    let current = 0;
+    const visited = new Set([0]);
+    const loadedIframes = new Set();
+
+    function loadIframe(idx) {
+        if (loadedIframes.has(idx)) return;
+        const slide = slides[idx];
+        const iframe = slide.querySelector('iframe[data-src]');
+        if (iframe) {
+            iframe.src = iframe.getAttribute('data-src');
+            iframe.removeAttribute('data-src');
+            loadedIframes.add(idx);
+
+            const loader = slide.querySelector('.loader');
+            if (loader) {
+                iframe.addEventListener('load', () => loader.classList.add('hidden'));
+                setTimeout(() => loader.classList.add('hidden'), 5000);
+            }
+        }
+    }
+
+    function goTo(idx) {
+        if (idx < 0 || idx >= TOTAL) return;
+
+        visited.add(idx);
+
+        slides[current].classList.remove('active');
+        slides[idx].classList.add('active');
+
+        // Load iframe if needed + preload next
+        loadIframe(idx);
+        if (idx + 1 < TOTAL) loadIframe(idx + 1);
+
+        // Update dots
+        dots.forEach((dot, i) => {
+            dot.classList.remove('active');
+            if (visited.has(i) && i !== idx) {
+                dot.classList.add('visited');
+            } else {
+                dot.classList.remove('visited');
+            }
+        });
+        dots[idx].classList.add('active');
+        dots[idx].classList.remove('visited');
+
+        // Update nav buttons
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx === TOTAL - 1;
+        pageCur.textContent = idx + 1;
+
+        current = idx;
+    }
+
+    // Dot click navigation
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => goTo(parseInt(dot.getAttribute('data-dot'))));
+    });
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault(); goTo(current - 1);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault(); goTo(current + 1);
+        } else if (e.key === 'Home') {
+            e.preventDefault(); goTo(0);
+        } else if (e.key === 'End') {
+            e.preventDefault(); goTo(TOTAL - 1);
+        } else {
+            const num = parseInt(e.key);
+            if (!isNaN(num)) {
+                const target = num === 0 ? 9 : num - 1;
+                if (target < TOTAL) goTo(target);
+            }
+        }
+    });
+
+    // Touch swipe
+    let touchStartX = 0, touchStartY = 0;
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            dx < 0 ? goTo(current + 1) : goTo(current - 1);
+        }
+    }, { passive: true });
+
+    // Init — load first iframe immediately
+    goTo(0);
+})();
+</script>
+</body>
+</html>
